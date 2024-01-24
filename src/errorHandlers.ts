@@ -1,5 +1,5 @@
 import { error, warn } from "@rsc-utils/console-utils";
-import { toHumanReadable } from "./toHumanReadable";
+import { toHumanReadable } from "./toHumanReadable.js";
 
 //#region generic error types
 
