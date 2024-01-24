@@ -16,8 +16,8 @@ export type DRoleResolvable = Role | Snowflake;
 export type DDMChannel = DMChannel | PartialDMChannel;
 
 export type DForumChannel = ForumChannel & { type: "GUILD_FORUM"; };
-export type DTextChannel = TextChannel & { type: "GUILD_TEXT"; }
-export type DThreadChannel = ThreadChannel & { type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD"; }
+export type DTextChannel = TextChannel & { type: "GUILD_TEXT"; };
+export type DThreadChannel = ThreadChannel & { type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD"; };
 
 export type DGuildChannel = DForumChannel | DTextChannel | DThreadChannel;
 export type DWebhookChannel = DTextChannel | DForumChannel;
@@ -33,5 +33,5 @@ export type DChannelResolvable = DChannel | Snowflake;
 
 /** Discord Message or Partial Message */
 export type DMessageCache<Cached extends boolean = boolean> = Message<Cached> & If<Cached, { channel:DMessageChannel; }, { channel:DDMChannel; }>;
-export type DMessagePartial = PartialMessage & { channel:DMessageChannel; }
+export type DMessagePartial = PartialMessage & { channel:DMessageChannel; };
 export type DMessage<Cached extends boolean = boolean> = DMessageCache<Cached> | DMessagePartial;
