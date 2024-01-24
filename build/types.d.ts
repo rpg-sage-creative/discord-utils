@@ -1,5 +1,5 @@
-import type { ButtonInteraction, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
-export type DInteraction = CommandInteraction | ButtonInteraction | MessageComponentInteraction | ModalSubmitInteraction;
+import type { ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
+export type DInteraction<Cached extends CacheType = CacheType> = ButtonInteraction<Cached> | CommandInteraction<Cached> | MessageComponentInteraction<Cached> | ModalSubmitInteraction<Cached>;
 export type DReaction = MessageReaction | PartialMessageReaction;
 /** Discord User or Partial User */
 export type DUser = User | PartialUser;
