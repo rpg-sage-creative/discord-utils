@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.2",
+"version":"0.0.3",
 "branch":"main",
-"commit":"b548069e468ca960bae30701fa811a39c96dc1ab",
-"commitSubject":"add guildToInviteUrl, userToProfileUrl",
-"commitTs":1706127759000,
-"commitDate":"2024-01-24-1222",
-"buildTs":1706127775000,
-"buildDate":"2024-01-24-1222",
+"commit":"c336f5886ce2011ae19f6c8da48c5ea74e2094a8",
+"commitSubject":"add CommandInteraction to DInteraction (slash commands)",
+"commitTs":1706129644000,
+"commitDate":"2024-01-24-1254",
+"buildTs":1706129661000,
+"buildDate":"2024-01-24-1254",
 "author":"Randal T Meyer"
 }
