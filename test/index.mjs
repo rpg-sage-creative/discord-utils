@@ -1,7 +1,9 @@
-import { enableLogLevels, info, debug, warn } from "@rsc-utils/console-utils";
+import { assert, debug, error, info, runTests, warn } from "@rsc-utils/console-utils";
 
-async function main() {
-	warn(`CREATE SOME TESTS!`);
-}
-enableLogLevels("development");
-main();
+runTests(async function testFunction() {
+	assert(false, "No Tests!");
+	info();
+	debug();
+	warn();
+	error();
+}, true);

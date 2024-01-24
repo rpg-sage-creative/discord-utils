@@ -1,0 +1,12 @@
+import type { Optional } from "@rsc-utils/type-utils";
+import { GuildMember } from "discord.js";
+import type { DChannel, DForumChannel, DMessage, DUser } from "./types";
+type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember;
+/**
+ * Returns a string that represents the Discord object in a meaningful way.
+ * Users become @UserName.
+ * Channels become #channel-name
+ */
+export declare function toHumanReadable<T extends Target>(target: T): string;
+export declare function toHumanReadable<T extends Target>(target: Optional<T>): string | null;
+export {};

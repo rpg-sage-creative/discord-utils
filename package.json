@@ -1,5 +1,5 @@
 {
-	"name": "@rsc-utils/x-utils",
+	"name": "@rsc-utils/discord-utils",
 	"version": "0.0.0",
 	"license": "ISC",
 	"main": "build/index.js",
@@ -12,9 +12,13 @@
 	"devDependencies": {
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
 		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
-		"@types/node": "^18.18.7"
+		"@types/node": "^18.18.7",
+		"discord.js": "^13.16.0"
 	},
 	"dependencies": {
-		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils"
+		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
+		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
+		"emoji-regex": "^10.3.0",
+		"xregexp": "^5.1.1"
 	}
 }
