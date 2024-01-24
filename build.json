@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.1",
+"version":"0.0.2",
 "branch":"main",
-"commit":"5abb3b5899c61f1e93d4e31f47862ab2606671a8",
-"commitSubject":"update build",
-"commitTs":1706126502000,
-"commitDate":"2024-01-24-1201",
-"buildTs":1706126526000,
-"buildDate":"2024-01-24-1202",
+"commit":"b548069e468ca960bae30701fa811a39c96dc1ab",
+"commitSubject":"add guildToInviteUrl, userToProfileUrl",
+"commitTs":1706127759000,
+"commitDate":"2024-01-24-1222",
+"buildTs":1706127775000,
+"buildDate":"2024-01-24-1222",
 "author":"Randal T Meyer"
 }
