@@ -1,4 +1,4 @@
-import { RegExpCreateOptions } from "@rsc-utils/string-utils";
+import type { RegExpCreateOptions } from "@rsc-utils/string-utils";
 type Options = RegExpCreateOptions & {};
 /**
  * Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji.
