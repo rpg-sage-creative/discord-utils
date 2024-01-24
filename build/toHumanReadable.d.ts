@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import { GuildMember } from "discord.js";
+import type { GuildMember } from "discord.js";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types";
 type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember;
 /**

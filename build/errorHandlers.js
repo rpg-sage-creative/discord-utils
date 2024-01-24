@@ -1,5 +1,5 @@
 import { error, warn } from "@rsc-utils/console-utils";
-import { toHumanReadable } from "./toHumanReadable";
+import { toHumanReadable } from "./toHumanReadable.js";
 function isInvalidFormBodyError(reason) {
     return reason.code === 50035;
 }
