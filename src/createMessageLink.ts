@@ -1,5 +1,5 @@
-import { MessageReference } from "discord.js";
-import { DMessage } from "./types";
+import type { MessageReference } from "discord.js";
+import type { DMessage } from "./types";
 
 export function createMessageLink(msgOrRef: DMessage): string;
 export function createMessageLink(msgOrRef: MessageReference): string;
