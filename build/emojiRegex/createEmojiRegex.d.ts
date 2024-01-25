@@ -6,9 +6,9 @@ type Options = RegExpCreateOptions & {
  * Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji.
  * Uses default options: { globalFlag:false, quantifier:"", animated:"optional" }
  */
-export declare function createDiscordEmojiRegex(): RegExp;
+export declare function createEmojiRegex(): RegExp;
 /**
  * Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji.
  */
-export declare function createDiscordEmojiRegex(options: Options): RegExp;
+export declare function createEmojiRegex(options: Options): RegExp;
 export {};

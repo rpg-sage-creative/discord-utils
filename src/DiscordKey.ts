@@ -1,16 +1,30 @@
 import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake, type NIL_SNOWFLAKE, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
+import type { MessageReference } from "discord.js";
+import { createUrlRegex } from "./parse/createUrlRegex.js";
 import type { DGuildChannel, DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";
-import { MessageReference } from "discord.js";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { toChannelUrl } from "./url/toChannelUrl.js";
+import { toMessageUrl } from "./url/toMessageUrl.js";
 
 interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
 
-export class DiscordKey {
+export class DiscordKey implements MessageReference {
+	//#region MessageReference
+	public get guildId(): Snowflake | undefined {
+		return this.hasServer ? this.server : undefined;
+	}
+	public get channelId(): Snowflake {
+		return this.threadOrChannel;
+	}
+	public get messageId(): Snowflake | undefined {
+		return this.hasMessage ? this.message : undefined;
+	}
+	//#endregion
 
 	public server: Snowflake;
 	public channel: Snowflake;
+	/** @deprecated */
 	public thread: Snowflake;
 	public message: Snowflake;
 
@@ -22,12 +36,14 @@ export class DiscordKey {
 
 	public hasServer: boolean;
 	public hasChannel: boolean;
+	/** @deprecated */
 	public hasThread: boolean;
 	public hasMessage: boolean;
 
 	public constructor(
 		server: Optional<TSnowflakeResolvable>,
 		channel: Optional<TSnowflakeResolvable>,
+		/** @deprecated */
 		thread?: Optional<TSnowflakeResolvable>,
 		message?: Optional<TSnowflakeResolvable>
 	) {
@@ -55,16 +71,18 @@ export class DiscordKey {
 		}
 	}
 
-	/** Returns the thread if it has one. Returns the channel otherwise. */
+	/** @deprecated Returns the thread if it has one. Returns the channel otherwise. */
 	public get threadOrChannel(): Snowflake {
 		return this.hasThread ? this.thread : this.channel;
 	}
+	/** @deprecated */
 	public get channelAndThread(): { channel:Snowflake|null; thread:Snowflake|null } {
 		return {
 			channel: this.hasChannel ? this.channel : null,
 			thread: this.hasThread ? this.thread : null
 		};
 	}
+	/** @deprecated */
 	public get user(): Snowflake | null {
 		return this.isDm ? this.channel : null;
 	}
@@ -72,15 +90,10 @@ export class DiscordKey {
 	public toString(): string { return this.key; }
 
 	public toChannelUrl(): string {
-		const server = this.hasServer ? this.server : "@me";
-		return `https://discord.com/channels/${server}/${this.threadOrChannel}`;
+		return toChannelUrl(this);
 	}
 	public toMessageUrl(): string | null {
-		if (this.hasMessage) {
-			const server = this.hasServer ? this.server : "@me";
-			return `https://discord.com/channels/${server}/${this.threadOrChannel}/${this.message}`;
-		}
-		return null;
+		return toMessageUrl(this);
 	}
 	public toUrl(): string {
 		return this.toMessageUrl() ?? this.toChannelUrl();
@@ -130,19 +143,19 @@ export class DiscordKey {
 		return orNilSnowflake(typeof(resolvable) === "string" ? resolvable : resolvable?.id);
 	}
 
-	public static toMessageUrl(msgOrRef: DMessage | MessageReference): string {
-		if ("messageId" in msgOrRef) {
-			return new DiscordKey(msgOrRef.guildId, msgOrRef.channelId, null, msgOrRef.messageId).toUrl();
-		}
-		return DiscordKey.fromMessage(msgOrRef).toUrl();
-	}
-
 	public static fromUrl(url: string): DiscordKey | null {
-		const regex = createDiscordUrlRegex();
-		if (regex.test(url)) {
-			const [_http, _slash, _dotCom, _channels, server, channel, message] = url.split("/");
-			return new DiscordKey(server, channel, channel, message);
+		const messageMatch = createUrlRegex("message").exec(url);
+		if (messageMatch?.groups) {
+			const { guildId, channelId, messageId } = messageMatch.groups;
+			return new DiscordKey(guildId, channelId, channelId, messageId);
 		}
+
+		const channelMatch = createUrlRegex("channel").exec(url);
+		if (channelMatch?.groups) {
+			const { guildId, channelId } = channelMatch.groups;
+			return new DiscordKey(guildId, channelId, channelId);
+		}
+
 		return null;
 	}
 }

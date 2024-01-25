@@ -1,5 +1,5 @@
 import { error } from "@rsc-utils/console-utils";
-export function guildToInviteUrl(guild) {
+export function toInviteUrl(guild) {
     if (!guild) {
         return null;
     }

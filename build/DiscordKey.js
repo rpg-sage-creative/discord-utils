@@ -1,6 +1,17 @@
 import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { createUrlRegex } from "./parse/createUrlRegex.js";
+import { toChannelUrl } from "./url/toChannelUrl.js";
+import { toMessageUrl } from "./url/toMessageUrl.js";
 export class DiscordKey {
+    get guildId() {
+        return this.hasServer ? this.server : undefined;
+    }
+    get channelId() {
+        return this.threadOrChannel;
+    }
+    get messageId() {
+        return this.hasMessage ? this.message : undefined;
+    }
     server;
     channel;
     thread;
@@ -51,15 +62,10 @@ export class DiscordKey {
     }
     toString() { return this.key; }
     toChannelUrl() {
-        const server = this.hasServer ? this.server : "@me";
-        return `https://discord.com/channels/${server}/${this.threadOrChannel}`;
+        return toChannelUrl(this);
     }
     toMessageUrl() {
-        if (this.hasMessage) {
-            const server = this.hasServer ? this.server : "@me";
-            return `https://discord.com/channels/${server}/${this.threadOrChannel}/${this.message}`;
-        }
-        return null;
+        return toMessageUrl(this);
     }
     toUrl() {
         return this.toMessageUrl() ?? this.toChannelUrl();
@@ -101,17 +107,16 @@ export class DiscordKey {
     static resolveId(resolvable) {
         return orNilSnowflake(typeof (resolvable) === "string" ? resolvable : resolvable?.id);
     }
-    static toMessageUrl(msgOrRef) {
-        if ("messageId" in msgOrRef) {
-            return new DiscordKey(msgOrRef.guildId, msgOrRef.channelId, null, msgOrRef.messageId).toUrl();
-        }
-        return DiscordKey.fromMessage(msgOrRef).toUrl();
-    }
     static fromUrl(url) {
-        const regex = createDiscordUrlRegex();
-        if (regex.test(url)) {
-            const [_http, _slash, _dotCom, _channels, server, channel, message] = url.split("/");
-            return new DiscordKey(server, channel, channel, message);
+        const messageMatch = createUrlRegex("message").exec(url);
+        if (messageMatch?.groups) {
+            const { guildId, channelId, messageId } = messageMatch.groups;
+            return new DiscordKey(guildId, channelId, channelId, messageId);
+        }
+        const channelMatch = createUrlRegex("channel").exec(url);
+        if (channelMatch?.groups) {
+            const { guildId, channelId } = channelMatch.groups;
+            return new DiscordKey(guildId, channelId, channelId);
         }
         return null;
     }

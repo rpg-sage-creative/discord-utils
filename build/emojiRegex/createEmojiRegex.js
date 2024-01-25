@@ -1,7 +1,7 @@
 import XRegExp from "xregexp";
 import { getDiscordEmojiRegexSource } from "./getDiscordEmojiRegexSource.js";
 import { getUnicodeEmojiRegexSource } from "./getUnicodeEmojiRegexSource.js";
-export function createDiscordEmojiRegex(options) {
+export function createEmojiRegex(options) {
     const discordEmojiRegex = getDiscordEmojiRegexSource();
     const unicodeEmojiRegex = getUnicodeEmojiRegexSource();
     const regex = `(?:${discordEmojiRegex}|${unicodeEmojiRegex})`;

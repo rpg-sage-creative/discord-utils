@@ -11,14 +11,14 @@ type Options = RegExpCreateOptions & {
  * Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji.
  * Uses default options: { globalFlag:false, quantifier:"", animated:"optional" }
  */
-export function createDiscordEmojiRegex(): RegExp;
+export function createEmojiRegex(): RegExp;
 
 /**
  * Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji.
  */
-export function createDiscordEmojiRegex(options: Options): RegExp;
+export function createEmojiRegex(options: Options): RegExp;
 
-export function createDiscordEmojiRegex(options?: Options): RegExp {
+export function createEmojiRegex(options?: Options): RegExp {
 	const discordEmojiRegex = getDiscordEmojiRegexSource();
 	const unicodeEmojiRegex = getUnicodeEmojiRegexSource();
 	const regex = `(?:${discordEmojiRegex}|${unicodeEmojiRegex})`;

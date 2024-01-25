@@ -1,8 +1,8 @@
 import { assert, runTests } from "@rsc-utils/console-utils";
-import { createDiscordEmojiRegex } from "../build/index.js";
+import { createEmojiRegex } from "../build/index.js";
 
-runTests(async function testCreateDiscordEmojiRegex() {
-	const regex = createDiscordEmojiRegex();
+runTests(async function testCreateEmojiRegex() {
+	const regex = createEmojiRegex();
 	const test = value => regex.exec(value)?.[0];
 	const values = [
 		["one 💯 hundred", "💯"],
