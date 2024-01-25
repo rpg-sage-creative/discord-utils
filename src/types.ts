@@ -22,6 +22,9 @@ export type DDMChannel = DMChannel | PartialDMChannel;
 export type DForumChannel = ForumChannel & { type: "GUILD_FORUM"; };
 export type DTextChannel = TextChannel & { type: "GUILD_TEXT"; };
 export type DThreadChannel = ThreadChannel & { type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD"; };
+// export type DForumChannel = ForumChannel & { type: ChannelType.GuildForum; };
+// export type DTextChannel = TextChannel & { type: ChannelType.GuildText; };
+// export type DThreadChannel = ThreadChannel & { type: ChannelType.PublicThread | ChannelType.PrivateThread; };
 
 export type DGuildChannel = DForumChannel | DTextChannel | DThreadChannel;
 export type DWebhookChannel = DTextChannel | DForumChannel;

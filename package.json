@@ -18,8 +18,8 @@
 		"@rsc-utils/snowflake-utils": "github:rpg-sage-creative/snowflake-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
+		"discord.js": "^13.17.1",
 		"emoji-regex": "^10.3.0",
-		"xregexp": "^5.1.1",
-		"discord.js": "^13.16.0"
+		"xregexp": "^5.1.1"
 	}
 }
