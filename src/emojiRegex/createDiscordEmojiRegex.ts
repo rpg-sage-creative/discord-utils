@@ -4,12 +4,12 @@ import { getDiscordEmojiRegexSource } from "./getDiscordEmojiRegexSource.js";
 import { getUnicodeEmojiRegexSource } from "./getUnicodeEmojiRegexSource.js";
 
 type Options = RegExpCreateOptions & {
-
+	animated?: boolean | "optional";
 };
 
 /**
  * Convenience for creating/sharing regex that matches discord emoji _and_ unicode emoji.
- * Uses default options: { globalFlag:false, quantifier:"" }
+ * Uses default options: { globalFlag:false, quantifier:"", animated:"optional" }
  */
 export function createDiscordEmojiRegex(): RegExp;
 

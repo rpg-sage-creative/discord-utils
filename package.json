@@ -11,14 +11,15 @@
 	},
 	"devDependencies": {
 		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
-		"@types/node": "^18.18.7",
-		"discord.js": "^13.16.0"
+		"@types/node": "^18.18.7"
 	},
 	"dependencies": {
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
+		"@rsc-utils/snowflake-utils": "github:rpg-sage-creative/snowflake-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"emoji-regex": "^10.3.0",
-		"xregexp": "^5.1.1"
+		"xregexp": "^5.1.1",
+		"discord.js": "^13.16.0"
 	}
 }

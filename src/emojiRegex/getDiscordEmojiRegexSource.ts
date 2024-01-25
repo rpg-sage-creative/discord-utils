@@ -14,9 +14,12 @@ export function getDiscordEmojiRegexSource(): string;
 export function getDiscordEmojiRegexSource(options: Options): string;
 
 export function getDiscordEmojiRegexSource(options?: Options): string {
-	let a = "";
-	if (options?.animated) {
-		a = options.animated === true ? "a" : "a?";
+	// default to optional
+	let a = "a?";
+	if (options?.animated === true) {
+		a = "a";
+	}else if (options?.animated === false) {
+		a = "";
 	}
 	return `<${a}:\\w{2,}:\\d{16,}>`;
 }
