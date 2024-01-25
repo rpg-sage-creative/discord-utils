@@ -2,6 +2,7 @@ import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake, type NIL_SNOWFLAKE, 
 import type { Optional } from "@rsc-utils/type-utils";
 import type { DGuildChannel, DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";
 import { MessageReference } from "discord.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 
 interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
@@ -134,5 +135,14 @@ export class DiscordKey {
 			return new DiscordKey(msgOrRef.guildId, msgOrRef.channelId, null, msgOrRef.messageId).toUrl();
 		}
 		return DiscordKey.fromMessage(msgOrRef).toUrl();
+	}
+
+	public static fromUrl(url: string): DiscordKey | null {
+		const regex = createDiscordUrlRegex();
+		if (regex.test(url)) {
+			const [_http, _slash, _dotCom, _channels, server, channel, message] = url.split("/");
+			return new DiscordKey(server, channel, channel, message);
+		}
+		return null;
 	}
 }

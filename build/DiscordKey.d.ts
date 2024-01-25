@@ -40,5 +40,6 @@ export declare class DiscordKey {
     /** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
     static resolveId(resolvable: Optional<TSnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE;
     static toMessageUrl(msgOrRef: DMessage | MessageReference): string;
+    static fromUrl(url: string): DiscordKey | null;
 }
 export {};

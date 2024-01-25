@@ -8,6 +8,7 @@ export * from "./guildToInviteUrl.js";
 export * from "./parseChannelIds.js";
 export * from "./parseSnowflake.js";
 export * from "./safeMentions.js";
+export * from "./toChannelMention.js";
 export * from "./toHumanReadable.js";
 export * from "./toRoleMention.js";
 export * from "./toUserMention.js";

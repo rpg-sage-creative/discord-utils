@@ -1,4 +1,5 @@
 import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 export class DiscordKey {
     server;
     channel;
@@ -105,5 +106,13 @@ export class DiscordKey {
             return new DiscordKey(msgOrRef.guildId, msgOrRef.channelId, null, msgOrRef.messageId).toUrl();
         }
         return DiscordKey.fromMessage(msgOrRef).toUrl();
+    }
+    static fromUrl(url) {
+        const regex = createDiscordUrlRegex();
+        if (regex.test(url)) {
+            const [_http, _slash, _dotCom, _channels, server, channel, message] = url.split("/");
+            return new DiscordKey(server, channel, channel, message);
+        }
+        return null;
     }
 }
