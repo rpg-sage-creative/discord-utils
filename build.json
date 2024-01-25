@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.8",
+"version":"0.0.9",
 "branch":"main",
-"commit":"408f5fffdcc77cff89d4c0ed1def9aa68bbc14b6",
-"commitSubject":"fix argument type to DMessage",
-"commitTs":1706216705000,
-"commitDate":"2024-01-25-1305",
-"buildTs":1706216723000,
-"buildDate":"2024-01-25-1305",
+"commit":"b312c2e5ec642c258b49e4a68566a2f1b06611d4",
+"commitSubject":"prepare logic for discord.js@14",
+"commitTs":1706222288000,
+"commitDate":"2024-01-25-1438",
+"buildTs":1706222509000,
+"buildDate":"2024-01-25-1441",
 "author":"Randal T Meyer"
 }
