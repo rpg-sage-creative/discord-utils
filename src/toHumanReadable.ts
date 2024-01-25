@@ -1,7 +1,7 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { GuildMember } from "discord.js";
-import type { DChannel, DForumChannel, DMessage, DUser } from "./types";
+import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";
 
 function channelToName(channel: Optional<DChannel | DForumChannel>): string | null {
 	if (channel) {

@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/type-utils";
 import type { GuildMember } from "discord.js";
-import type { DChannel, DForumChannel, DMessage, DUser } from "./types";
+import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";
 type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember;
 /**
  * Returns a string that represents the Discord object in a meaningful way.
