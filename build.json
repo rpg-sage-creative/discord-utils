@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.5",
+"version":"0.0.6",
 "branch":"main",
-"commit":"fe26627df1880912944044e9d0c3f14d11b187b6",
-"commitSubject":"fix imports",
-"commitTs":1706143324000,
-"commitDate":"2024-01-24-1642",
-"buildTs":1706143349000,
-"buildDate":"2024-01-24-1642",
+"commit":"fff90e90c4263aeeb495065d4282b9a9885cf888",
+"commitSubject":"add toChannelMention, DiscordKey.fromUrl",
+"commitTs":1706144182000,
+"commitDate":"2024-01-24-1656",
+"buildTs":1706144200000,
+"buildDate":"2024-01-24-1656",
 "author":"Randal T Meyer"
 }
