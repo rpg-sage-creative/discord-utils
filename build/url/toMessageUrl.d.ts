@@ -1,3 +1,4 @@
-import type { Message, MessageReference } from "discord.js";
+import type { MessageReference } from "discord.js";
 import type { DiscordKey } from "../DiscordKey.js";
-export declare function toMessageUrl(ref: DiscordKey | Message | MessageReference): string | null;
+import type { DMessage } from "../types.js";
+export declare function toMessageUrl(ref: DiscordKey | DMessage | MessageReference): string | null;
