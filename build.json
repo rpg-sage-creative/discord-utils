@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.9",
+"version":"0.0.10",
 "branch":"main",
-"commit":"b312c2e5ec642c258b49e4a68566a2f1b06611d4",
-"commitSubject":"prepare logic for discord.js@14",
-"commitTs":1706222288000,
-"commitDate":"2024-01-25-1438",
-"buildTs":1706222509000,
-"buildDate":"2024-01-25-1441",
+"commit":"56f7cf55091eddc6c5f3c5773451f4267c83ab73",
+"commitSubject":"rename createUrlRegex to createDiscordUrlRegex",
+"commitTs":1706308993000,
+"commitDate":"2024-01-26-1443",
+"buildTs":1706309018000,
+"buildDate":"2024-01-26-1443",
 "author":"Randal T Meyer"
 }
