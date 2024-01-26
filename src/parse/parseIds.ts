@@ -1,7 +1,7 @@
 import { Snowflake, isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
 import { Optional } from "@rsc-utils/type-utils";
 import { createMentionRegex } from "./createMentionRegex.js";
-import { createUrlRegex } from "./createUrlRegex.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import { DMessage } from "../types.js";
 
 type IdType = "channel";
@@ -36,10 +36,10 @@ function getContentMentionIds(type: IdType, content: Optional<string>): Possible
 
 function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
 	if (content) {
-		const globalRegex = createUrlRegex(type, { globalFlag:true });
+		const globalRegex = createDiscordUrlRegex(type, { globalFlag:true });
 		const urls = content.match(globalRegex) ?? [];
 		if (urls.length) {
-			const regex = createUrlRegex(type);
+			const regex = createDiscordUrlRegex(type);
 			return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
 		}
 	}

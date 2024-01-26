@@ -1,5 +1,5 @@
 import { createMentionRegex } from "./createMentionRegex.js";
-import { createUrlRegex } from "./createUrlRegex.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 function getGroupKey(type) {
     switch (type) {
         case "channel": return "channelId";
@@ -19,7 +19,7 @@ export function parseId(value, type) {
             }
         }
         if (type !== "role" && type !== "user") {
-            const urlRegex = createUrlRegex(type);
+            const urlRegex = createDiscordUrlRegex(type);
             const urlMatch = urlRegex.exec(value);
             if (urlMatch?.groups?.[groupKey]) {
                 return urlMatch.groups[groupKey];

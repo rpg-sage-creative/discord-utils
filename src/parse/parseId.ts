@@ -1,7 +1,7 @@
 import { type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { createMentionRegex } from "./createMentionRegex.js";
-import { createUrlRegex } from "./createUrlRegex.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 
 type IdType = "channel" | "message" | "role" | "user";
 
@@ -28,7 +28,7 @@ export function parseId(value: Optional<string>, type: IdType): Snowflake | null
 		}
 
 		if (type !== "role" && type !== "user") {
-			const urlRegex = createUrlRegex(type);
+			const urlRegex = createDiscordUrlRegex(type);
 			const urlMatch = urlRegex.exec(value);
 			if (urlMatch?.groups?.[groupKey]) {
 				return urlMatch.groups[groupKey];

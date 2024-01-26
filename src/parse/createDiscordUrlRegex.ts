@@ -19,7 +19,7 @@ import { RegExpCreateOptions, wrap } from "@rsc-utils/string-utils";
 type UrlType = "channel" | "message";
 
 /** @internal @private */
-export function createUrlRegex(type: UrlType, options?: RegExpCreateOptions): RegExp {
+export function createDiscordUrlRegex(type: UrlType, options?: RegExpCreateOptions): RegExp {
 	const capture = options?.capture;
 	const flags = options?.globalFlag ? "gi" : "i";
 

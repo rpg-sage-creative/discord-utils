@@ -1,6 +1,6 @@
 import { isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
 import { createMentionRegex } from "./createMentionRegex.js";
-import { createUrlRegex } from "./createUrlRegex.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 function getGroupKey(type) {
     switch (type) {
         case "channel": return "channelId";
@@ -24,10 +24,10 @@ function getContentMentionIds(type, content) {
 }
 function getContentUrlIds(type, content) {
     if (content) {
-        const globalRegex = createUrlRegex(type, { globalFlag: true });
+        const globalRegex = createDiscordUrlRegex(type, { globalFlag: true });
         const urls = content.match(globalRegex) ?? [];
         if (urls.length) {
-            const regex = createUrlRegex(type);
+            const regex = createDiscordUrlRegex(type);
             return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
         }
     }

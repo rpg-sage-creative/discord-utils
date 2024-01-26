@@ -1,5 +1,5 @@
 import { wrap } from "@rsc-utils/string-utils";
-export function createUrlRegex(type, options) {
+export function createDiscordUrlRegex(type, options) {
     const capture = options?.capture;
     const flags = options?.globalFlag ? "gi" : "i";
     let regex = "";
