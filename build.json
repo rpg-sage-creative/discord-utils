@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.11",
+"version":"0.0.12",
 "branch":"main",
-"commit":"cd29bd430bf9c54a6cc609d27f39f6366350b875",
-"commitSubject":"removing npm-utils",
-"commitTs":1706651563000,
-"commitDate":"2024-01-30-1352",
-"buildTs":1706651593000,
-"buildDate":"2024-01-30-1353",
+"commit":"0ebff6be349312d8852ccfa4ca9cf9acef86c8ac",
+"commitSubject":"update to test-utils",
+"commitTs":1706902829000,
+"commitDate":"2024-02-02-1140",
+"buildTs":1706902894000,
+"buildDate":"2024-02-02-1141",
 "author":"Randal T Meyer"
 }
