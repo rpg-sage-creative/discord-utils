@@ -1,18 +1,29 @@
 import { isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
 import { createMentionRegex } from "./createMentionRegex.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+function isMentionIdType(type) {
+    return ["channel", "role", "user"].includes(type);
+}
+function isUrlIdType(type) {
+    return ["channel", "message"].includes(type);
+}
 function getGroupKey(type) {
     switch (type) {
         case "channel": return "channelId";
+        case "message": return "messageId";
+        case "role": return "roleId";
+        case "user": return "userId";
     }
 }
 function getMentionKey(type) {
     switch (type) {
         case "channel": return "channels";
+        case "role": return "roles";
+        case "user": return "users";
     }
 }
 function getContentMentionIds(type, content) {
-    if (content) {
+    if (isMentionIdType(type) && content) {
         const globalRegex = createMentionRegex(type, { globalFlag: true });
         const mentions = content.match(globalRegex) ?? [];
         if (mentions.length) {
@@ -22,8 +33,15 @@ function getContentMentionIds(type, content) {
     }
     return [];
 }
+function getMessageMentionIds(type, message) {
+    if (isMentionIdType(type)) {
+        const collection = message.mentions[getMentionKey(type)];
+        return collection.map(mention => mention.id);
+    }
+    return [];
+}
 function getContentUrlIds(type, content) {
-    if (content) {
+    if (isUrlIdType(type) && content) {
         const globalRegex = createDiscordUrlRegex(type, { globalFlag: true });
         const urls = content.match(globalRegex) ?? [];
         if (urls.length) {
@@ -39,6 +57,6 @@ function uniqueNonNilSnowflakeFilter(value, index, array) {
 export function parseIds(message, type) {
     const contentMentionIds = getContentMentionIds(type, message.content);
     const contentUrlIds = getContentUrlIds(type, message.content);
-    const mentionIds = message.mentions[getMentionKey(type)].map(mention => mention.id);
+    const mentionIds = getMessageMentionIds(type, message);
     return [...contentMentionIds, ...contentUrlIds, ...mentionIds].filter(uniqueNonNilSnowflakeFilter);
 }
