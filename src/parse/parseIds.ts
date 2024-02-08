@@ -1,9 +1,9 @@
-import { type Snowflake, isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { createMentionRegex } from "./createMentionRegex.js";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
-import { type DMessage } from "../types.js";
 import type { Collection } from "discord.js";
+import { type DMessage } from "../types.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { createMentionRegex } from "./createMentionRegex.js";
 
 type MentionIdType = "channel" | "role" | "user";
 type UrlIdType = "channel" | "message";
@@ -87,13 +87,14 @@ function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnow
 
 /** A filter that only returns unique nonNil snowflakes. */
 function uniqueNonNilSnowflakeFilter(value: PossibleSnowflake, index: number, array: PossibleSnowflake[]): value is Snowflake {
-	return array.indexOf(value) === index && isNonNilSnowflake(value);
+	return isNonNilSnowflake(value) && array.indexOf(value) === index;
 }
 
 /** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
-export function parseIds(message: DMessage, type: IdType): Snowflake[] {
+export function parseIds(message: DMessage, type: IdType, includeRaw?: boolean): Snowflake[] {
 	const contentMentionIds = getContentMentionIds(type, message.content);
 	const contentUrlIds = getContentUrlIds(type, message.content);
 	const mentionIds = getMessageMentionIds(type, message);
-	return [...contentMentionIds, ...contentUrlIds, ...mentionIds].filter(uniqueNonNilSnowflakeFilter);
+	const rawIds = includeRaw ? (message.content ?? "").match(/\d{16,}/g) ?? [] : [];
+	return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
 }

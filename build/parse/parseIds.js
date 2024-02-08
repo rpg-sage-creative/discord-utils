@@ -1,6 +1,6 @@
 import { isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
-import { createMentionRegex } from "./createMentionRegex.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { createMentionRegex } from "./createMentionRegex.js";
 function isMentionIdType(type) {
     return ["channel", "role", "user"].includes(type);
 }
@@ -52,11 +52,12 @@ function getContentUrlIds(type, content) {
     return [];
 }
 function uniqueNonNilSnowflakeFilter(value, index, array) {
-    return array.indexOf(value) === index && isNonNilSnowflake(value);
+    return isNonNilSnowflake(value) && array.indexOf(value) === index;
 }
-export function parseIds(message, type) {
+export function parseIds(message, type, includeRaw) {
     const contentMentionIds = getContentMentionIds(type, message.content);
     const contentUrlIds = getContentUrlIds(type, message.content);
     const mentionIds = getMessageMentionIds(type, message);
-    return [...contentMentionIds, ...contentUrlIds, ...mentionIds].filter(uniqueNonNilSnowflakeFilter);
+    const rawIds = includeRaw ? (message.content ?? "").match(/\d{16,}/g) ?? [] : [];
+    return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
 }
