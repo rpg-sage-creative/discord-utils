@@ -1,12 +1,11 @@
-import { error, warn } from "@rsc-utils/console-utils";
+import { error, warn, formatArg } from "@rsc-utils/console-utils";
 import { toHumanReadable } from "./toHumanReadable.js";
 function isInvalidFormBodyError(reason) {
     return reason.code === 50035;
 }
 function handleInvalidFormBodyError(reason) {
     if (isInvalidFormBodyError(reason)) {
-        const stringValue = Object.prototype.toString.call(reason);
-        error(stringValue);
+        error(reason);
         return true;
     }
     return false;
@@ -14,7 +13,8 @@ function handleInvalidFormBodyError(reason) {
 function isDiscordApiError(reason) {
     return reason?.name === "DiscordAPIError";
 }
-function isDiscordApiErrorMissingPermissionsFetchWebhook(_reason, asString) {
+function isDiscordApiErrorMissingPermissionsFetchWebhook(reason) {
+    const asString = formatArg(reason);
     return asString.includes("DiscordAPIError: Missing Permissions")
         && asString.includes("TextChannel.fetchWebhooks");
 }
@@ -29,8 +29,7 @@ function isUnknownUser(reason) {
 }
 function handleDiscordApiError(reason) {
     if (isDiscordApiError(reason)) {
-        const asString = Object.prototype.toString.call(reason);
-        if (isDiscordApiErrorMissingPermissionsFetchWebhook(reason, asString)) {
+        if (isDiscordApiErrorMissingPermissionsFetchWebhook(reason)) {
             warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
             return true;
         }
@@ -46,14 +45,11 @@ export function handleDiscordErrorReturnNull(reason, options) {
     handled ||= handleInvalidFormBodyError(reason);
     handled ||= handleDiscordApiError(reason);
     if (!handled) {
-        const output = (options?.target || options?.errMsg)
-            ? [toHumanReadable(options.target), options.errMsg].filter(s => s).join(": ")
-            : Object.prototype.toString.call(reason);
-        if (output === "[object Error]") {
-            error(reason);
+        if (options?.target || options?.errMsg) {
+            error([toHumanReadable(options.target), options.errMsg].filter(s => s).join(": "));
         }
         else {
-            error(output);
+            error(reason);
         }
     }
     return null;
