@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.14",
+"version":"0.0.15",
 "branch":"main",
-"commit":"8ce15771e82b8d3f5978f2e980fd850b104a0414",
-"commitSubject":"allow parseIds to return raw values in message content",
-"commitTs":1707369598000,
-"commitDate":"2024-02-07-2119",
-"buildTs":1707369644000,
-"buildDate":"2024-02-07-2120",
+"commit":"a470cb4baa0bbbe05d645bd8e6c93d323e03fdfb",
+"commitSubject":"add embed length validation and webhook payload creation",
+"commitTs":1708389569000,
+"commitDate":"2024-02-19-1639",
+"buildTs":1708389636000,
+"buildDate":"2024-02-19-1640",
 "author":"Randal T Meyer"
 }
