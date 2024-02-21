@@ -1,7 +1,7 @@
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { validateEmbedLengths } from "../embed/validateEmbedLengths.js";
-export function validateWebhookPayload(options) {
+export function validateMessageOptions(options) {
     const contentLength = options.content?.length ?? 0;
     if (contentLength > DiscordMaxValues.message.contentLength) {
         return false;

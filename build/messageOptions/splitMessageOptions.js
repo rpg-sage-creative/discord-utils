@@ -2,7 +2,7 @@ import { chunk } from "@rsc-utils/string-utils";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
-export function createWebhookPayloads(options) {
+export function splitMessageOptions(options) {
     const { content, embeds, files, ...baseOptions } = options;
     const payloads = [];
     const contentChunks = content ? chunk(content, DiscordMaxValues.message.contentLength) : [];
