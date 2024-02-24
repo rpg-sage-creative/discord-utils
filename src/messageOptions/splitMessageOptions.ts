@@ -1,21 +1,126 @@
 import { chunk } from "@rsc-utils/string-utils";
-import type { MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
+import { MessageEmbed, MessageEmbedOptions, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 
-type Options = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
+type MsgOptions = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
+
+type ConvertOptions = { contentToEmbeds?:boolean; embedsToContent?:boolean; };
+
+type MsgEmbed = MessageEmbed | MessageEmbedOptions;
+
+/** Ensures we have a string, prepending a NewLine or title markdown if needed. */
+function getValueToAppend(value?: string | null, newLine?: boolean, title?: boolean): string {
+	return `${title ? "### " : ""}${newLine ? "\n" : ""}${value ?? ""}`;
+}
+
+/** Converts embeds into content. */
+function embedsToContent(embeds?: MsgEmbed[] | null): string | undefined {
+	// map the embeds to content and join them
+	const content = embeds?.map(embed => {
+		let text = "";
+		text += getValueToAppend(embed.title, !!text, true);
+		text += getValueToAppend(embed.description, !!text, false);
+		if (embed.fields?.length) {
+			embed.fields.forEach(field => {
+				text += getValueToAppend(field.name, !!text, true);
+				text += getValueToAppend(field.value, !!text, false);
+			});
+		}
+		return text;
+	}).join("\n\n");
+
+	// return undefined if we have a blank string
+	return content?.trim()
+		? content
+		: undefined;
+}
+
+/** Converts content into embeds. */
+function contentToEmbeds(content?: string | null): MessageEmbed[] | undefined {
+	const trimmedContent = content?.trim();
+	if (trimmedContent?.length) {
+		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
+		if (chunks.length) {
+			return chunks.map(description => new MessageEmbed({ description }));
+		}
+	}
+	return undefined;
+}
+
+/** Merges embeds into content. */
+function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): string | undefined {
+	// get embed content
+	const embedContent = embedsToContent(embeds);
+
+	// get has flags
+	const hasContent = !!content?.trim();
+	const hasEmbedContent = !!embedContent?.trim();
+
+	// return non blank output
+	if (hasContent && hasEmbedContent) {
+		return `${content}\n\n${hasEmbedContent}`;
+	}else if (hasEmbedContent) {
+		return embedContent!;
+	}else if (hasContent) {
+		return content!;
+	}
+
+	// return undefined to avoid sending an empty string as content
+	return undefined;
+}
+
+/** Merges content into embeds */
+function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null): MessageEmbed[] | undefined {
+	// get content embeds
+	const contentEmbeds = contentToEmbeds(content);
+
+	// get has flags
+	const hasContentEmbeds = !!contentEmbeds?.length;
+	const hasEmbeds = !!embeds?.length;
+
+	// return defined embeds
+	if (hasContentEmbeds && hasEmbeds) {
+		return contentEmbeds.concat(embeds as MessageEmbed[]);
+	}else if (hasContentEmbeds) {
+		return contentEmbeds;
+	}else if (hasEmbeds) {
+		return embeds as MessageEmbed[];
+	}
+
+	// return undefined to avoid sending an invalid array
+	return undefined;
+}
 
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
-export function splitMessageOptions<T extends Options>(options: T): T[] {
+export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, convertOptions?: ConvertOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { content, embeds, files, ...baseOptions } = options;
+	const { content, embeds, files, ...baseOptions } = msgOptions;
 
-	const payloads: T[] = [];
+	let contentToChunk: string | undefined;
+	let embedsToPost: MessageEmbed[] | undefined;
+
+	if (convertOptions?.embedsToContent) {
+		// merge the incoming content with the embeds
+		contentToChunk = mergeContent(content, embeds as MsgEmbed[]);
+
+	}else if (convertOptions?.contentToEmbeds) {
+		// merge the content into the embeds
+		embedsToPost = mergeEmbeds(content, embeds as MsgEmbed[]);
+
+	}else {
+		contentToChunk = content ?? undefined;
+		embedsToPost = embeds as MessageEmbed[];
+	}
 
 	// chunk content into valid lengths
-	const contentChunks = content ? chunk(content, DiscordMaxValues.message.contentLength) : [];
+	const contentChunks = contentToChunk?.trim()
+		? chunk(contentToChunk, DiscordMaxValues.message.contentLength)
+		: [];
+
+	const payloads: T[] = [];
 
 	// create a payload for each chunk
 	contentChunks.forEach(contentChunk => {
@@ -27,7 +132,7 @@ export function splitMessageOptions<T extends Options>(options: T): T[] {
 	});
 
 	// iterate the embeds
-	embeds?.forEach(embed => {
+	embedsToPost?.forEach(embed => {
 		// get the length of the embed to add
 		const embedLength = getEmbedLength(embed);
 
