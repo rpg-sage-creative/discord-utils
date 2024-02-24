@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.16",
+"version":"0.0.17",
 "branch":"main",
-"commit":"c233253abfb9ad74c89535ff868d118b54bc7df2",
-"commitSubject":"update to split/validate all message options",
-"commitTs":1708558150000,
-"commitDate":"2024-02-21-1529",
-"buildTs":1708558172000,
-"buildDate":"2024-02-21-1529",
+"commit":"e11f810332e254a064757fd39e900f0ff221f129",
+"commitSubject":"update splitMessage to convert content and embeds",
+"commitTs":1708814067000,
+"commitDate":"2024-02-24-1434",
+"buildTs":1708814122000,
+"buildDate":"2024-02-24-1435",
 "author":"Randal T Meyer"
 }
