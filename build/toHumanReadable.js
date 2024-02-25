@@ -41,8 +41,23 @@ function memberToMention(member) {
     }
     return "@UnknownMember";
 }
+function webhookToName(webhook) {
+    if (webhook) {
+        if (webhook.sourceGuild) {
+            return `${webhook.sourceGuild.name}$${webhook.name}`;
+        }
+        if (webhook.owner) {
+            return `${userToMention(webhook.owner)}$${webhook.name}`;
+        }
+        return `$${webhook.name}`;
+    }
+    return "$UnknownWebhook";
+}
 export function toHumanReadable(target) {
     if (target) {
+        if ("token" in target) {
+            return webhookToName(target);
+        }
         if ("createDM" in target) {
             if ("user" in target) {
                 return memberToMention(target);
