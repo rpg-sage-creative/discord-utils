@@ -63,14 +63,14 @@ function mergeEmbeds(content, embeds) {
     }
     return undefined;
 }
-export function splitMessageOptions(msgOptions, convertOptions) {
+export function splitMessageOptions(msgOptions, splitOptions) {
     const { content, embeds, files, ...baseOptions } = msgOptions;
     let contentToChunk;
     let embedsToPost;
-    if (convertOptions?.embedsToContent) {
+    if (splitOptions?.embedsToContent) {
         contentToChunk = mergeContent(content, embeds);
     }
-    else if (convertOptions?.contentToEmbeds) {
+    else if (splitOptions?.contentToEmbeds) {
         embedsToPost = mergeEmbeds(content, embeds);
     }
     else {
@@ -97,11 +97,11 @@ export function splitMessageOptions(msgOptions, convertOptions) {
                 payload.embeds.push(embed);
             }
             else {
-                payloads.push({ embeds: [embed], ...baseOptions });
+                payloads.push({ content: splitOptions?.blankContentValue, embeds: [embed], ...baseOptions });
             }
         }
         else {
-            payloads.push({ embeds: [embed], ...baseOptions });
+            payloads.push({ content: splitOptions?.blankContentValue, embeds: [embed], ...baseOptions });
         }
     });
     payloads[0].files = files;

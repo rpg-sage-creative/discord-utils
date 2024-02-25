@@ -7,7 +7,14 @@ import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 
 type MsgOptions = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
 
-type ConvertOptions = { contentToEmbeds?:boolean; embedsToContent?:boolean; };
+type SplitOptions = {
+	/** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */
+	blankContentValue?: string;
+	/** Convert all content to embeds? */
+	contentToEmbeds?: boolean;
+	/** Convert all embeds to content? */
+	embedsToContent?: boolean;
+};
 
 type MsgEmbed = MessageEmbed | MessageEmbedOptions;
 
@@ -95,18 +102,18 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null): Messa
 }
 
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
-export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, convertOptions?: ConvertOptions): T[] {
+export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
 	const { content, embeds, files, ...baseOptions } = msgOptions;
 
 	let contentToChunk: string | undefined;
 	let embedsToPost: MessageEmbed[] | undefined;
 
-	if (convertOptions?.embedsToContent) {
+	if (splitOptions?.embedsToContent) {
 		// merge the incoming content with the embeds
 		contentToChunk = mergeContent(content, embeds as MsgEmbed[]);
 
-	}else if (convertOptions?.contentToEmbeds) {
+	}else if (splitOptions?.contentToEmbeds) {
 		// merge the content into the embeds
 		embedsToPost = mergeEmbeds(content, embeds as MsgEmbed[]);
 
@@ -148,12 +155,12 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, convert
 
 			// create a new embed
 			}else {
-				payloads.push({ embeds:[embed], ...baseOptions } as T);
+				payloads.push({ content:splitOptions?.blankContentValue, embeds:[embed], ...baseOptions } as T);
 			}
 
 		// no payload, create a new one
 		}else {
-			payloads.push({ embeds:[embed], ...baseOptions } as T);
+			payloads.push({ content:splitOptions?.blankContentValue, embeds:[embed], ...baseOptions } as T);
 		}
 	});
 
