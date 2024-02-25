@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.18",
+"version":"0.0.19",
 "branch":"main",
-"commit":"a3ca4c3c2c4258c4805e1188f365f8f07789d679",
-"commitSubject":"add ability to pass value for blank/empty content",
-"commitTs":1708840527000,
-"commitDate":"2024-02-24-2155",
-"buildTs":1708840560000,
-"buildDate":"2024-02-24-2156",
+"commit":"197bd5828f5460df7879e6dc1dd7e84a8917d65a",
+"commitSubject":"include webhook in toHumanReadable",
+"commitTs":1708842007000,
+"commitDate":"2024-02-24-2220",
+"buildTs":1708842040000,
+"buildDate":"2024-02-24-2220",
 "author":"Randal T Meyer"
 }
