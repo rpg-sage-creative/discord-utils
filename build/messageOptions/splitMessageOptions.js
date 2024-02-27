@@ -23,12 +23,12 @@ function embedsToContent(embeds) {
         ? content
         : undefined;
 }
-function contentToEmbeds(content) {
+function contentToEmbeds(content, color) {
     const trimmedContent = content?.trim();
     if (trimmedContent?.length) {
         const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
         if (chunks.length) {
-            return chunks.map(description => new MessageEmbed({ description }));
+            return chunks.map(description => new MessageEmbed({ color, description }));
         }
     }
     return undefined;
@@ -48,8 +48,8 @@ function mergeContent(content, embeds) {
     }
     return undefined;
 }
-function mergeEmbeds(content, embeds) {
-    const contentEmbeds = contentToEmbeds(content);
+function mergeEmbeds(content, embeds, color) {
+    const contentEmbeds = contentToEmbeds(content, embeds?.[0].color ?? color);
     const hasContentEmbeds = !!contentEmbeds?.length;
     const hasEmbeds = !!embeds?.length;
     if (hasContentEmbeds && hasEmbeds) {
@@ -71,16 +71,14 @@ export function splitMessageOptions(msgOptions, splitOptions) {
         contentToChunk = mergeContent(content, embeds);
     }
     else if (splitOptions?.contentToEmbeds) {
-        embedsToPost = mergeEmbeds(content, embeds);
+        embedsToPost = mergeEmbeds(content, embeds, splitOptions.embedColor);
     }
     else {
         contentToChunk = content ?? undefined;
         embedsToPost = embeds;
     }
-    const contentChunks = contentToChunk?.trim()
-        ? chunk(contentToChunk, DiscordMaxValues.message.contentLength)
-        : [];
     const payloads = [];
+    const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
     contentChunks.forEach(contentChunk => {
         payloads.push({
             content: contentChunk,
@@ -88,6 +86,10 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             ...baseOptions
         });
     });
+    let blankContent = splitOptions?.blankContentValue?.trim();
+    if (!blankContent?.length) {
+        blankContent = undefined;
+    }
     embedsToPost?.forEach(embed => {
         const embedLength = getEmbedLength(embed);
         const payload = payloads[payloads.length - 1];
@@ -97,11 +99,11 @@ export function splitMessageOptions(msgOptions, splitOptions) {
                 payload.embeds.push(embed);
             }
             else {
-                payloads.push({ content: splitOptions?.blankContentValue, embeds: [embed], ...baseOptions });
+                payloads.push({ content: blankContent, embeds: [embed], ...baseOptions });
             }
         }
         else {
-            payloads.push({ content: splitOptions?.blankContentValue, embeds: [embed], ...baseOptions });
+            payloads.push({ content: blankContent, embeds: [embed], ...baseOptions });
         }
     });
     payloads[0].components = components;
