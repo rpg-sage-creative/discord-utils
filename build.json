@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.19",
+"version":"0.0.20",
 "branch":"main",
-"commit":"197bd5828f5460df7879e6dc1dd7e84a8917d65a",
-"commitSubject":"include webhook in toHumanReadable",
-"commitTs":1708842007000,
-"commitDate":"2024-02-24-2220",
-"buildTs":1708842040000,
-"buildDate":"2024-02-24-2220",
+"commit":"2f9bf589cbeb26c3cb5778cc0a5f5c632a56a113",
+"commitSubject":"include components when splitting message payloads",
+"commitTs":1709069456000,
+"commitDate":"2024-02-27-1330",
+"buildTs":1709069490000,
+"buildDate":"2024-02-27-1331",
 "author":"Randal T Meyer"
 }
