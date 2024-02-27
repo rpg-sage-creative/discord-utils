@@ -104,7 +104,7 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null): Messa
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
 export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { content, embeds, files, ...baseOptions } = msgOptions;
+	const { components, content, embeds, files, ...baseOptions } = msgOptions;
 
 	let contentToChunk: string | undefined;
 	let embedsToPost: MessageEmbed[] | undefined;
@@ -163,6 +163,9 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 			payloads.push({ content:splitOptions?.blankContentValue, embeds:[embed], ...baseOptions } as T);
 		}
 	});
+
+	// only include components in the first payload
+	payloads[0].components = components;
 
 	// only include files in the first payload
 	payloads[0].files = files;

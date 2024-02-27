@@ -64,7 +64,7 @@ function mergeEmbeds(content, embeds) {
     return undefined;
 }
 export function splitMessageOptions(msgOptions, splitOptions) {
-    const { content, embeds, files, ...baseOptions } = msgOptions;
+    const { components, content, embeds, files, ...baseOptions } = msgOptions;
     let contentToChunk;
     let embedsToPost;
     if (splitOptions?.embedsToContent) {
@@ -104,6 +104,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             payloads.push({ content: splitOptions?.blankContentValue, embeds: [embed], ...baseOptions });
         }
     });
+    payloads[0].components = components;
     payloads[0].files = files;
     return payloads;
 }
