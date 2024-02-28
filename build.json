@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.23",
+"version":"0.0.24",
 "branch":"main",
-"commit":"059b7ab7af426c5d88360314247d83ceed659bdf",
-"commitSubject":"include build",
-"commitTs":1709080663000,
-"commitDate":"2024-02-27-1637",
-"buildTs":1709080701000,
-"buildDate":"2024-02-27-1638",
+"commit":"ab2905904df4cad0ab63c08eceacab69a5cbf8aa",
+"commitSubject":"include max lengths for commands",
+"commitTs":1709163061000,
+"commitDate":"2024-02-28-1531",
+"buildTs":1709163085000,
+"buildDate":"2024-02-28-1531",
 "author":"Randal T Meyer"
 }
