@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.21",
+"version":"0.0.22",
 "branch":"main",
-"commit":"070f804e23b934d137d44dbc4cf2c3b5890bc4ae",
-"commitSubject":"allow embed color to be set/matched",
-"commitTs":1709074121000,
-"commitDate":"2024-02-27-1448",
-"buildTs":1709074143000,
-"buildDate":"2024-02-27-1449",
+"commit":"29ff794c8cdc6e5338ce23115ff9781b9c9048e8",
+"commitSubject":"allow embedContent to be passed in",
+"commitTs":1709080590000,
+"commitDate":"2024-02-27-1636",
+"buildTs":1709080612000,
+"buildDate":"2024-02-27-1636",
 "author":"Randal T Meyer"
 }
