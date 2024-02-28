@@ -1,4 +1,30 @@
 export declare const DiscordMaxValues: {
+    /** slash commands, message commands, user commands */
+    command: {
+        /** required */
+        nameLength: number;
+        /** required for CHAT_INPUT; empty string ("") for USER and MESSAGE */
+        descriptionLength: number;
+        option: {
+            count: number;
+            /** required */
+            nameLength: number;
+            /** required */
+            descriptionLength: number;
+            choice: {
+                count: number;
+                /** required */
+                nameLength: number;
+                /** required */
+                valueLength: number;
+            };
+        };
+        totalLength: number;
+        slashCount: number;
+        messageCount: number;
+        userCount: number;
+    };
+    /** message embeds */
     embed: {
         titleLength: number;
         descriptionLength: number;
@@ -11,9 +37,11 @@ export declare const DiscordMaxValues: {
         authorNameLength: number;
         totalLength: number;
     };
+    /** message */
     message: {
         contentLength: number;
         embedCount: number;
     };
+    /** user */
     usernameLength: number;
 };

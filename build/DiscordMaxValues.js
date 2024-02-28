@@ -1,4 +1,22 @@
 export const DiscordMaxValues = {
+    command: {
+        nameLength: 32,
+        descriptionLength: 100,
+        option: {
+            count: 25,
+            nameLength: 32,
+            descriptionLength: 100,
+            choice: {
+                count: 25,
+                nameLength: 100,
+                valueLength: 100
+            }
+        },
+        totalLength: 8000,
+        slashCount: 100,
+        messageCount: 5,
+        userCount: 5
+    },
     embed: {
         titleLength: 256,
         descriptionLength: 4096,
