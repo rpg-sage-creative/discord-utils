@@ -1,6 +1,8 @@
 import { ColorResolvable, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
-type MsgOptions = WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions;
-type SplitOptions = {
+type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions) & {
+    embedContent?: string;
+};
+export type SplitOptions = {
     /** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */
     blankContentValue?: string;
     /** Convert all content to embeds? */

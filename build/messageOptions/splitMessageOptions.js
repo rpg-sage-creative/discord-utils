@@ -64,18 +64,20 @@ function mergeEmbeds(content, embeds, color) {
     return undefined;
 }
 export function splitMessageOptions(msgOptions, splitOptions) {
-    const { components, content, embeds, files, ...baseOptions } = msgOptions;
+    const { components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
     let contentToChunk;
     let embedsToPost;
+    const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) ?? [];
+    const allIncomingEmbeds = convertedEmbeds.concat(embeds ?? []);
     if (splitOptions?.embedsToContent) {
-        contentToChunk = mergeContent(content, embeds);
+        contentToChunk = mergeContent(content, allIncomingEmbeds);
     }
     else if (splitOptions?.contentToEmbeds) {
-        embedsToPost = mergeEmbeds(content, embeds, splitOptions.embedColor);
+        embedsToPost = mergeEmbeds(content, allIncomingEmbeds, splitOptions.embedColor);
     }
     else {
         contentToChunk = content ?? undefined;
-        embedsToPost = embeds;
+        embedsToPost = allIncomingEmbeds;
     }
     const payloads = [];
     const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
