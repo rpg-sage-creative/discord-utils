@@ -65,10 +65,10 @@ function mergeEmbeds(content, embeds, color) {
 }
 export function splitMessageOptions(msgOptions, splitOptions) {
     const { components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
-    let contentToChunk;
-    let embedsToPost;
     const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) ?? [];
     const allIncomingEmbeds = convertedEmbeds.concat(embeds ?? []);
+    let contentToChunk;
+    let embedsToPost;
     if (splitOptions?.embedsToContent) {
         contentToChunk = mergeContent(content, allIncomingEmbeds);
     }
