@@ -1,6 +1,6 @@
 {
 	"name": "@rsc-utils/discord-utils",
-	"version": "0.0.25",
+	"version": "0.0.26",
 	"license": "ISC",
 	"main": "build/index.js",
 	"type": "module",

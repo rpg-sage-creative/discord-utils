@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.25",
+"version":"0.0.26",
 "branch":"main",
-"commit":"7d556dffced46bd7e6572e025ad5b387974bbec3",
-"commitSubject":"include build ...",
-"commitTs":1709163105000,
-"commitDate":"2024-02-28-1531",
-"buildTs":1709163128000,
-"buildDate":"2024-02-28-1532",
+"commit":"aec7f8ace5d41bc89a16013af73209dbbdefc163",
+"commitSubject":"fix getValueToAppend",
+"commitTs":1709272327000,
+"commitDate":"2024-02-29-2152",
+"buildTs":1709273986000,
+"buildDate":"2024-02-29-2219",
 "author":"Randal T Meyer"
 }
