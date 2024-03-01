@@ -1,10 +1,13 @@
-import { chunk } from "@rsc-utils/string-utils";
+import { chunk, isNotBlank } from "@rsc-utils/string-utils";
 import { MessageEmbed } from "discord.js";
 import { DiscordMaxValues } from "../DiscordMaxValues.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 function getValueToAppend(value, newLine, title) {
-    return `${title ? "### " : ""}${newLine ? "\n" : ""}${value ?? ""}`;
+    const titleOut = isNotBlank(value) && title ? "### " : "";
+    const newLineOut = newLine ? "\n" : "";
+    const valueOut = value?.trim() ?? "";
+    return titleOut + newLineOut + valueOut;
 }
 function embedsToContent(embeds) {
     const content = embeds?.map(embed => {
