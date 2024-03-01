@@ -4,6 +4,8 @@
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
 
+		"composite": true,
+
 		"forceConsistentCasingInFileNames": true,
 
 		"lib": [ "DOM", "ES2022" ],
