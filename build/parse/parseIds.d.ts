@@ -4,5 +4,5 @@ type MentionIdType = "channel" | "role" | "user";
 type UrlIdType = "channel" | "message";
 type IdType = MentionIdType | UrlIdType;
 /** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
-export declare function parseIds(message: DMessage, type: IdType, includeRaw?: boolean): Snowflake[];
+export declare function parseIds(messageOrContent: DMessage | string, type: IdType, includeRaw?: boolean): Snowflake[];
 export {};

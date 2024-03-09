@@ -54,10 +54,13 @@ function getContentUrlIds(type, content) {
 function uniqueNonNilSnowflakeFilter(value, index, array) {
     return isNonNilSnowflake(value) && array.indexOf(value) === index;
 }
-export function parseIds(message, type, includeRaw) {
-    const contentMentionIds = getContentMentionIds(type, message.content);
-    const contentUrlIds = getContentUrlIds(type, message.content);
-    const mentionIds = getMessageMentionIds(type, message);
-    const rawIds = includeRaw ? (message.content ?? "").match(/\d{16,}/g) ?? [] : [];
+export function parseIds(messageOrContent, type, includeRaw) {
+    const isString = typeof (messageOrContent) === "string";
+    const content = isString ? messageOrContent : messageOrContent.content;
+    const message = isString ? undefined : messageOrContent;
+    const contentMentionIds = getContentMentionIds(type, content);
+    const contentUrlIds = getContentUrlIds(type, content);
+    const mentionIds = message ? getMessageMentionIds(type, message) : [];
+    const rawIds = includeRaw ? (content ?? "").match(/\d{16,}/g) ?? [] : [];
     return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
 }
