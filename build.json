@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.26",
+"version":"0.0.27",
 "branch":"main",
-"commit":"aec7f8ace5d41bc89a16013af73209dbbdefc163",
-"commitSubject":"fix getValueToAppend",
-"commitTs":1709272327000,
-"commitDate":"2024-02-29-2152",
-"buildTs":1709273986000,
-"buildDate":"2024-02-29-2219",
+"commit":"c3f58bd9f862ed4cdd0ca50099909a8113e8eae2",
+"commitSubject":"update parseIds to accept a string",
+"commitTs":1710027073000,
+"commitDate":"2024-03-09-1531",
+"buildTs":1710027092000,
+"buildDate":"2024-03-09-1531",
 "author":"Randal T Meyer"
 }
