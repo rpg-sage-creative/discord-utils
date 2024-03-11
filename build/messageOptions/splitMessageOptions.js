@@ -111,7 +111,12 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             payloads.push({ content: blankContent, embeds: [embed], ...baseOptions });
         }
     });
-    payloads[0].components = components;
-    payloads[0].files = files;
+    if (components?.length || files?.length) {
+        if (!payloads.length) {
+            payloads.push({});
+        }
+        payloads[0].components = components;
+        payloads[0].files = files;
+    }
     return payloads;
 }
