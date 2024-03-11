@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.28",
+"version":"0.0.29",
 "branch":"main",
-"commit":"15e543be93ecc216eebdcd1a05b2082a0707040f",
-"commitSubject":"add wrapUrl",
-"commitTs":1710174544000,
-"commitDate":"2024-03-11-0929",
-"buildTs":1710174565000,
-"buildDate":"2024-03-11-0929",
+"commit":"b86689e62b48258bed7c233fe27192a2040dc32c",
+"commitSubject":"ensure we have a payload for components/files",
+"commitTs":1710184263000,
+"commitDate":"2024-03-11-1211",
+"buildTs":1710184286000,
+"buildDate":"2024-03-11-1211",
 "author":"Randal T Meyer"
 }
