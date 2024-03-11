@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.27",
+"version":"0.0.28",
 "branch":"main",
-"commit":"c3f58bd9f862ed4cdd0ca50099909a8113e8eae2",
-"commitSubject":"update parseIds to accept a string",
-"commitTs":1710027073000,
-"commitDate":"2024-03-09-1531",
-"buildTs":1710027092000,
-"buildDate":"2024-03-09-1531",
+"commit":"15e543be93ecc216eebdcd1a05b2082a0707040f",
+"commitSubject":"add wrapUrl",
+"commitTs":1710174544000,
+"commitDate":"2024-03-11-0929",
+"buildTs":1710174565000,
+"buildDate":"2024-03-11-0929",
 "author":"Randal T Meyer"
 }
