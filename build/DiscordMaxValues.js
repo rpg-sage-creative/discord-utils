@@ -17,6 +17,22 @@ export const DiscordMaxValues = {
         messageCount: 5,
         userCount: 5
     },
+    component: {
+        button: {
+            idLength: 100,
+            labelLength: 80
+        },
+        row: {
+            count: 5,
+            buttonCount: 5,
+            selectCount: 1
+        },
+        select: {
+            idLength: 100,
+            optionCount: 25,
+            placeholderLength: 150
+        }
+    },
     embed: {
         titleLength: 256,
         descriptionLength: 4096,

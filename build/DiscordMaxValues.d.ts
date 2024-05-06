@@ -24,6 +24,23 @@ export declare const DiscordMaxValues: {
         messageCount: number;
         userCount: number;
     };
+    /** message components */
+    component: {
+        button: {
+            idLength: number;
+            labelLength: number;
+        };
+        row: {
+            count: number;
+            buttonCount: number;
+            selectCount: number;
+        };
+        select: {
+            idLength: number;
+            optionCount: number;
+            placeholderLength: number;
+        };
+    };
     /** message embeds */
     embed: {
         titleLength: number;

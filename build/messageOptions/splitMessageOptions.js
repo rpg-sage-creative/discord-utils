@@ -41,7 +41,7 @@ function mergeContent(content, embeds) {
     const hasContent = !!content?.trim();
     const hasEmbedContent = !!embedContent?.trim();
     if (hasContent && hasEmbedContent) {
-        return `${content}\n\n${hasEmbedContent}`;
+        return `${content}\n\n${embedContent}`;
     }
     else if (hasEmbedContent) {
         return embedContent;
