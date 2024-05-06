@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.29",
+"version":"0.0.30",
 "branch":"main",
-"commit":"b86689e62b48258bed7c233fe27192a2040dc32c",
-"commitSubject":"ensure we have a payload for components/files",
-"commitTs":1710184263000,
-"commitDate":"2024-03-11-1211",
-"buildTs":1710184286000,
-"buildDate":"2024-03-11-1211",
+"commit":"9d71e51f4f3e3d75b6b049552f4718f9039ad02f",
+"commitSubject":"include build",
+"commitTs":1715021674000,
+"commitDate":"2024-05-06-1154",
+"buildTs":1715021697000,
+"buildDate":"2024-05-06-1154",
 "author":"Randal T Meyer"
 }
