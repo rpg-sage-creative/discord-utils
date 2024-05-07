@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.31",
+"version":"0.0.32",
 "branch":"main",
-"commit":"5daf14ecdb7c7b44a77f0a3b9c89855f8a0ee58a",
-"commitSubject":"expanded types and perms; transitional EmbedBuilder",
-"commitTs":1715113936000,
-"commitDate":"2024-05-07-1332",
-"buildTs":1715113966000,
-"buildDate":"2024-05-07-1332",
+"commit":"8c2f5763c1b73cce305a60fdd91c1ae7e0d66cd3",
+"commitSubject":"discord-api-types import fix",
+"commitTs":1715115736000,
+"commitDate":"2024-05-07-1402",
+"buildTs":1715115759000,
+"buildDate":"2024-05-07-1402",
 "author":"Randal T Meyer"
 }
