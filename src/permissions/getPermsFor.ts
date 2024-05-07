@@ -1,4 +1,4 @@
-import { PermissionFlagsBits } from "discord-api-types/v9.js";
+import { PermissionFlagsBits } from "discord-api-types/v10.js";
 import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
 import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased } from "../typeChecks.js";
 import type { ChannelPermissionString } from "./ChannelPermissionString.js";
