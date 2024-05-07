@@ -25,7 +25,7 @@ export function isDMBased(channel: Optional<DChannel>): channel is DDMChannel;
 export function isDMBased(channel: Optional<DWebhookChannel>): false;
 export function isDMBased(channel: Optional<DChannelOrUser>): channel is DDMChannel;
 export function isDMBased(channel: Optional<DChannelOrUser>): boolean {
-	return channel ? "recipient" in channel : false;
+	return channel ? ("recipient" in channel) || ("recipients" in channel) : false;
 }
 
 export function isGuildBased(channel: Optional<DChannel | GuildBasedChannel>): channel is DGuildChannel {
