@@ -1,5 +1,6 @@
 import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
 import type { ChannelPermissionString } from "./ChannelPermissionString.js";
+import { DWebhookChannel } from "../types.js";
 type AccessResults = {
     /** perms.has("MANAGE_CHANNELS") */
     canManageChannel: boolean;
@@ -15,6 +16,8 @@ type AccessResults = {
     canAddReactions: boolean;
     /** canManageWebhooks and "fetchWebhooks" in channel */
     canSendWebhooks: boolean;
+    /** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
+    webhookChannel?: DWebhookChannel;
 };
 type CheckedResults = AccessResults & {
     /** the perms checked */

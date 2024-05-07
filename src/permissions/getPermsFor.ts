@@ -1,6 +1,8 @@
+import { PermissionFlagsBits } from "discord-api-types/v9.js";
 import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
-import type { ChannelPermissionString } from "./ChannelPermissionString.js";
 import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased } from "../typeChecks.js";
+import type { ChannelPermissionString } from "./ChannelPermissionString.js";
+import { DWebhookChannel } from "../types.js";
 
 type AccessResults = {
 	/** perms.has("MANAGE_CHANNELS") */
@@ -23,6 +25,9 @@ type AccessResults = {
 
 	/** canManageWebhooks and "fetchWebhooks" in channel */
 	canSendWebhooks: boolean;
+
+	/** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
+	webhookChannel?: DWebhookChannel;
 };
 
 type CheckedResults = AccessResults & {
@@ -66,16 +71,17 @@ export function getPermsFor(channel: GuildBasedChannel, memberOrRole?: GuildMemb
 	}
 
 	const perms = channelWithPerms?.permissionsFor(memberId);
-	const canManageChannel = perms?.has("MANAGE_CHANNELS") ?? false;
-	const canManageWebhooks = perms?.has("MANAGE_WEBHOOKS") ?? false;
-	const canViewChannel = perms?.has("VIEW_CHANNEL") ?? false;
+	const canManageChannel = perms?.has(PermissionFlagsBits.ManageChannels) ?? false;
+	const canManageWebhooks = perms?.has(PermissionFlagsBits.ManageWebhooks) ?? false;
+	const canViewChannel = perms?.has(PermissionFlagsBits.ViewChannel) ?? false;
 	const isInChannel = isThread ? channel.guildMembers.has(memberId) : channel.members.has(memberId);
-	const canSendMessages = perms?.has(isThread ? "SEND_MESSAGES_IN_THREADS" : "SEND_MESSAGES") ?? false;
-	const canAddReactions = perms?.has("ADD_REACTIONS") ?? false;
+	const canSendMessages = perms?.has(isThread ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages) ?? false;
+	const canAddReactions = perms?.has(PermissionFlagsBits.AddReactions) ?? false;
 	const canSendWebhooks = canManageWebhooks && canFetchWebhooksFor(channelWithPerms);
+	const webhookChannel = canSendWebhooks ? channelWithPerms : undefined;
 
 	if (arguments.length < 3) {
-		return { canManageChannel, canManageWebhooks, canViewChannel, isInChannel, canSendMessages, canAddReactions, canSendWebhooks };
+		return { canManageChannel, canManageWebhooks, canViewChannel, isInChannel, canSendMessages, canAddReactions, canSendWebhooks, webhookChannel };
 	}
 
 	const missing = perms ? checked.filter(perm => !perms.has(perm)) : checked.slice();
@@ -90,6 +96,7 @@ export function getPermsFor(channel: GuildBasedChannel, memberOrRole?: GuildMemb
 		canSendMessages,
 		canAddReactions,
 		canSendWebhooks,
+		webhookChannel,
 		checked,
 		missing,
 		// hasMissing,
