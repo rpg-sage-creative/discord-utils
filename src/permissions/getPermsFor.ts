@@ -1,8 +1,8 @@
-import { PermissionFlagsBits } from "discord-api-types/v9.js";
+import { PermissionFlagsBits } from "discord-api-types/v9";
 import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
 import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased } from "../typeChecks.js";
+import type { DWebhookChannel } from "../types.js";
 import type { ChannelPermissionString } from "./ChannelPermissionString.js";
-import { DWebhookChannel } from "../types.js";
 
 type AccessResults = {
 	/** perms.has("MANAGE_CHANNELS") */
