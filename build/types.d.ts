@@ -16,6 +16,7 @@ export type DTextChannel = TextChannel & {
 };
 export type DThreadChannel = ThreadChannel & {
     type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD";
+    parent: DTextChannel | DForumChannel;
 };
 export type DGuildChannel = DForumChannel | DTextChannel | DThreadChannel;
 export type DWebhookChannel = DTextChannel | DForumChannel;
