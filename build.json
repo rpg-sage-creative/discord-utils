@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.32",
+"version":"0.0.33",
 "branch":"main",
-"commit":"8c2f5763c1b73cce305a60fdd91c1ae7e0d66cd3",
-"commitSubject":"discord-api-types import fix",
-"commitTs":1715115736000,
-"commitDate":"2024-05-07-1402",
-"buildTs":1715115759000,
-"buildDate":"2024-05-07-1402",
+"commit":"c94cc891fd157fbc8a356d5971faa00f3190f626",
+"commitSubject":"include recipients for multidm",
+"commitTs":1715116607000,
+"commitDate":"2024-05-07-1416",
+"buildTs":1715116629000,
+"buildDate":"2024-05-07-1417",
 "author":"Randal T Meyer"
 }
