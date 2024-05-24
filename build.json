@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.34",
+"version":"0.0.35",
 "branch":"main",
-"commit":"70ef51cdd3ae2d90b501bae2d2956ce1072d7b55",
-"commitSubject":"use core-utils",
-"commitTs":1716574403000,
-"commitDate":"2024-05-24-1113",
-"buildTs":1716574434000,
-"buildDate":"2024-05-24-1113",
+"commit":"7ce77de5cf5ace385b768ecddd1376b6c557856a",
+"commitSubject":"use updated core-utils",
+"commitTs":1716593334000,
+"commitDate":"2024-05-24-1628",
+"buildTs":1716593366000,
+"buildDate":"2024-05-24-1629",
 "author":"Randal"
 }
