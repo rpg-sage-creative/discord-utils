@@ -1,4 +1,4 @@
-import { type Snowflake } from "@rsc-utils/snowflake-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
 import { type DMessage } from "../types.js";
 type MentionIdType = "channel" | "role" | "user";
 type UrlIdType = "channel" | "message";

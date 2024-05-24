@@ -1,11 +1,12 @@
-import { createMentionRegex } from "./createMentionRegex.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { createMentionRegex } from "./createMentionRegex.js";
 function getGroupKey(type) {
     switch (type) {
         case "channel": return "channelId";
         case "message": return "messageId";
         case "role": return "roleId";
-        case "user": return "userId";
+        case "user":
+        default: return "userId";
     }
 }
 export function parseId(value, type) {

@@ -1,4 +1,4 @@
-import { isNonNilSnowflake } from "@rsc-utils/snowflake-utils";
+import { isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import { createMentionRegex } from "./createMentionRegex.js";
 function isMentionIdType(type) {

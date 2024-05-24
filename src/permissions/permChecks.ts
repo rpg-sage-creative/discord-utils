@@ -1,5 +1,4 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { isDMBased } from "../typeChecks.js";
 import type { DChannel } from "../types.js";
 import { getPermsFor } from "./getPermsFor.js";

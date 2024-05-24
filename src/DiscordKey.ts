@@ -1,5 +1,4 @@
-import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake, type NIL_SNOWFLAKE, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake, type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MessageReference } from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import type { DGuildChannel, DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";

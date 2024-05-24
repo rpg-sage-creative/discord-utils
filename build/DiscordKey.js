@@ -1,4 +1,4 @@
-import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/snowflake-utils";
+import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/core-utils";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
