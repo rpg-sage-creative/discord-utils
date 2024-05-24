@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.33",
+"version":"0.0.34",
 "branch":"main",
-"commit":"c94cc891fd157fbc8a356d5971faa00f3190f626",
-"commitSubject":"include recipients for multidm",
-"commitTs":1715116607000,
-"commitDate":"2024-05-07-1416",
-"buildTs":1715116629000,
-"buildDate":"2024-05-07-1417",
-"author":"Randal T Meyer"
+"commit":"70ef51cdd3ae2d90b501bae2d2956ce1072d7b55",
+"commitSubject":"use core-utils",
+"commitTs":1716574403000,
+"commitDate":"2024-05-24-1113",
+"buildTs":1716574434000,
+"buildDate":"2024-05-24-1113",
+"author":"Randal"
 }
