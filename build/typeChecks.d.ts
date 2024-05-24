@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { GuildBasedChannel } from "discord.js";
 import type { DChannel, DDMChannel, DGuildChannel, DTextChannel, DUser, DWebhookChannel } from "./types.js";
 type DChannelOrUser = DChannel | DWebhookChannel | DUser;

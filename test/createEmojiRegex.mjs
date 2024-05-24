@@ -1,8 +1,7 @@
-import { debug, info, warn } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { createEmojiRegex } from "../build/index.js";
 
-runTests(async function testCreateEmojiRegex() {
+runTests(async function test_createEmojiRegex() {
 	const regex = createEmojiRegex();
 	const test = value => regex.exec(value)?.[0];
 	const values = [

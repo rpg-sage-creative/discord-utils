@@ -1,5 +1,5 @@
 import { type NIL_SNOWFLAKE, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageReference } from "discord.js";
 import type { DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";
 interface IHasSnowflakeId {

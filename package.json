@@ -5,19 +5,17 @@
 	"main": "build/index.js",
 	"type": "module",
 	"scripts": {
-		"build": "bash ./node_modules/@rsc-utils/console-utils/scripts/sh/build.sh",
-		"release": "bash ./node_modules/@rsc-utils/console-utils/scripts/sh/release.sh",
-		"test": "bash ./node_modules/@rsc-utils/console-utils/scripts/sh/test.sh"
+		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh",
+		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
+		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh"
 	},
 	"devDependencies": {
-		"@rsc-utils/test-utils": "github:rpg-sage-creative/test-utils",
 		"@types/node": "^18.18.7"
 	},
 	"dependencies": {
-		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
 		"@rsc-utils/snowflake-utils": "github:rpg-sage-creative/snowflake-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
-		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"discord-api-types": "^0.27.3",
 		"discord.js": "^13.17.1",
 		"emoji-regex": "^10.3.0",

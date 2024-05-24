@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { GuildMember, Webhook } from "discord.js";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";
 type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember | Webhook;

@@ -1,8 +1,7 @@
-import { debug, info, warn } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { parseSnowflake } from "../build/index.js";
 
-runTests(async function testParseSnowflake() {
+runTests(async function test_parseSnowflake() {
 	const id = "1234567890123456";
 	const channelId = `<#${id}>`;
 	const roleId = `<@&${id}>`;

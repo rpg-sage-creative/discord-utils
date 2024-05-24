@@ -1,8 +1,7 @@
-import { debug, info, warn } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { safeMentions } from "../build/index.js";
 
-runTests(async function testSafeMentions() {
+runTests(async function test_safeMentions() {
 	const values = [
 		["one @here", "one @\u200Bhere"],
 		["two @everyone", "two @\u200Beveryone"],

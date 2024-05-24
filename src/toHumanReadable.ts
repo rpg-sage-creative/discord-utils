@@ -1,5 +1,5 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { APIUser } from "discord-api-types/v9";
 import type { GuildMember, Webhook } from "discord.js";
 import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";

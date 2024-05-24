@@ -1,8 +1,7 @@
-import { debug, info, warn } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { wrapUrl } from "../../build/index.js";
 
-runTests(async function testWrapUrl() {
+runTests(async function test_wrapUrl() {
 	const unwrappedUrl = "https://google.com";
 	const wrappedUrl = "<https://google.com>";
 	const nonUrl = "hello there";
@@ -15,4 +14,4 @@ runTests(async function testWrapUrl() {
 	assert(wrappedUrl, wrapUrl, wrappedUrl);
 	assert(nonUrl, wrapUrl, nonUrl);
 	assert(multipleUrlsAfter, wrapUrl, multipleUrlsBefore, true);
-});
+}, true);

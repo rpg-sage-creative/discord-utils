@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/console-utils";
+import { error } from "@rsc-utils/core-utils";
 function isTextChannel(channel) {
     if (channel) {
         if ("isText" in channel && typeof (channel.isText) === "function" && channel.isText()) {

@@ -1,5 +1,5 @@
 import { type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { createMentionRegex } from "./createMentionRegex.js";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 
