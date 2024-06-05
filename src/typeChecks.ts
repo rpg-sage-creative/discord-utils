@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { GuildBasedChannel } from "discord.js";
-import type { DChannel, DDMChannel, DGuildChannel, DTextChannel, DUser, DWebhookChannel } from "./types.js";
+import type { GuildBasedChannel, TextBasedChannel } from "discord.js";
+import type { DChannel, DDMChannel, DGuildChannel, DTextChannel, DThreadChannel, DUser, DWebhookChannel } from "./types.js";
 
 type DChannelOrUser = DChannel | DWebhookChannel | DUser;
 
@@ -31,4 +31,11 @@ export function isDMBased(channel: Optional<DChannelOrUser>): boolean {
 export function isGuildBased(channel: Optional<DChannel | GuildBasedChannel>): channel is DGuildChannel {
 	const types = ["GUILD_TEXT", "GUILD_PRIVATE_THREAD", "GUILD_PUBLIC_THREAD", "GUILD_FORUM"];
 	return types.includes(channel?.type!);
+}
+
+export function isThread(channel: Optional<DChannel | TextBasedChannel>): channel is DThreadChannel {
+	if (channel?.isThread()) {
+		return isGuildBased(channel.parent);
+	}
+	return false;
 }

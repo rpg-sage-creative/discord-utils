@@ -4,6 +4,7 @@ import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import type { DGuildChannel, DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
+import { isThread } from "./typeChecks.js";
 
 interface IHasSnowflakeId { id:Snowflake; }
 type TSnowflakeResolvable = string | IHasSnowflakeId;
@@ -104,7 +105,7 @@ export class DiscordKey implements MessageReference {
 
 	public static fromChannel(channel: DMessageChannel): DiscordKey {
 		const guildId = (channel as DGuildChannel).guild?.id;
-		if (channel.isThread()) {
+		if (isThread(channel)) {
 			const threadId = channel.id;
 			const channelId = channel.parent?.id;
 			return new DiscordKey(guildId, channelId, threadId);
@@ -114,7 +115,7 @@ export class DiscordKey implements MessageReference {
 
 	public static fromInteraction(interaction: DInteraction): DiscordKey {
 		const channel = interaction.channel;
-		if (channel?.isThread()) {
+		if (isThread(channel)) {
 			const threadId = channel.id;
 			const channelId = channel.parent?.id;
 			return new DiscordKey(interaction.guildId, channelId, threadId);
@@ -125,7 +126,7 @@ export class DiscordKey implements MessageReference {
 	public static fromMessage(message: DMessage): DiscordKey {
 		const channel = message.channel;
 		const guildId = (channel as DGuildChannel).guild?.id;
-		if (channel.isThread()) {
+		if (isThread(channel)) {
 			const threadId = channel.id;
 			const channelId = channel.parent?.id;
 			return new DiscordKey(guildId, channelId, threadId, message.id);

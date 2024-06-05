@@ -1,5 +1,6 @@
-import type { ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, Snowflake, TextChannel, ThreadChannel, User } from "discord.js";
-export type DInteraction<Cached extends CacheType = CacheType> = ButtonInteraction<Cached> | CommandInteraction<Cached> | MessageComponentInteraction<Cached> | ModalSubmitInteraction<Cached>;
+import type { AutocompleteInteraction, ButtonInteraction, CacheType, CommandInteraction, DMChannel, ForumChannel, Guild, GuildPreview, If, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, PartialDMChannel, PartialMessage, PartialMessageReaction, PartialUser, Role, SelectMenuInteraction, Snowflake, TextChannel, ThreadChannel, User, VoiceChannel } from "discord.js";
+export type DInteraction<Cached extends CacheType = CacheType> = ButtonInteraction<Cached> | SelectMenuInteraction<Cached> | MessageComponentInteraction<Cached> | AutocompleteInteraction<Cached> | CommandInteraction<Cached> | ModalSubmitInteraction<Cached>;
+export type DRepliableInteraction<Cached extends CacheType = CacheType> = ButtonInteraction<Cached> | SelectMenuInteraction<Cached> | MessageComponentInteraction<Cached> | CommandInteraction<Cached> | ModalSubmitInteraction<Cached>;
 export type DReaction = MessageReaction | PartialMessageReaction;
 /** Discord User or Partial User */
 export type DUser = User | PartialUser;
@@ -17,6 +18,9 @@ export type DTextChannel = TextChannel & {
 export type DThreadChannel = ThreadChannel & {
     type: "GUILD_PUBLIC_THREAD" | "GUILD_PRIVATE_THREAD";
     parent: DTextChannel | DForumChannel;
+};
+export type DVoiceChannel = VoiceChannel & {
+    type: "GUILD_VOICE";
 };
 export type DGuildChannel = DForumChannel | DTextChannel | DThreadChannel;
 export type DWebhookChannel = DTextChannel | DForumChannel;

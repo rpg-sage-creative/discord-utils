@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { GuildBasedChannel } from "discord.js";
-import type { DChannel, DDMChannel, DGuildChannel, DTextChannel, DUser, DWebhookChannel } from "./types.js";
+import type { GuildBasedChannel, TextBasedChannel } from "discord.js";
+import type { DChannel, DDMChannel, DGuildChannel, DTextChannel, DThreadChannel, DUser, DWebhookChannel } from "./types.js";
 type DChannelOrUser = DChannel | DWebhookChannel | DUser;
 export declare function canCheckPermissionsFor(user: Optional<DUser>): false;
 export declare function canCheckPermissionsFor(channel: Optional<DChannel>): channel is DGuildChannel;
@@ -15,4 +15,5 @@ export declare function isDMBased(channel: Optional<DChannel>): channel is DDMCh
 export declare function isDMBased(channel: Optional<DWebhookChannel>): false;
 export declare function isDMBased(channel: Optional<DChannelOrUser>): channel is DDMChannel;
 export declare function isGuildBased(channel: Optional<DChannel | GuildBasedChannel>): channel is DGuildChannel;
+export declare function isThread(channel: Optional<DChannel | TextBasedChannel>): channel is DThreadChannel;
 export {};

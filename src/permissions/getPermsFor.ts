@@ -1,6 +1,6 @@
 import { PermissionFlagsBits } from "discord-api-types/v9";
 import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
-import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased } from "../typeChecks.js";
+import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased, isThread as isThreadChannel } from "../typeChecks.js";
 import type { DWebhookChannel } from "../types.js";
 import type { ChannelPermissionString } from "./ChannelPermissionString.js";
 
@@ -64,7 +64,7 @@ export function getPermsFor(channel: GuildBasedChannel, memberOrRole?: GuildMemb
 	}
 
 	// check for thread and ensure we have the correct channel for perms checking
-	const isThread = channel.isThread();
+	const isThread = isThreadChannel(channel);
 	const channelWithPerms = isThread ? channel.parent : channel;
 	if (!canCheckPermissionsFor(channelWithPerms)) {
 		return { canManageChannel:false, canManageWebhooks:false, canViewChannel:false, isInChannel:false, canSendMessages:false, canAddReactions:false, canSendWebhooks:false };

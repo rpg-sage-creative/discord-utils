@@ -67,7 +67,7 @@ function mergeEmbeds(content, embeds, color) {
     return undefined;
 }
 export function splitMessageOptions(msgOptions, splitOptions) {
-    const { components, content, embedContent, embeds, files, ...baseOptions } = msgOptions;
+    const { attachments, components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
     const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) ?? [];
     const allIncomingEmbeds = convertedEmbeds.concat(embeds ?? []);
     let contentToChunk;
@@ -82,6 +82,9 @@ export function splitMessageOptions(msgOptions, splitOptions) {
         contentToChunk = content ?? undefined;
         embedsToPost = allIncomingEmbeds;
     }
+    if (replyingTo && contentToChunk) {
+        contentToChunk = replyingTo + "\n\n" + contentToChunk;
+    }
     const payloads = [];
     const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
     contentChunks.forEach(contentChunk => {
@@ -91,7 +94,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             ...baseOptions
         });
     });
-    let blankContent = splitOptions?.blankContentValue?.trim();
+    let blankContent = (contentToChunk ? null : replyingTo) ?? splitOptions?.blankContentValue?.trim();
     if (!blankContent?.length) {
         blankContent = undefined;
     }
@@ -111,10 +114,11 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             payloads.push({ content: blankContent, embeds: [embed], ...baseOptions });
         }
     });
-    if (components?.length || files?.length) {
+    if (attachments?.length || components?.length || files?.length) {
         if (!payloads.length) {
             payloads.push({});
         }
+        payloads[0].attachments = attachments;
         payloads[0].components = components;
         payloads[0].files = files;
     }

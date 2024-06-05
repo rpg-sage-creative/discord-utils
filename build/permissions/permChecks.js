@@ -1,7 +1,7 @@
-import { isDMBased } from "../typeChecks.js";
+import { isDMBased, isThread } from "../typeChecks.js";
 import { getPermsFor } from "./getPermsFor.js";
 function isLockedOrArchivedThread(channel) {
-    if (channel.isThread()) {
+    if (isThread(channel)) {
         if (channel.locked) {
             return true;
         }

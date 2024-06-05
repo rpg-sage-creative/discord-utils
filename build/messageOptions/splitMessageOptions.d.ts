@@ -1,6 +1,7 @@
 import { ColorResolvable, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
 type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions) & {
     embedContent?: string;
+    replyingTo?: string;
 };
 export type SplitOptions = {
     /** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */

@@ -2,6 +2,7 @@ import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/co
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
+import { isThread } from "./typeChecks.js";
 export class DiscordKey {
     get guildId() {
         return this.hasServer ? this.server : undefined;
@@ -75,7 +76,7 @@ export class DiscordKey {
     }
     static fromChannel(channel) {
         const guildId = channel.guild?.id;
-        if (channel.isThread()) {
+        if (isThread(channel)) {
             const threadId = channel.id;
             const channelId = channel.parent?.id;
             return new DiscordKey(guildId, channelId, threadId);
@@ -84,7 +85,7 @@ export class DiscordKey {
     }
     static fromInteraction(interaction) {
         const channel = interaction.channel;
-        if (channel?.isThread()) {
+        if (isThread(channel)) {
             const threadId = channel.id;
             const channelId = channel.parent?.id;
             return new DiscordKey(interaction.guildId, channelId, threadId);
@@ -94,7 +95,7 @@ export class DiscordKey {
     static fromMessage(message) {
         const channel = message.channel;
         const guildId = channel.guild?.id;
-        if (channel.isThread()) {
+        if (isThread(channel)) {
             const threadId = channel.id;
             const channelId = channel.parent?.id;
             return new DiscordKey(guildId, channelId, threadId, message.id);

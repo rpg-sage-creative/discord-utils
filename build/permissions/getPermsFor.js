@@ -1,11 +1,11 @@
 import { PermissionFlagsBits } from "discord-api-types/v9";
-import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased } from "../typeChecks.js";
+import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased, isThread as isThreadChannel } from "../typeChecks.js";
 export function getPermsFor(channel, memberOrRole, ...checked) {
     const memberId = typeof (memberOrRole) === "string" ? memberOrRole : memberOrRole?.id;
     if (!memberId || !isGuildBased(channel)) {
         return { canManageChannel: false, canManageWebhooks: false, canViewChannel: false, isInChannel: false, canSendMessages: false, canAddReactions: false, canSendWebhooks: false };
     }
-    const isThread = channel.isThread();
+    const isThread = isThreadChannel(channel);
     const channelWithPerms = isThread ? channel.parent : channel;
     if (!canCheckPermissionsFor(channelWithPerms)) {
         return { canManageChannel: false, canManageWebhooks: false, canViewChannel: false, isInChannel: false, canSendMessages: false, canAddReactions: false, canSendWebhooks: false };

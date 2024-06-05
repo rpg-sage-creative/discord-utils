@@ -1,10 +1,10 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { isDMBased } from "../typeChecks.js";
+import { isDMBased, isThread } from "../typeChecks.js";
 import type { DChannel } from "../types.js";
 import { getPermsFor } from "./getPermsFor.js";
 
 function isLockedOrArchivedThread(channel: DChannel): boolean {
-	if (channel.isThread()) {
+	if (isThread(channel)) {
 		/** @todo look into checking channel.sendable */
 		if (channel.locked) {
 			return true;
