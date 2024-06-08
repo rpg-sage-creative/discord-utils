@@ -1,8 +1,11 @@
-import { isNilSnowflake, isNonNilSnowflake, orNilSnowflake } from "@rsc-utils/core-utils";
+import { isNilSnowflake, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import {} from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
+import { resolveSnowflake } from "./resolveSnowflake.js";
+import { isGuildBased, isThread } from "./typeChecks.js";
+import {} from "./types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
-import { isThread } from "./typeChecks.js";
 export class DiscordKey {
     get guildId() {
         return this.hasServer ? this.server : undefined;
@@ -75,7 +78,7 @@ export class DiscordKey {
         return resolvables.map(DiscordKey.resolveId).join("-");
     }
     static fromChannel(channel) {
-        const guildId = channel.guild?.id;
+        const guildId = isGuildBased(channel) ? channel.guildId : undefined;
         if (isThread(channel)) {
             const threadId = channel.id;
             const channelId = channel.parent?.id;
@@ -94,7 +97,7 @@ export class DiscordKey {
     }
     static fromMessage(message) {
         const channel = message.channel;
-        const guildId = channel.guild?.id;
+        const guildId = isGuildBased(channel) ? channel.guildId : undefined;
         if (isThread(channel)) {
             const threadId = channel.id;
             const channelId = channel.parent?.id;
@@ -106,7 +109,7 @@ export class DiscordKey {
         return DiscordKey.fromMessage(messageReaction.message);
     }
     static resolveId(resolvable) {
-        return orNilSnowflake(typeof (resolvable) === "string" ? resolvable : resolvable?.id);
+        return resolveSnowflake(resolvable, true);
     }
     static fromUrl(url) {
         const messageMatch = createDiscordUrlRegex("message").exec(url);

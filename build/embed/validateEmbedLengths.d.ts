@@ -1,2 +1,2 @@
-import type { EmbedResolvable } from "./EmbedResolvable.js";
-export declare function validateEmbedLengths(embed: EmbedResolvable): boolean;
+import { type EmbedResolvable } from "./EmbedResolvable.js";
+export declare function validateEmbedLengths(resolvable: EmbedResolvable): boolean;

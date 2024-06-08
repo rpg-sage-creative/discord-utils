@@ -1,4 +1,4 @@
-import { orNilSnowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, orNilSnowflake } from "@rsc-utils/core-utils";
 export function resolveSnowflake(resolvable, orNil) {
     const out = orNil ? orNilSnowflake : (value) => value;
     if (resolvable) {

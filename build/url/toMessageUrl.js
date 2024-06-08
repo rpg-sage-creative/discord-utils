@@ -1,3 +1,6 @@
+import {} from "@rsc-utils/core-utils";
+import {} from "discord.js";
+import {} from "../types.js";
 function createUrl(guildId, channelId, messageId) {
     return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}/${messageId}`;
 }

@@ -1,3 +1,4 @@
+import {} from "@rsc-utils/core-utils";
 import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import { createMentionRegex } from "./createMentionRegex.js";
 function getGroupKey(type) {

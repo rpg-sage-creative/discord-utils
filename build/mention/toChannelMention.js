@@ -1,4 +1,5 @@
-import { Formatters } from "discord.js";
+import {} from "@rsc-utils/core-utils";
+import { channelMention } from "discord.js";
 export function toChannelMention(id) {
-    return id ? Formatters.channelMention(id) : null;
+    return id ? channelMention(id) : null;
 }

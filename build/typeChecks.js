@@ -1,19 +1,27 @@
-export function canCheckPermissionsFor(channel) {
-    return channel ? "permissionsFor" in channel : false;
+export function canCheckPermissionsFor(value) {
+    return isChannel(value) && "permissionsFor" in value;
 }
-export function canFetchWebhooksFor(channel) {
-    return channel ? "fetchWebhooks" in channel : false;
+export function canFetchWebhooksFor(value) {
+    return isChannel(value) && "fetchWebhooks" in value;
 }
-export function isDMBased(channel) {
-    return channel ? ("recipient" in channel) || ("recipients" in channel) : false;
+export function isChannel(value) {
+    return value ? "isThread" in value : false;
 }
-export function isGuildBased(channel) {
-    const types = ["GUILD_TEXT", "GUILD_PRIVATE_THREAD", "GUILD_PUBLIC_THREAD", "GUILD_FORUM"];
-    return types.includes(channel?.type);
+export function isMessageTarget(value) {
+    return value ? "send" in value : false;
 }
-export function isThread(channel) {
-    if (channel?.isThread()) {
-        return isGuildBased(channel.parent);
-    }
-    return false;
+export function isDMBased(value) {
+    return isChannel(value) && value.isDMBased();
+}
+export function isGroupDMBased(value) {
+    return isDMBased(value) && "recipients" in value;
+}
+export function isGuildBased(value) {
+    return isChannel(value) && "guild" in value;
+}
+export function isThread(value) {
+    return isChannel(value) && value.isThread();
+}
+export function isUser(value) {
+    return value ? "createDM" in value : false;
 }

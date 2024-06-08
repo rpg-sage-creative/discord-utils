@@ -1,5 +1,6 @@
-import { ColorResolvable, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
-type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions) & {
+import { type ColorResolvable, type MessageCreateOptions, type MessageEditOptions, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
+type MessageOptions = MessageCreateOptions | MessageEditOptions | WebhookMessageCreateOptions | WebhookMessageEditOptions;
+type SplitMessageOptions<T extends MessageOptions> = T & {
     embedContent?: string;
     replyingTo?: string;
 };
@@ -14,5 +15,5 @@ export type SplitOptions = {
     embedColor?: ColorResolvable;
 };
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
-export declare function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[];
+export declare function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitMessageOptions<T>, splitOptions?: SplitOptions): T[];
 export {};

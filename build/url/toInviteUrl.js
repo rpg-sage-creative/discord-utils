@@ -1,4 +1,6 @@
 import { error } from "@rsc-utils/core-utils";
+import {} from "@rsc-utils/core-utils";
+import { Guild } from "discord.js";
 function isTextChannel(channel) {
     if (channel) {
         if ("isText" in channel && typeof (channel.isText) === "function" && channel.isText()) {

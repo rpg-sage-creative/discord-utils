@@ -1,10 +1,7 @@
 import { type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { MessageReference } from "discord.js";
-import type { DInteraction, DMessage, DMessageChannel, DReaction } from "./types.js";
-interface IHasSnowflakeId {
-    id: Snowflake;
-}
-type TSnowflakeResolvable = string | IHasSnowflakeId;
+import { type Channel, type MessageReference } from "discord.js";
+import { type SnowflakeResolvable } from "./resolveSnowflake.js";
+import { type DInteraction, type MessageOrPartial, type ReactionOrPartial } from "./types.js";
 export declare class DiscordKey implements MessageReference {
     get guildId(): Snowflake | undefined;
     get channelId(): Snowflake;
@@ -24,9 +21,9 @@ export declare class DiscordKey implements MessageReference {
     /** @deprecated */
     hasThread: boolean;
     hasMessage: boolean;
-    constructor(server: Optional<TSnowflakeResolvable>, channel: Optional<TSnowflakeResolvable>, 
+    constructor(server: Optional<SnowflakeResolvable>, channel: Optional<SnowflakeResolvable>, 
     /** @deprecated */
-    thread?: Optional<TSnowflakeResolvable>, message?: Optional<TSnowflakeResolvable>);
+    thread?: Optional<SnowflakeResolvable>, message?: Optional<SnowflakeResolvable>);
     /** @deprecated Returns the thread if it has one. Returns the channel otherwise. */
     get threadOrChannel(): Snowflake;
     /** @deprecated */
@@ -40,13 +37,12 @@ export declare class DiscordKey implements MessageReference {
     toChannelUrl(): string;
     toMessageUrl(): string | null;
     toUrl(): string;
-    static createKey(...resolvables: Optional<TSnowflakeResolvable>[]): string;
-    static fromChannel(channel: DMessageChannel): DiscordKey;
+    static createKey(...resolvables: Optional<SnowflakeResolvable>[]): string;
+    static fromChannel(channel: Channel): DiscordKey;
     static fromInteraction(interaction: DInteraction): DiscordKey;
-    static fromMessage(message: DMessage): DiscordKey;
-    static fromMessageReaction(messageReaction: DReaction): DiscordKey;
+    static fromMessage(message: MessageOrPartial): DiscordKey;
+    static fromMessageReaction(messageReaction: ReactionOrPartial): DiscordKey;
     /** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
-    static resolveId(resolvable: Optional<TSnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE;
+    static resolveId(resolvable: Optional<SnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE;
     static fromUrl(url: string): DiscordKey | null;
 }
-export {};

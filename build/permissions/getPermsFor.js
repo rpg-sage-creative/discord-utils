@@ -1,5 +1,7 @@
-import { PermissionFlagsBits } from "discord-api-types/v9";
+import { PermissionFlagsBits } from "discord.js";
 import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased, isThread as isThreadChannel } from "../typeChecks.js";
+import {} from "../types.js";
+import {} from "./ChannelPermissionString.js";
 export function getPermsFor(channel, memberOrRole, ...checked) {
     const memberId = typeof (memberOrRole) === "string" ? memberOrRole : memberOrRole?.id;
     if (!memberId || !isGuildBased(channel)) {

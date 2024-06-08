@@ -1,6 +1,6 @@
-import type { GuildBasedChannel, GuildMember, GuildMemberResolvable, Role, RoleResolvable } from "discord.js";
-import type { DWebhookChannel } from "../types.js";
-import type { ChannelPermissionString } from "./ChannelPermissionString.js";
+import { type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
+import { type WebhookChannel } from "../types.js";
+import { type ChannelPermissionString } from "./ChannelPermissionString.js";
 type AccessResults = {
     /** perms.has("MANAGE_CHANNELS") */
     canManageChannel: boolean;
@@ -17,7 +17,7 @@ type AccessResults = {
     /** canManageWebhooks and "fetchWebhooks" in channel */
     canSendWebhooks: boolean;
     /** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
-    webhookChannel?: DWebhookChannel;
+    webhookChannel?: WebhookChannel;
 };
 type CheckedResults = AccessResults & {
     /** the perms checked */
@@ -31,7 +31,7 @@ type CheckedResults = AccessResults & {
 };
 type GuildMemberOrRoleResolvable = GuildMember | GuildMemberResolvable | Role | RoleResolvable;
 /** A quick check to see if a member or role can view or manage a channel. */
-export declare function getPermsFor(channel: GuildBasedChannel, memberOrRole: GuildMemberOrRoleResolvable): AccessResults;
+export declare function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable): AccessResults;
 /** Checks the user/role and channel to see which of the given permissions are missing or present. */
-export declare function getPermsFor(channel: GuildBasedChannel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: ChannelPermissionString[]): CheckedResults;
+export declare function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: ChannelPermissionString[]): CheckedResults;
 export {};

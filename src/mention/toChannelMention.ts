@@ -1,6 +1,6 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Formatters } from "discord.js";
+import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { channelMention } from "discord.js";
 
 export function toChannelMention(id: Optional<Snowflake>): string | null {
-	return id ? Formatters.channelMention(id) : null;
+	return id ? channelMention(id) : null;
 }

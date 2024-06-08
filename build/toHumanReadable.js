@@ -1,15 +1,18 @@
+import {} from "@rsc-utils/core-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import {} from "discord.js";
+import { isDMBased, isGroupDMBased } from "./typeChecks.js";
 function channelToName(channel) {
     if (channel) {
-        if ("guild" in channel) {
-            const guildName = channel.guild?.name ?? channel.guildId ?? "UnknownGuild";
-            const channelName = channel.name ?? channel.id;
-            return `${guildName}#${ZERO_WIDTH_SPACE}${channelName}`;
-        }
-        if (channel.recipient) {
+        if (isDMBased(channel)) {
+            if (isGroupDMBased(channel)) {
+                return channel.recipients.map(userToMention).join(",");
+            }
             return userToMention(channel.recipient);
         }
-        return `#${ZERO_WIDTH_SPACE}${channel.id}`;
+        const guildName = channel.guild?.name ?? channel.guildId ?? "UnknownGuild";
+        const channelName = channel.name ?? channel.id;
+        return `${guildName}#${ZERO_WIDTH_SPACE}${channelName}`;
     }
     return null;
 }
@@ -27,8 +30,11 @@ function userToMention(user) {
         if ("displayName" in user && user.displayName) {
             return `@${ZERO_WIDTH_SPACE}${user.displayName}`;
         }
-        const discriminator = (user.discriminator ?? "0") !== "0" ? `#${user.discriminator}` : ``;
-        return `@${ZERO_WIDTH_SPACE}${user.username}${discriminator}`;
+        if ("discriminator" in user) {
+            const discriminator = (user.discriminator ?? "0") !== "0" ? `#${user.discriminator}` : ``;
+            return `@${ZERO_WIDTH_SPACE}${user.username}${discriminator}`;
+        }
+        return `@${ZERO_WIDTH_SPACE}${user.username}`;
     }
     return "@UnknownUser";
 }

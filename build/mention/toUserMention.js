@@ -1,4 +1,5 @@
-import { Formatters } from "discord.js";
+import {} from "@rsc-utils/core-utils";
+import { userMention } from "discord.js";
 export function toUserMention(id) {
-    return id ? Formatters.userMention(id) : null;
+    return id ? userMention(id) : null;
 }

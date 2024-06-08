@@ -1,7 +1,6 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import type { GuildMember, Webhook } from "discord.js";
-import type { DChannel, DForumChannel, DMessage, DUser } from "./types.js";
-type Target = DChannel | DForumChannel | DMessage | DUser | GuildMember | Webhook;
+import { type Optional } from "@rsc-utils/core-utils";
+import { type Channel, type GuildMember, type Message, type User, type Webhook } from "discord.js";
+type Target = Channel | Message | User | GuildMember | Webhook;
 /**
  * Returns a string that represents the Discord object in a meaningful way.
  * Users become @UserName.
