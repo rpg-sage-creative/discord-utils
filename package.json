@@ -15,8 +15,7 @@
 	"dependencies": {
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
-		"discord-api-types": "^0.27.3",
-		"discord.js": "^13.17.1",
+		"discord.js": "^14.15.3",
 		"emoji-regex": "^10.3.0",
 		"xregexp": "^5.1.1"
 	}
