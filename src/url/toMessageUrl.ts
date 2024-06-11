@@ -1,8 +1,8 @@
-import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { type Optional } from "@rsc-utils/core-utils";
 import { type MessageReference } from "discord.js";
 import { type MessageOrPartial } from "../types.js";
 
-function createUrl(guildId: Optional<Snowflake>, channelId: Snowflake, messageId: Snowflake): string {
+function createUrl(guildId: Optional<string>, channelId: string, messageId: string): string {
 	return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}/${messageId}`;
 }
 

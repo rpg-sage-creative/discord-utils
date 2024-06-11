@@ -28,5 +28,5 @@ export function parseId(value, type) {
             }
         }
     }
-    return null;
+    return undefined;
 }

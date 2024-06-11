@@ -1,9 +1,9 @@
-import { NIL_SNOWFLAKE, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isSnowflake, NIL_SNOWFLAKE, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 
 type HasSnowflakeId = { id:Snowflake; };
 /** @deprecated */
 type HasSnowflakeDid = { did:Snowflake; };
-export type SnowflakeResolvable = Snowflake | HasSnowflakeId | HasSnowflakeDid;
+export type SnowflakeResolvable = Snowflake | string | HasSnowflakeId | HasSnowflakeDid;
 
 type CanHaveSnowflakeId = { id?:Snowflake; };
 /** @deprecated */
@@ -26,7 +26,7 @@ export function resolveSnowflake(resolvable: Optional<SnowflakeResolvable>): Sno
 export function resolveSnowflake(resolvable: Optional<SnowflakeResolvable>, orNil: true): Snowflake | NIL_SNOWFLAKE;
 
 export function resolveSnowflake(resolvable: Optional<SnowflakeResolvable | CanBeSnowflakeResolvable>, orNil?: true): Snowflake | NIL_SNOWFLAKE | undefined {
-	const out = orNil ? orNilSnowflake : (value: Optional<Snowflake>) => value as Snowflake;
+	const out = orNil ? orNilSnowflake : (value: Optional<string>) => isSnowflake(value) ? value : undefined;
 	if (resolvable) {
 		if (typeof(resolvable) === "string") {
 			return out(resolvable);

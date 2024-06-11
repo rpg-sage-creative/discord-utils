@@ -6,7 +6,7 @@ type HasSnowflakeId = {
 type HasSnowflakeDid = {
     did: Snowflake;
 };
-export type SnowflakeResolvable = Snowflake | HasSnowflakeId | HasSnowflakeDid;
+export type SnowflakeResolvable = Snowflake | string | HasSnowflakeId | HasSnowflakeDid;
 type CanHaveSnowflakeId = {
     id?: Snowflake;
 };

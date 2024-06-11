@@ -42,8 +42,8 @@ function getMentionKey(type: MentionIdType): MentionKey { // NOSONAR
 	}
 }
 
-/** Reusable type for Snowflake | undefined. */
-type PossibleSnowflake = Snowflake | undefined;
+/** Reusable type for Snowflake | string | undefined. */
+type PossibleSnowflake = Snowflake | string | undefined;
 
 /** Parses the content for mentions of the given IdType and returns the id/snowflakes. */
 function getContentMentionIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {

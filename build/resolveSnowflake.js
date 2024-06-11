@@ -1,6 +1,6 @@
-import { NIL_SNOWFLAKE, orNilSnowflake } from "@rsc-utils/core-utils";
+import { isSnowflake, NIL_SNOWFLAKE, orNilSnowflake } from "@rsc-utils/core-utils";
 export function resolveSnowflake(resolvable, orNil) {
-    const out = orNil ? orNilSnowflake : (value) => value;
+    const out = orNil ? orNilSnowflake : (value) => isSnowflake(value) ? value : undefined;
     if (resolvable) {
         if (typeof (resolvable) === "string") {
             return out(resolvable);
