@@ -11,5 +11,5 @@ runTests(async function test_parseSnowflake() {
 	assert(id, parseSnowflake, channelId);
 	assert(id, parseSnowflake, roleId);
 	assert(id, parseSnowflake, userId);
-	assert(null, parseSnowflake, control);
+	assert(undefined, parseSnowflake, control);
 }, true);

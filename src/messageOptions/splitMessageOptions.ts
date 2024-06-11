@@ -5,6 +5,7 @@ import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
+import type { Optional } from "@rsc-utils/core-utils";
 
 type MessageOptions = MessageCreateOptions | MessageEditOptions | WebhookMessageCreateOptions | WebhookMessageEditOptions;
 type SplitMessageOptions<T extends MessageOptions> = T & { embedContent?:string; replyingTo?:string; };
@@ -23,7 +24,7 @@ export type SplitOptions = {
 type MsgEmbed = Embed | APIEmbed;
 
 /** Ensures we have a string, prepending a NewLine or title markdown if needed. */
-function getValueToAppend(value?: string | null, newLine?: boolean, title?: boolean): string {
+function getValueToAppend(value?: Optional<string>, newLine?: boolean, title?: boolean): string {
 	const titleOut = isNotBlank(value) && title ? "### " : "";
 	const newLineOut = newLine ? "\n" : "";
 	const valueOut = value?.trim() ?? "";
@@ -31,7 +32,7 @@ function getValueToAppend(value?: string | null, newLine?: boolean, title?: bool
 }
 
 /** Converts embeds into content. */
-function embedsToContent(embeds?: MsgEmbed[] | null): string | undefined {
+function embedsToContent(embeds?: Optional<MsgEmbed[]>): string | undefined {
 	// map the embeds to content and join them
 	const content = embeds?.map(embed => {
 		let text = "";
@@ -53,7 +54,7 @@ function embedsToContent(embeds?: MsgEmbed[] | null): string | undefined {
 }
 
 /** Converts content into embeds. */
-function contentToEmbeds(content?: string | null, colorResolvable?: ColorResolvable): EmbedBuilder[] | undefined {
+function contentToEmbeds(content?: Optional<string>, colorResolvable?: ColorResolvable): EmbedBuilder[] | undefined {
 	const trimmedContent = content?.trim();
 	if (trimmedContent?.length) {
 		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
@@ -66,7 +67,7 @@ function contentToEmbeds(content?: string | null, colorResolvable?: ColorResolva
 }
 
 /** Merges embeds into content. */
-function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): string | undefined {
+function mergeContent(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>): string | undefined {
 	// get embed content
 	const embedContent = embedsToContent(embeds);
 
@@ -88,7 +89,7 @@ function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): stri
 }
 
 /** Merges content into embeds */
-function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?: ColorResolvable): EmbedBuilder[] | undefined {
+function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, color?: ColorResolvable): EmbedBuilder[] | undefined {
 	// get content embeds
 	const contentEmbeds = contentToEmbeds(content, embeds?.[0].color as ColorResolvable ?? color);
 

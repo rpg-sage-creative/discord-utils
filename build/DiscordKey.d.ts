@@ -28,14 +28,14 @@ export declare class DiscordKey implements MessageReference {
     get threadOrChannel(): Snowflake;
     /** @deprecated */
     get channelAndThread(): {
-        channel: Snowflake | null;
-        thread: Snowflake | null;
+        channel: Snowflake | undefined;
+        thread: Snowflake | undefined;
     };
     /** @deprecated */
-    get user(): Snowflake | null;
+    get user(): Snowflake | undefined;
     toString(): string;
     toChannelUrl(): string;
-    toMessageUrl(): string | null;
+    toMessageUrl(): string | undefined;
     toUrl(): string;
     static createKey(...resolvables: Optional<SnowflakeResolvable>[]): string;
     static fromChannel(channel: Channel): DiscordKey;
@@ -44,5 +44,5 @@ export declare class DiscordKey implements MessageReference {
     static fromMessageReaction(messageReaction: ReactionOrPartial): DiscordKey;
     /** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
     static resolveId(resolvable: Optional<SnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE;
-    static fromUrl(url: string): DiscordKey | null;
+    static fromUrl(url: string): DiscordKey | undefined;
 }

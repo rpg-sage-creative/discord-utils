@@ -3,7 +3,7 @@ import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { type APIUser, type Channel, type GuildMember, type Message, type PartialRecipient, type PartialUser, type User, type Webhook } from "discord.js";
 import { isDMBased, isGroupDMBased } from "./typeChecks.js";
 
-function channelToName(channel: Optional<Channel>): string | null {
+function channelToName(channel: Optional<Channel>): string | undefined {
 	if (channel) {
 		if (isDMBased(channel)) {
 			if (isGroupDMBased(channel)) {
@@ -15,7 +15,7 @@ function channelToName(channel: Optional<Channel>): string | null {
 		const channelName = channel.name ?? channel.id;
 		return `${guildName}#${ZERO_WIDTH_SPACE}${channelName}`;
 }
-	return null;
+	return undefined;
 }
 
 function messageToChannelName(message: Message): string {
@@ -72,8 +72,8 @@ type Target = Channel | Message | User | GuildMember | Webhook;
  * Channels become #channel-name
  */
 export function toHumanReadable<T extends Target>(target: T): string;
-export function toHumanReadable<T extends Target>(target: Optional<T>): string | null;
-export function toHumanReadable<T extends Target>(target: Optional<T>): string | null {
+export function toHumanReadable<T extends Target>(target: Optional<T>): string | undefined;
+export function toHumanReadable<T extends Target>(target: Optional<T>): string | undefined {
 	if (target) {
 		if ("token" in target) {
 			return webhookToName(target);
@@ -90,5 +90,5 @@ export function toHumanReadable<T extends Target>(target: Optional<T>): string |
 		}
 		return channelToName(target);
 	}
-	return null;
+	return undefined;
 }

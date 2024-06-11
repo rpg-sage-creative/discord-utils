@@ -6,7 +6,7 @@ function createUrl(guildId: Optional<string>, channelId: string, messageId: stri
 	return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}/${messageId}`;
 }
 
-export function toMessageUrl(ref: MessageOrPartial | MessageReference): string | null {
+export function toMessageUrl(ref: MessageOrPartial | MessageReference): string | undefined {
 	if ("messageId" in ref) {
 		if (ref.messageId) {
 			return createUrl(ref.guildId, ref.channelId, ref.messageId);
@@ -14,5 +14,5 @@ export function toMessageUrl(ref: MessageOrPartial | MessageReference): string |
 	}else if (ref.id) {
 		return createUrl(ref.guildId, ref.channelId, ref.id);
 	}
-	return null;
+	return undefined;
 }

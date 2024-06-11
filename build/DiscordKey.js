@@ -57,12 +57,12 @@ export class DiscordKey {
     }
     get channelAndThread() {
         return {
-            channel: this.hasChannel ? this.channel : null,
-            thread: this.hasThread ? this.thread : null
+            channel: this.hasChannel ? this.channel : undefined,
+            thread: this.hasThread ? this.thread : undefined
         };
     }
     get user() {
-        return this.isDm ? this.channel : null;
+        return this.isDm ? this.channel : undefined;
     }
     toString() { return this.key; }
     toChannelUrl() {
@@ -122,6 +122,6 @@ export class DiscordKey {
             const { guildId, channelId } = channelMatch.groups;
             return new DiscordKey(guildId, channelId, channelId);
         }
-        return null;
+        return undefined;
     }
 }

@@ -14,7 +14,7 @@ function channelToName(channel) {
         const channelName = channel.name ?? channel.id;
         return `${guildName}#${ZERO_WIDTH_SPACE}${channelName}`;
     }
-    return null;
+    return undefined;
 }
 function messageToChannelName(message) {
     const author = userToMention(message.author);
@@ -77,5 +77,5 @@ export function toHumanReadable(target) {
         }
         return channelToName(target);
     }
-    return null;
+    return undefined;
 }

@@ -1,6 +1,6 @@
 import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
 
 /** A convenient method for grabbing the first Snowflake present in the string. */
-export function parseSnowflake(value: Optional<string>): Snowflake | null {
-	return /(?<id>\d{16,})/.exec(value ?? "")?.groups?.id as Snowflake ?? null;
+export function parseSnowflake(value: Optional<string>): Snowflake | undefined {
+	return /(?<id>\d{16,})/.exec(value ?? "")?.groups?.id as Snowflake ?? undefined;
 }

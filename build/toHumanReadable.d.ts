@@ -7,5 +7,5 @@ type Target = Channel | Message | User | GuildMember | Webhook;
  * Channels become #channel-name
  */
 export declare function toHumanReadable<T extends Target>(target: T): string;
-export declare function toHumanReadable<T extends Target>(target: Optional<T>): string | null;
+export declare function toHumanReadable<T extends Target>(target: Optional<T>): string | undefined;
 export {};

@@ -13,5 +13,5 @@ export function toMessageUrl(ref) {
     else if (ref.id) {
         return createUrl(ref.guildId, ref.channelId, ref.id);
     }
-    return null;
+    return undefined;
 }

@@ -74,15 +74,15 @@ export class DiscordKey implements MessageReference {
 		return this.hasThread ? this.thread : this.channel;
 	}
 	/** @deprecated */
-	public get channelAndThread(): { channel:Snowflake|null; thread:Snowflake|null } {
+	public get channelAndThread(): { channel:Snowflake|undefined; thread:Snowflake|undefined } {
 		return {
-			channel: this.hasChannel ? this.channel : null,
-			thread: this.hasThread ? this.thread : null
+			channel: this.hasChannel ? this.channel : undefined,
+			thread: this.hasThread ? this.thread : undefined
 		};
 	}
 	/** @deprecated */
-	public get user(): Snowflake | null {
-		return this.isDm ? this.channel : null;
+	public get user(): Snowflake | undefined {
+		return this.isDm ? this.channel : undefined;
 	}
 
 	public toString(): string { return this.key; }
@@ -90,7 +90,7 @@ export class DiscordKey implements MessageReference {
 	public toChannelUrl(): string {
 		return toChannelUrl(this);
 	}
-	public toMessageUrl(): string | null {
+	public toMessageUrl(): string | undefined {
 		return toMessageUrl(this);
 	}
 	public toUrl(): string {
@@ -141,7 +141,7 @@ export class DiscordKey implements MessageReference {
 		return resolveSnowflake(resolvable, true);
 	}
 
-	public static fromUrl(url: string): DiscordKey | null {
+	public static fromUrl(url: string): DiscordKey | undefined {
 		const messageMatch = createDiscordUrlRegex("message").exec(url);
 		if (messageMatch?.groups) {
 			const { guildId, channelId, messageId } = messageMatch.groups;
@@ -154,6 +154,6 @@ export class DiscordKey implements MessageReference {
 			return new DiscordKey(guildId, channelId, channelId);
 		}
 
-		return null;
+		return undefined;
 	}
 }
