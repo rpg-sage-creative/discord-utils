@@ -1,9 +1,9 @@
 import { isNilSnowflake, isNonNilSnowflake, type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { type Channel, type MessageReference } from "discord.js";
+import { type MessageReference } from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import { resolveSnowflake, type SnowflakeResolvable } from "./resolveSnowflake.js";
 import { isGuildBased, isThread } from "./typeChecks.js";
-import { type DInteraction, type MessageOrPartial, type ReactionOrPartial } from "./types.js";
+import { type DInteraction, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 
@@ -101,7 +101,7 @@ export class DiscordKey implements MessageReference {
 		return resolvables.map(DiscordKey.resolveId).join("-");
 	}
 
-	public static fromChannel(channel: Channel): DiscordKey {
+	public static fromChannel(channel: MessageTarget): DiscordKey {
 		const guildId = isGuildBased(channel) ? channel.guildId : undefined;
 		if (isThread(channel)) {
 			const threadId = channel.id;

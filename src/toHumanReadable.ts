@@ -27,7 +27,8 @@ function messageToChannelName(message: Message): string {
 	}
 }
 
-function userToMention(user: Optional<User | PartialUser | APIUser | PartialRecipient>): string {
+type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
+function userToMention(user: Optional<UserResolvable>): string {
 	if (user) {
 		if ("displayName" in user && user.displayName) {
 			return `@${ZERO_WIDTH_SPACE}${user.displayName}`;
