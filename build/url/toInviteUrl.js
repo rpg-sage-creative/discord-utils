@@ -1,30 +1,30 @@
 import { error } from "@rsc-utils/core-utils";
-import {} from "@rsc-utils/core-utils";
 import { Guild } from "discord.js";
-function isTextChannel(channel) {
-    if (channel) {
-        if ("isText" in channel && typeof (channel.isText) === "function" && channel.isText()) {
-            return true;
-        }
-        if ("isTextBased" in channel && typeof (channel.isTextBased) === "function" && channel.isTextBased()) {
-            return true;
-        }
-    }
-    return false;
-}
 export function toInviteUrl(guild) {
     if (!guild) {
         return null;
     }
     try {
         const bestInvite = guild.invites.cache.find(invite => {
-            if (("stageInstance" in invite) && invite.stageInstance) {
+            if (!invite.channel?.isTextBased())
                 return false;
-            }
-            if (invite.targetUser || invite.temporary) {
+            if (invite.guildScheduledEvent)
                 return false;
-            }
-            return isTextChannel(invite.channel);
+            if (invite.maxAge)
+                return false;
+            if (invite.maxUses)
+                return false;
+            if (invite.stageInstance)
+                return false;
+            if (invite.targetApplication)
+                return false;
+            if (invite.targetUser)
+                return false;
+            if (invite.targetType)
+                return false;
+            if (invite.temporary)
+                return false;
+            return true;
         });
         return bestInvite?.url ?? null;
     }

@@ -1,2 +1,3 @@
-import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
-export declare function toUserMention(id: Optional<Snowflake>): string | undefined;
+import { type Optional } from "@rsc-utils/core-utils";
+import { type SnowflakeResolvable } from "../resolveSnowflake.js";
+export declare function toUserMention(resolvable: Optional<SnowflakeResolvable>): string | undefined;

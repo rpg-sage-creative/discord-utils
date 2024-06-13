@@ -20,7 +20,7 @@ export function canSendMessageTo(botId, channel) {
     if (isDMBased(channel)) {
         return true;
     }
-    if (isLockedOrArchivedThread(channel)) {
+    if (isLockedOrArchivedThread(channel) && !channel.sendable) {
         return false;
     }
     const perms = getPermsFor(channel, botId);
