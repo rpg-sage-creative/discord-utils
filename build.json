@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.36",
-"branch":"main",
-"commit":"e52f2e156a89b2b7571264f45a924d985d7d44e4",
-"commitSubject":"include updates from sage",
-"commitTs":1717623703000,
-"commitDate":"2024-06-05-1441",
-"buildTs":1717623745000,
-"buildDate":"2024-06-05-1442",
+"version":"0.0.37",
+"branch":"updated-packages",
+"commit":"bfa9af3d2453fb10282f6965b98bcfa1dc8d2c75",
+"commitSubject":"implement runDiscordTests",
+"commitTs":1718323764000,
+"commitDate":"2024-06-13-1709",
+"buildTs":1718324147000,
+"buildDate":"2024-06-13-1715",
 "author":"Randal"
 }
