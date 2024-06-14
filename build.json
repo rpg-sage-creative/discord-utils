@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.37",
+"version":"0.0.38",
 "branch":"updated-packages",
-"commit":"bfa9af3d2453fb10282f6965b98bcfa1dc8d2c75",
-"commitSubject":"implement runDiscordTests",
-"commitTs":1718323764000,
-"commitDate":"2024-06-13-1709",
-"buildTs":1718324147000,
-"buildDate":"2024-06-13-1715",
+"commit":"4be4074c3864b455900501c5020e341878054182",
+"commitSubject":"add createActionRow",
+"commitTs":1718386504000,
+"commitDate":"2024-06-14-1035",
+"buildTs":1718386541000,
+"buildDate":"2024-06-14-1035",
 "author":"Randal"
 }
