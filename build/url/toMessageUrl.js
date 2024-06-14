@@ -1,6 +1,3 @@
-import {} from "@rsc-utils/core-utils";
-import {} from "discord.js";
-import {} from "../types.js";
 function createUrl(guildId, channelId, messageId) {
     return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}/${messageId}`;
 }
@@ -10,8 +7,13 @@ export function toMessageUrl(ref) {
             return createUrl(ref.guildId, ref.channelId, ref.messageId);
         }
     }
-    else if (ref.id) {
-        return createUrl(ref.guildId, ref.channelId, ref.id);
+    else {
+        if (ref.url) {
+            return ref.url;
+        }
+        if (ref.id) {
+            return createUrl(ref.guildId, ref.channelId, ref.id);
+        }
     }
     return undefined;
 }

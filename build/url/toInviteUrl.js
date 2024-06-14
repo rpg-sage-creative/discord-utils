@@ -2,7 +2,7 @@ import { error } from "@rsc-utils/core-utils";
 import { Guild } from "discord.js";
 export function toInviteUrl(guild) {
     if (!guild) {
-        return null;
+        return undefined;
     }
     try {
         const bestInvite = guild.invites.cache.find(invite => {
@@ -26,10 +26,10 @@ export function toInviteUrl(guild) {
                 return false;
             return true;
         });
-        return bestInvite?.url ?? null;
+        return bestInvite?.url ?? undefined;
     }
     catch (ex) {
         error(ex);
     }
-    return null;
+    return undefined;
 }

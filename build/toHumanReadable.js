@@ -1,6 +1,4 @@
-import {} from "@rsc-utils/core-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import {} from "discord.js";
 import { isDMBased, isGroupDMBased } from "./typeChecks.js";
 function channelToName(channel) {
     if (channel) {
@@ -10,7 +8,7 @@ function channelToName(channel) {
             }
             return userToMention(channel.recipient);
         }
-        const guildName = channel.guild?.name ?? channel.guildId ?? "UnknownGuild";
+        const guildName = guildToName(channel.guild);
         const channelName = channel.name ?? channel.id;
         return `${guildName}#${ZERO_WIDTH_SPACE}${channelName}`;
     }
@@ -59,6 +57,9 @@ function webhookToName(webhook) {
     }
     return "$UnknownWebhook";
 }
+function guildToName(guild) {
+    return guild?.name ?? "UnknownGuild";
+}
 export function toHumanReadable(target) {
     if (target) {
         if ("token" in target) {
@@ -74,6 +75,9 @@ export function toHumanReadable(target) {
         }
         if ("channel" in target) {
             return messageToChannelName(target);
+        }
+        if ("discoverySplash" in target) {
+            return guildToName(target);
         }
         return channelToName(target);
     }

@@ -1,6 +1,6 @@
-import { type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import { type APIUser, type Channel, type GuildMember, type Message, type PartialRecipient, type PartialUser, type User, type Webhook } from "discord.js";
+import type { APIUser, Channel, Guild, GuildMember, GuildPreview, Message, PartialRecipient, PartialUser, User, Webhook } from "discord.js";
 import { isDMBased, isGroupDMBased } from "./typeChecks.js";
 
 function channelToName(channel: Optional<Channel>): string | undefined {
@@ -11,7 +11,7 @@ function channelToName(channel: Optional<Channel>): string | undefined {
 			}
 			return userToMention(channel.recipient);
 		}
-		const guildName = channel.guild?.name ?? channel.guildId ?? "UnknownGuild";
+		const guildName = guildToName(channel.guild);
 		const channelName = channel.name ?? channel.id;
 		return `${guildName}#${ZERO_WIDTH_SPACE}${channelName}`;
 }
@@ -65,7 +65,12 @@ function webhookToName(webhook: Optional<Webhook>): string {
 	return "$UnknownWebhook";
 }
 
-type Target = Channel | Message | User | GuildMember | Webhook;
+type GuildResolvable = Guild | GuildPreview;
+function guildToName(guild: Optional<GuildResolvable>): string {
+	return guild?.name ?? "UnknownGuild";
+}
+
+type Target = Channel | Guild | GuildPreview | GuildMember | Message | PartialUser | User | Webhook;
 
 /**
  * Returns a string that represents the Discord object in a meaningful way.
@@ -88,6 +93,9 @@ export function toHumanReadable<T extends Target>(target: Optional<T>): string |
 		}
 		if ("channel" in target) {
 			return messageToChannelName(target);
+		}
+		if ("discoverySplash" in target) {
+			return guildToName(target);
 		}
 		return channelToName(target);
 	}
