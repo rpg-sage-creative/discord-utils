@@ -1,5 +1,5 @@
-import { error, warn, formatArg } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "./toHumanReadable.js";
+import { error, formatArg, warn } from "@rsc-utils/core-utils";
+import { toHumanReadable } from "../humanReadable/toHumanReadable.js";
 
 //#region generic error types
 
@@ -59,20 +59,7 @@ function isDiscordApiError(reason: any): reason is TDiscordApiError {
 function isDiscordApiErrorMissingPermissionsFetchWebhook(reason: any): boolean {
 	const asString = formatArg(reason);
 	return asString.includes("DiscordAPIError: Missing Permissions")
-		&& asString.includes("TextChannel.fetchWebhooks");
-}
-
-
-function isUnknownGuild(reason: TDiscordApiError): boolean {
-	return reason?.message === "Unknown Guild";
-}
-
-function isUnknownMember(reason: TDiscordApiError): boolean {
-	return reason?.message === "Unknown Member";
-}
-
-function isUnknownUser(reason: TDiscordApiError): boolean {
-	return reason?.message === "Unknown User";
+		&& asString.includes(".fetchWebhooks");
 }
 
 function handleDiscordApiError(reason: any): boolean {
@@ -81,7 +68,7 @@ function handleDiscordApiError(reason: any): boolean {
 			warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
 			return true;
 		}
-		if (isUnknownMember(reason) || isUnknownGuild(reason) || isUnknownUser(reason)) {
+		if (/Unknown (Guild|Member|User)/.test(reason?.message ?? "")) {
 			warn(`${reason.message}: ${reason.path}`);
 			return true;
 		}

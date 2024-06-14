@@ -1,5 +1,5 @@
-import { error, warn, formatArg } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "./toHumanReadable.js";
+import { error, formatArg, warn } from "@rsc-utils/core-utils";
+import { toHumanReadable } from "../humanReadable/toHumanReadable.js";
 function isInvalidFormBodyError(reason) {
     return reason.code === 50035;
 }
@@ -16,16 +16,7 @@ function isDiscordApiError(reason) {
 function isDiscordApiErrorMissingPermissionsFetchWebhook(reason) {
     const asString = formatArg(reason);
     return asString.includes("DiscordAPIError: Missing Permissions")
-        && asString.includes("TextChannel.fetchWebhooks");
-}
-function isUnknownGuild(reason) {
-    return reason?.message === "Unknown Guild";
-}
-function isUnknownMember(reason) {
-    return reason?.message === "Unknown Member";
-}
-function isUnknownUser(reason) {
-    return reason?.message === "Unknown User";
+        && asString.includes(".fetchWebhooks");
 }
 function handleDiscordApiError(reason) {
     if (isDiscordApiError(reason)) {
@@ -33,7 +24,7 @@ function handleDiscordApiError(reason) {
             warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
             return true;
         }
-        if (isUnknownMember(reason) || isUnknownGuild(reason) || isUnknownUser(reason)) {
+        if (/Unknown (Guild|Member|User)/.test(reason?.message ?? "")) {
             warn(`${reason.message}: ${reason.path}`);
             return true;
         }

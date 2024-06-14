@@ -1,7 +1,7 @@
 import {} from "@rsc-utils/core-utils";
 import {} from "discord.js";
 import {} from "../DiscordKey.js";
-import { isGuildBased } from "../typeChecks.js";
+import { isGuildBased } from "../types/typeChecks.js";
 function createUrl(guildId, channelId) {
     return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}`;
 }

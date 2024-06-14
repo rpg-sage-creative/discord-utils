@@ -1,9 +1,9 @@
 import { isNilSnowflake, isNonNilSnowflake, type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { type MessageReference } from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
-import { resolveSnowflake, type SnowflakeResolvable } from "./resolveSnowflake.js";
-import { isGuildBased, isThread } from "./typeChecks.js";
-import { type DInteraction, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types.js";
+import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
+import { isGuildBased, isThread } from "./types/typeChecks.js";
+import { type DInteraction, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 
@@ -39,11 +39,11 @@ export class DiscordKey implements MessageReference {
 	public hasMessage: boolean;
 
 	public constructor(
-		server: Optional<SnowflakeResolvable>,
-		channel: Optional<SnowflakeResolvable>,
+		server: Optional<CanBeSnowflakeResolvable>,
+		channel: Optional<CanBeSnowflakeResolvable>,
 		/** @deprecated */
-		thread?: Optional<SnowflakeResolvable>,
-		message?: Optional<SnowflakeResolvable>
+		thread?: Optional<CanBeSnowflakeResolvable>,
+		message?: Optional<CanBeSnowflakeResolvable>
 	) {
 		this.server = DiscordKey.resolveId(server);
 		this.channel = DiscordKey.resolveId(channel);
@@ -137,7 +137,7 @@ export class DiscordKey implements MessageReference {
 	}
 
 	/** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
-	public static resolveId(resolvable: Optional<SnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE {
+	public static resolveId(resolvable: Optional<CanBeSnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE {
 		return resolveSnowflake(resolvable, true);
 	}
 

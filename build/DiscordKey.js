@@ -1,9 +1,9 @@
 import { isNilSnowflake, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import {} from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
-import { resolveSnowflake } from "./resolveSnowflake.js";
-import { isGuildBased, isThread } from "./typeChecks.js";
-import {} from "./types.js";
+import { resolveSnowflake } from "./resolve/resolveSnowflake.js";
+import { isGuildBased, isThread } from "./types/typeChecks.js";
+import {} from "./types/types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 export class DiscordKey {

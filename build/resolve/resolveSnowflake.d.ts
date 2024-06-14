@@ -6,15 +6,19 @@ type HasSnowflakeId = {
 type HasSnowflakeDid = {
     did: Snowflake;
 };
-export type SnowflakeResolvable = Snowflake | string | HasSnowflakeId | HasSnowflakeDid;
+export type SnowflakeResolvable = Snowflake | HasSnowflakeId | HasSnowflakeDid;
 type CanHaveSnowflakeId = {
     id?: Snowflake;
+} | {
+    id?: string;
 };
 /** @deprecated */
 type CanHaveSnowflakeDid = {
     did?: Snowflake;
+} | {
+    did?: string;
 };
-type CanBeSnowflakeResolvable = CanHaveSnowflakeId | CanHaveSnowflakeDid;
+export type CanBeSnowflakeResolvable = string | CanHaveSnowflakeId | CanHaveSnowflakeDid;
 /** Assumes a valid snowflake resolvable. */
 export declare function resolveSnowflake(resolvable: SnowflakeResolvable): Snowflake;
 /** Returns undefined if the value is not resolvable. */
