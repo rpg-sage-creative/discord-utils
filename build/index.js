@@ -1,3 +1,4 @@
+export * from "./components/index.js";
 export * from "./embed/index.js";
 export * from "./emojiRegex/index.js";
 export * from "./mention/index.js";
