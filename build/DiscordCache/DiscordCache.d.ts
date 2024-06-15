@@ -56,8 +56,8 @@ export declare class DiscordCache {
     fetchOrCreateWebhook(guildIdResolvable: GuildIdResolvable, channelIdResolvable: ChannelIdResolvable, options?: WebhookOptions): Promise<Webhook | undefined>;
     findLastWebhookMessageByAuthor(guildIdResolvable: GuildIdResolvable, channelIdResolvable: ChannelIdResolvable, webhookOptions: WebhookOptions, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | undefined>;
     static filterChannelMessages(channel: MessageChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]>;
-    static from(guildResolvable: ClientGuildResolvable): Promise<DiscordCache>;
-    static from(client: Client, guildIdResolvable: GuildIdResolvable): DiscordCache;
+    static from(guildResolvable: ClientGuildResolvable): DiscordCache;
+    static from(client: Client, guildIdResolvable: GuildIdResolvable): Promise<DiscordCache>;
     private static SAGE_ID;
     static getSageId(): `${number}`;
     static setSageId(id: Snowflake): void;

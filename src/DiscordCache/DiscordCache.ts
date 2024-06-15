@@ -365,8 +365,8 @@ export class DiscordCache {
 		return filtered;
 	}
 
-	public static from(guildResolvable: ClientGuildResolvable): Promise<DiscordCache>;
-	public static from(client: Client, guildIdResolvable: GuildIdResolvable): DiscordCache;
+	public static from(guildResolvable: ClientGuildResolvable): DiscordCache;
+	public static from(client: Client, guildIdResolvable: GuildIdResolvable): Promise<DiscordCache>;
 	public static from(...args: (Client | ClientGuildResolvable | GuildIdResolvable)[]): Awaitable<DiscordCache> {
 		// handle client/guildIdResolvable
 		if (args.length === 2) {
