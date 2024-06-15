@@ -6,6 +6,7 @@ export async function fetchGuild(client, guildIdResolvable) {
     if (!guildId) {
         return undefined;
     }
-    verbose(`fetchGuild(${guildId})`);
-    return client.guilds.fetch(guildId).catch(DiscordApiError.process);
+    const guild = await client.guilds.fetch(guildId).catch(DiscordApiError.process);
+    verbose(`fetchGuild(${guildId}) = ${guild?.name}`);
+    return guild;
 }
