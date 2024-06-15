@@ -97,7 +97,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             ...baseOptions
         });
     });
-    let blankContent = (contentToChunk ? null : replyingTo) ?? splitOptions?.blankContentValue?.trim();
+    let blankContent = (contentToChunk ? undefined : replyingTo) ?? splitOptions?.blankContentValue?.trim();
     if (!blankContent?.length) {
         blankContent = undefined;
     }

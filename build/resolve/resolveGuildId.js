@@ -1,12 +1,10 @@
+import { resolveSnowflake } from "./resolveSnowflake.js";
 export function resolveGuildId(resolvable) {
     if (resolvable) {
-        if (typeof (resolvable) === "string") {
-            return resolvable;
+        if (typeof (resolvable) !== "string" && "guild" in resolvable) {
+            return resolveSnowflake(resolvable.guild?.id);
         }
-        if ("guild" in resolvable) {
-            return resolvable.guild?.id;
-        }
-        return resolvable.id;
+        return resolveSnowflake(resolvable);
     }
     return undefined;
 }

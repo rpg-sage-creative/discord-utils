@@ -2,8 +2,7 @@ import { isNilSnowflake, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import {} from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import { resolveSnowflake } from "./resolve/resolveSnowflake.js";
-import { isGuildBased, isThread } from "./types/typeChecks.js";
-import {} from "./types/types.js";
+import { isGuildBased, isMessage, isThread } from "./types/types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 export class DiscordKey {
@@ -15,6 +14,9 @@ export class DiscordKey {
     }
     get messageId() {
         return this.hasMessage ? this.message : undefined;
+    }
+    get userId() {
+        return this.isDm ? this.channel : undefined;
     }
     server;
     channel;
@@ -30,10 +32,10 @@ export class DiscordKey {
     hasThread;
     hasMessage;
     constructor(server, channel, thread, message) {
-        this.server = DiscordKey.resolveId(server);
-        this.channel = DiscordKey.resolveId(channel);
-        this.thread = DiscordKey.resolveId(thread);
-        this.message = DiscordKey.resolveId(message);
+        this.server = resolveSnowflake(server, true);
+        this.channel = resolveSnowflake(channel, true);
+        this.thread = resolveSnowflake(thread, true);
+        this.message = resolveSnowflake(message, true);
         this.isDm = isNilSnowflake(this.server);
         this.hasServer = isNonNilSnowflake(this.server);
         this.hasChannel = isNonNilSnowflake(this.channel);
@@ -75,41 +77,21 @@ export class DiscordKey {
         return this.toMessageUrl() ?? this.toChannelUrl();
     }
     static createKey(...resolvables) {
-        return resolvables.map(DiscordKey.resolveId).join("-");
+        return resolvables.map(resolvable => resolveSnowflake(resolvable, true)).join("-");
     }
-    static fromChannel(channel) {
+    static from(resolvable) {
+        if ("message" in resolvable) {
+            return DiscordKey.from(resolvable.message);
+        }
+        const channel = "channel" in resolvable ? resolvable.channel : resolvable;
         const guildId = isGuildBased(channel) ? channel.guildId : undefined;
+        const messageId = isMessage(resolvable) ? resolvable.id : undefined;
         if (isThread(channel)) {
             const threadId = channel.id;
             const channelId = channel.parent?.id;
-            return new DiscordKey(guildId, channelId, threadId);
+            return new DiscordKey(guildId, channelId, threadId, messageId);
         }
-        return new DiscordKey(guildId, channel.id);
-    }
-    static fromInteraction(interaction) {
-        const channel = interaction.channel;
-        if (isThread(channel)) {
-            const threadId = channel.id;
-            const channelId = channel.parent?.id;
-            return new DiscordKey(interaction.guildId, channelId, threadId);
-        }
-        return new DiscordKey(interaction.guildId, interaction.channelId);
-    }
-    static fromMessage(message) {
-        const channel = message.channel;
-        const guildId = isGuildBased(channel) ? channel.guildId : undefined;
-        if (isThread(channel)) {
-            const threadId = channel.id;
-            const channelId = channel.parent?.id;
-            return new DiscordKey(guildId, channelId, threadId, message.id);
-        }
-        return new DiscordKey(guildId, message.channel.id, null, message.id);
-    }
-    static fromMessageReaction(messageReaction) {
-        return DiscordKey.fromMessage(messageReaction.message);
-    }
-    static resolveId(resolvable) {
-        return resolveSnowflake(resolvable, true);
+        return new DiscordKey(guildId, channel?.id, undefined, messageId);
     }
     static fromUrl(url) {
         const messageMatch = createDiscordUrlRegex("message").exec(url);

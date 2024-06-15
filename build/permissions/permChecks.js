@@ -1,7 +1,7 @@
 import {} from "@rsc-utils/core-utils";
 import {} from "discord.js";
-import { isDMBased, isThread } from "../types/typeChecks.js";
 import { getPermsFor } from "./getPermsFor.js";
+import { isDMBased, isThread } from "../types/types.js";
 function isLockedOrArchivedThread(channel) {
     if (isThread(channel)) {
         if (channel.locked) {

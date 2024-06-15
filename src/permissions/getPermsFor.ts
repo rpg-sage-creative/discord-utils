@@ -1,7 +1,6 @@
 import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type PermissionResolvable, type Role, type RoleResolvable } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { canCheckPermissionsFor, canFetchWebhooksFor, isGuildBased, isThread as isThreadChannel } from "../types/typeChecks.js";
-import { type WebhookChannel } from "../types/types.js";
+import { isGuildBased, isThread as isThreadChannel, isWebhookChannel, type WebhookChannel } from "../types/types.js";
 
 type AccessResults = {
 	/** perms.has("MANAGE_CHANNELS") */
@@ -80,7 +79,7 @@ export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleRe
 	// check for thread and ensure we have the correct channel for perms checking
 	const isThread = isThreadChannel(channel);
 	const channelWithPerms = isThread ? channel.parent : channel;
-	if (!canCheckPermissionsFor(channelWithPerms)) {
+	if (!isGuildBased(channelWithPerms)) {
 		return emptyResults();
 	}
 
@@ -91,7 +90,7 @@ export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleRe
 	const isInChannel = isThread ? channel.guildMembers.has(memberOrRoleId) : channel.members.has(memberOrRoleId);
 	const canSendMessages = perms?.has(isThread ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages) ?? false;
 	const canAddReactions = perms?.has(PermissionFlagsBits.AddReactions) ?? false;
-	const canSendWebhooks = canManageWebhooks && canFetchWebhooksFor(channelWithPerms);
+	const canSendWebhooks = canManageWebhooks && isWebhookChannel(channelWithPerms);
 	const webhookChannel = canSendWebhooks ? channelWithPerms : undefined;
 	const canSendPolls = perms?.has(PermissionFlagsBits.SendPolls) ?? false;
 

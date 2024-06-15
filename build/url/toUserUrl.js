@@ -1,4 +1,5 @@
+import { resolveUserId } from "../resolve/resolveUserId.js";
 export function toUserUrl(user) {
-    const userId = typeof (user) === "string" ? user : user?.id;
+    const userId = resolveUserId(user);
     return userId ? `https://discordapp.com/users/${userId}` : undefined;
 }

@@ -1,11 +1,12 @@
-import { type NIL_SNOWFLAKE, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { type MessageReference } from "discord.js";
+import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { type Interaction, type MessageReference } from "discord.js";
 import { type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
-import { type DInteraction, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
+import { type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
 export declare class DiscordKey implements MessageReference {
     get guildId(): Snowflake | undefined;
     get channelId(): Snowflake;
     get messageId(): Snowflake | undefined;
+    get userId(): Snowflake | undefined;
     server: Snowflake;
     channel: Snowflake;
     /** @deprecated */
@@ -38,11 +39,6 @@ export declare class DiscordKey implements MessageReference {
     toMessageUrl(): string | undefined;
     toUrl(): string;
     static createKey(...resolvables: Optional<SnowflakeResolvable>[]): string;
-    static fromChannel(channel: MessageTarget): DiscordKey;
-    static fromInteraction(interaction: DInteraction): DiscordKey;
-    static fromMessage(message: MessageOrPartial): DiscordKey;
-    static fromMessageReaction(messageReaction: ReactionOrPartial): DiscordKey;
-    /** Resolves to a nonNilSnowflake or NIL_SNOWFLAKE. */
-    static resolveId(resolvable: Optional<CanBeSnowflakeResolvable>): Snowflake | NIL_SNOWFLAKE;
+    static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial): DiscordKey;
     static fromUrl(url: string): DiscordKey | undefined;
 }

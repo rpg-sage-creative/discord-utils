@@ -1,12 +1,13 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { Channel, Guild, GuildMember, GuildPreview, Message, PartialUser, User, Webhook } from "discord.js";
+import type { Channel, Guild, GuildMember, GuildPreview, Webhook } from "discord.js";
+import type { MessageOrPartial, UserOrPartial } from "../types/types.js";
 import { toChannelName } from "./toChannelName.js";
 import { toGuildMemberName } from "./toGuildMemberName.js";
 import { toGuildName } from "./toGuildName.js";
 import { toUserName } from "./toUserName.js";
 import { toWebhookName } from "./toWebhookName.js";
 
-type Target = Channel | Guild | GuildPreview | GuildMember | Message | PartialUser | User | Webhook;
+export type Readable = Channel | Guild | GuildPreview | GuildMember | MessageOrPartial | UserOrPartial | Webhook;
 
 /**
  * Returns a string that represents the Discord object in a meaningful way.
@@ -15,9 +16,9 @@ type Target = Channel | Guild | GuildPreview | GuildMember | Message | PartialUs
  * Users/GuildMembers become: @UserName.
  * Webhooks become: $WebhookName
  */
-export function toHumanReadable<T extends Target>(target: T): string;
-export function toHumanReadable<T extends Target>(target: Optional<T>): string | undefined;
-export function toHumanReadable<T extends Target>(target: Optional<T>): string | undefined {
+export function toHumanReadable<T extends Readable>(target: T): string;
+export function toHumanReadable<T extends Readable>(target: Optional<T>): string | undefined;
+export function toHumanReadable<T extends Readable>(target: Optional<T>): string | undefined {
 	if (target) {
 		if ("token" in target) {
 			return toWebhookName(target);
