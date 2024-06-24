@@ -1,8 +1,7 @@
-import { NIL_SNOWFLAKE, debug, errorReturnFalse, info, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, GuildPreview, Message, Role, User, Webhook } from "discord.js";
+import { NIL_SNOWFLAKE, debug, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { Client, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordApiError } from "../DiscordApiError.js";
 import { DiscordKey } from "../DiscordKey.js";
-import { toHumanReadable } from "../humanReadable/toHumanReadable.js";
 import { getPermsFor } from "../permissions/getPermsFor.js";
 import { resolveChannelGuildId } from "../resolve/internal/resolveChannelGuildId.js";
 import { resolveChannelId } from "../resolve/resolveChannelId.js";
@@ -10,7 +9,6 @@ import { resolveGuildId } from "../resolve/resolveGuildId.js";
 import { resolveRoleId } from "../resolve/resolveRoleId.js";
 import { resolveUserId } from "../resolve/resolveUserId.js";
 import { isMessageTarget, isNonThread, isThread, isWebhookChannel } from "../types/types.js";
-import { fetchGuild } from "./internal/fetchGuild.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelIdResolvable, name) {
     const channelId = resolveChannelId(channelIdResolvable);
@@ -19,52 +17,35 @@ function createWebhookKey(channelIdResolvable, name) {
 export class DiscordCache {
     client;
     guild;
+    #cached;
     constructor(client, guild, channel) {
         this.client = client;
         this.guild = guild;
-        this.channelMap = new Map();
-        this.guildMap = new Map();
-        this.guildPreviewMap = new Map();
-        this.guildMemberMap = new Map([[NIL_SNOWFLAKE, undefined]]);
-        this.guildMemberRoleMap = new Map();
-        this.messageMap = new Map();
-        this.roleMap = new Map();
-        this.userMap = new Map();
+        this.#cached = new Map();
         this.webhookMap = new Map();
-        this.manageWebhooksPermMap = new Map();
-        if (channel) {
-            this.channelMap.set(channel.id, channel);
-        }
         if (guild) {
-            this.guildMap.set(guild.id, guild);
+            this.#cached.set(guild.id, true);
+        }
+        if (channel) {
+            this.#cached.set(channel.id, true);
         }
     }
     clear() {
         debug("Clearing DiscordCache");
-        this.channelMap.clear();
-        this.guildMap.clear();
-        this.guildPreviewMap.clear();
-        this.guildMemberMap.clear();
-        this.guildMemberRoleMap.clear();
-        this.messageMap.clear();
-        this.roleMap.clear();
-        this.userMap.clear();
+        this.#cached.clear();
         this.webhookMap.clear();
-        this.manageWebhooksPermMap.clear();
     }
-    channelMap;
     async fetchChannel(resolvable) {
         const channelId = resolveChannelId(resolvable);
-        if (!channelId)
+        if (!isNonNilSnowflake(channelId))
             return undefined;
-        if (!this.channelMap.has(channelId)) {
-            const guildId = resolveChannelGuildId(resolvable);
-            const channel = guildId
-                ? await this.fetchTextChannel(guildId, channelId)
-                : await this.fetchDmChannel(channelId);
-            this.channelMap.set(channelId, channel);
+        const guildId = resolveChannelGuildId(resolvable);
+        if (guildId) {
+            const guild = await this.fetchGuild(guildId);
+            return guild?.channels?.cache.get(channelId);
         }
-        return this.channelMap.get(channelId);
+        const user = await this.fetchUser(channelId);
+        return user?.dmChannel ?? undefined;
     }
     async fetchChannelAndThread(resolvable) {
         const threadOrChannel = await this.fetchChannel(resolvable);
@@ -77,94 +58,68 @@ export class DiscordCache {
         }
         return {};
     }
-    async fetchDmChannel(userId) {
-        const user = await this.fetchUser(userId);
-        return user?.dmChannel ?? undefined;
-    }
-    async fetchTextChannel(guildId, channelId) {
-        const guild = await this.fetchGuild(guildId);
-        return guild?.channels?.cache.get(channelId);
-    }
-    guildMap;
     async fetchGuild(resolvable) {
         const guildId = resolveGuildId(resolvable);
-        if (!guildId)
+        if (!isNonNilSnowflake(guildId))
             return undefined;
-        if (!this.guildMap.has(guildId)) {
-            const guild = await fetchGuild(this.client, guildId);
-            this.guildMap.set(guildId, guild);
-        }
-        return this.guildMap.get(guildId);
+        const cache = this.#cached.has(guildId);
+        const guild = await this.client.guilds.fetch({ guild: guildId, cache, force: !cache }).catch(DiscordApiError.process);
+        this.#cached.set(guildId, true);
+        return guild;
     }
-    guildPreviewMap;
     async fetchGuildName(resolvable, defaultValue) {
         const guildId = resolveGuildId(resolvable);
-        if (!guildId) {
+        if (!isNonNilSnowflake(guildId))
             return defaultValue ?? "ERROR_FETCHING_GUILD";
-        }
-        if (this.guildMap.has(guildId)) {
-            return this.guildMap.get(guildId)?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD";
-        }
-        if (!this.guildPreviewMap.has(guildId)) {
-            const guildPreview = await this.client.fetchGuildPreview(guildId).catch(DiscordApiError.process);
-            this.guildPreviewMap.set(guildId, guildPreview);
-        }
-        return this.guildPreviewMap.get(guildId)?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD_PREVIEW";
+        const cache = this.#cached.has(guildId);
+        const guild = await this.client.guilds.fetch({ guild: guildId, cache, force: !cache }).catch(DiscordApiError.process);
+        const guildPreview = guild ? undefined : await this.client.fetchGuildPreview(guildId).catch(DiscordApiError.process);
+        this.#cached.set(guildId, true);
+        return guild?.name ?? guildPreview?.name ?? defaultValue ?? "ERROR_FETCHING_GUILD";
     }
-    guildMemberMap;
     async fetchGuildMember(resolvable) {
+        if (!this.guild)
+            return undefined;
         const userId = resolveUserId(resolvable);
         if (!userId)
             return undefined;
-        if (!this.guildMemberMap.has(userId)) {
-            const guildMember = await this.guild?.members.fetch({ user: userId, cache: true, force: true }).catch(DiscordApiError.process);
-            this.guildMemberMap.set(userId, guildMember ?? undefined);
-        }
-        return this.guildMemberMap.get(userId) ?? undefined;
+        const key = `${this.guild.id}-${userId}`;
+        const cache = this.#cached.has(key);
+        const guildMember = await this.guild?.members.fetch({ user: userId, cache, force: !cache }).catch(DiscordApiError.process);
+        this.#cached.set(key, true);
+        return guildMember;
     }
-    guildMemberRoleMap;
     async fetchGuildMemberRole(userId, roleId) {
-        const key = `${userId}-${roleId}`;
-        if (!this.guildMemberRoleMap.has(key)) {
-            const guildMember = await this.fetchGuildMember(userId);
-            const role = guildMember?.roles.cache.get(roleId);
-            this.guildMemberRoleMap.set(key, role);
-        }
-        return this.guildMemberRoleMap.get(key);
+        const guildMember = await this.fetchGuildMember(userId);
+        return guildMember?.roles.cache.get(roleId);
     }
-    messageMap;
     async fetchMessage(discordKey) {
         const { messageId } = discordKey;
-        if (!messageId)
+        if (!isNonNilSnowflake(messageId))
             return undefined;
-        if (!this.messageMap.has(messageId)) {
-            const channel = await this.fetchChannel(discordKey);
-            const message = isMessageTarget(channel) ? await channel.messages.fetch({ message: messageId, cache: true, force: true }) : undefined;
-            this.messageMap.set(messageId, message);
-        }
-        return this.messageMap.get(messageId);
+        const cache = this.#cached.has(messageId);
+        const channel = await this.fetchChannel(discordKey);
+        const message = isMessageTarget(channel) ? await channel.messages.fetch({ message: messageId, cache, force: !cache }) : undefined;
+        this.#cached.set(messageId, true);
+        return message;
     }
-    roleMap;
     async fetchGuildRole(roleIdResolvable) {
         const roleId = resolveRoleId(roleIdResolvable);
-        if (!roleId)
+        if (!isNonNilSnowflake(roleId))
             return undefined;
-        if (!this.roleMap.has(roleId)) {
-            const role = await this.guild?.roles.fetch(roleId, { cache: true, force: true }).catch(DiscordApiError.process);
-            this.roleMap.set(roleId, role ?? undefined);
-        }
-        return this.roleMap.get(roleId);
+        const cache = this.#cached.has(roleId);
+        const role = await this.guild?.roles.fetch(roleId, { cache, force: !cache }).catch(DiscordApiError.process);
+        this.#cached.set(roleId, true);
+        return role ?? undefined;
     }
-    userMap;
     async fetchUser(userIdResolvable) {
         const userId = resolveUserId(userIdResolvable);
-        if (!userId)
+        if (!isNonNilSnowflake(userId))
             return undefined;
-        if (!this.userMap.has(userId) && isNonNilSnowflake(userId)) {
-            const user = await this.client.users.fetch(userId, { cache: true, force: true }).catch(DiscordApiError.process);
-            this.userMap.set(userId, user);
-        }
-        return this.userMap.get(userId);
+        const cache = this.#cached.has(userId);
+        const user = await this.client.users.fetch(userId, { cache, force: !cache }).catch(DiscordApiError.process);
+        this.#cached.set(userId, true);
+        return user;
     }
     webhookMap;
     async fetchWebhook(guildIdResolvable, channelIdResolvable, options) {
@@ -184,36 +139,30 @@ export class DiscordCache {
     async fetchWebhookChannel(guildIdResolvable, channelIdResolvable) {
         const guildId = resolveGuildId(guildIdResolvable);
         const channelId = resolveChannelId(channelIdResolvable);
-        if (!guildId || !channelId)
+        if (!isNonNilSnowflake(guildId) || !isNonNilSnowflake(channelId))
             return undefined;
         const discordKey = new DiscordKey(guildId, channelId);
         const { channel } = await this.fetchChannelAndThread(discordKey);
         return isWebhookChannel(channel) ? channel : undefined;
     }
-    manageWebhooksPermMap;
     hasManageWebhooksPerm(channel) {
         if (!channel)
             return false;
-        const channelId = channel.id;
-        if (!this.manageWebhooksPermMap.has(channelId)) {
+        const key = `${channel.id}-canManageWebhooks`;
+        if (!this.#cached.has(key)) {
             const { canManageWebhooks } = getPermsFor(channel, DiscordCache.getSageId());
-            if (!canManageWebhooks) {
-                info(`Cannot ManageWebhooks: ${toHumanReadable(channel)}`);
-            }
-            this.manageWebhooksPermMap.set(channelId, canManageWebhooks);
+            this.#cached.set(key, canManageWebhooks);
         }
-        return this.manageWebhooksPermMap.get(channelId) === true;
+        return this.#cached.get(key) === true;
     }
     async fetchOrCreateWebhook(guildIdResolvable, channelIdResolvable, options) {
         const existing = await this.fetchWebhook(guildIdResolvable, channelIdResolvable, options);
-        if (existing) {
+        if (existing)
             return existing;
-        }
         const channel = await this.fetchWebhookChannel(guildIdResolvable, channelIdResolvable);
-        if (!this.hasManageWebhooksPerm(channel)) {
+        if (!this.hasManageWebhooksPerm(channel))
             return undefined;
-        }
-        if (!channel.isThread()) {
+        if (!isThread(channel)) {
             const webhookName = options?.name ?? SageDialogWebhookName;
             const webhookArgs = { ...options, name: webhookName };
             const webhook = await channel.createWebhook(webhookArgs).catch(DiscordApiError.process);
@@ -253,22 +202,19 @@ export class DiscordCache {
         return undefined;
     }
     static async filterChannelMessages(channel, filter, lastMessageId, limit) {
-        if (!channel) {
+        if (!channel)
             return [];
-        }
-        const options = {
-            before: lastMessageId ?? channel.lastMessageId,
-            limit: limit || 25,
-            cache: true
-        };
+        const before = lastMessageId ?? channel.lastMessageId ?? undefined;
+        const cache = true;
+        if (!limit)
+            limit = 25;
+        const options = { before, cache, limit };
         const collection = await channel.messages.fetch(options).catch(DiscordApiError.process);
-        if (!collection) {
+        if (!collection)
             return [];
-        }
         const array = Array.from(collection.values());
-        if (!filter) {
+        if (!filter)
             return array;
-        }
         const filtered = [];
         for (let i = 0, message = array[i]; i < array.length; i++, message = array[i]) {
             if (await filter(message, i, array).catch(errorReturnFalse)) {
@@ -281,7 +227,11 @@ export class DiscordCache {
         if (args.length === 2) {
             const client = args[0];
             const guildId = resolveGuildId(args[1]);
-            return fetchGuild(client, guildId).then(guild => new DiscordCache(client, guild));
+            const discordCache = new DiscordCache(client);
+            return discordCache.fetchGuild(guildId).then(guild => {
+                discordCache.guild = guild;
+                return discordCache;
+            });
         }
         const guildResolvable = args[0];
         if ("guild" in guildResolvable) {
