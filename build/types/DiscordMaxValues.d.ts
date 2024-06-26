@@ -37,6 +37,7 @@ export declare const DiscordMaxValues: {
         };
         select: {
             idLength: number;
+            labelLength: number;
             optionCount: number;
             placeholderLength: number;
         };

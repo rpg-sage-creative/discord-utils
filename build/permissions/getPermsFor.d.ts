@@ -1,17 +1,17 @@
-import { type Channel, type GuildMember, type GuildMemberResolvable, type PermissionResolvable, type Role, type RoleResolvable } from "discord.js";
+import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { type WebhookChannel } from "../types/types.js";
 type AccessResults = {
-    /** perms.has("MANAGE_CHANNELS") */
+    /** perms.has("ManageChannels") */
     canManageChannel: boolean;
-    /** perms.has("MANAGE_WEBHOOKS") */
+    /** perms.has("ManageWebhooks") */
     canManageWebhooks: boolean;
-    /** perms.has("VIEW_CHANNEL") */
+    /** perms.has("ViewChannel") */
     canViewChannel: boolean;
     /** is the member in the members list (has joined a thread) */
     isInChannel: boolean;
-    /** perms.has("SEND_MESSAGES") or perms.has("SEND_MESSAGES_IN_THREADS") */
+    /** perms.has("SendMessages") or perms.has("SendMessagesInThreads") */
     canSendMessages: boolean;
-    /** perms.has("ADD_REACTIONS") */
+    /** perms.has("AddReactions") */
     canAddReactions: boolean;
     /** canManageWebhooks and "fetchWebhooks" in channel */
     canSendWebhooks: boolean;
@@ -19,19 +19,20 @@ type AccessResults = {
     webhookChannel?: WebhookChannel;
     canSendPolls: boolean;
 };
+type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
 type CheckedResults = AccessResults & {
     /** the perms checked */
-    checked: PermissionResolvable[];
+    checked: PermFlagBitsKeys[];
     /** missing.length > 0 */
     /** presnt.length > 0 */
     /** the perms not found */
-    missing: PermissionResolvable[];
+    missing: PermFlagBitsKeys[];
     /** the perms found */
-    present: PermissionResolvable[];
+    present: PermFlagBitsKeys[];
 };
 type GuildMemberOrRoleResolvable = GuildMember | GuildMemberResolvable | Role | RoleResolvable;
 /** A quick check to see if a member or role can view or manage a channel. */
 export declare function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable): AccessResults;
 /** Checks the user/role and channel to see which of the given permissions are missing or present. */
-export declare function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: PermissionResolvable[]): CheckedResults;
+export declare function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: PermFlagBitsKeys[]): CheckedResults;
 export {};
