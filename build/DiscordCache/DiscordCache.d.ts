@@ -3,8 +3,8 @@ import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThrea
 import { DiscordKey } from "../DiscordKey.js";
 import { type CanBeChannelIdResolvable, type ChannelIdResolvable } from "../resolve/resolveChannelId.js";
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "../resolve/resolveGuildId.js";
-import { type RoleIdResolvable } from "../resolve/resolveRoleId.js";
-import { type UserIdResolvable } from "../resolve/resolveUserId.js";
+import { type CanBeRoleIdResolvable } from "../resolve/resolveRoleId.js";
+import { type CanBeUserIdResolvable } from "../resolve/resolveUserId.js";
 import { type MessageChannel, type NonThreadChannel } from "../types/types.js";
 type ClientGuildResolvable = Guild | {
     client: Client;
@@ -26,15 +26,15 @@ export declare class DiscordCache {
     constructor(client: Client, guild?: Optional<Guild>, channel?: Optional<Channel>);
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
-    fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelIdResolvable>): Promise<T | undefined>;
+    fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelIdResolvable>, isDm?: true): Promise<T | undefined>;
     fetchChannelAndThread(resolvable: Optional<CanBeChannelIdResolvable>): Promise<ChannelAndThread>;
     fetchGuild(resolvable: Optional<CanBeGuildIdResolvable>): Promise<Guild | undefined>;
     fetchGuildName(resolvable: Optional<CanBeGuildIdResolvable>, defaultValue?: string): Promise<string>;
-    fetchGuildMember(resolvable: Optional<UserIdResolvable>): Promise<GuildMember | undefined>;
+    fetchGuildMember(resolvable: Optional<CanBeUserIdResolvable>): Promise<GuildMember | undefined>;
     fetchGuildMemberRole(userId: Snowflake, roleId: Snowflake): Promise<Role | undefined>;
     fetchMessage(discordKey: DiscordKey): Promise<Message | undefined>;
-    fetchGuildRole(roleIdResolvable: Optional<RoleIdResolvable>): Promise<Role | undefined>;
-    fetchUser(userIdResolvable: Optional<UserIdResolvable>): Promise<User | undefined>;
+    fetchGuildRole(roleIdResolvable: Optional<CanBeRoleIdResolvable>): Promise<Role | undefined>;
+    fetchUser(userIdResolvable: Optional<CanBeUserIdResolvable>): Promise<User | undefined>;
     private webhookMap;
     fetchWebhook(guildIdResolvable: GuildIdResolvable, channelIdResolvable: ChannelIdResolvable, options?: WebhookOptions): Promise<Webhook | undefined>;
     private fetchWebhookChannel;

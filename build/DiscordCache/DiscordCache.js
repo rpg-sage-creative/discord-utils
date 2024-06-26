@@ -1,4 +1,4 @@
-import { NIL_SNOWFLAKE, debug, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { Client, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordApiError } from "../DiscordApiError.js";
 import { DiscordKey } from "../DiscordKey.js";
@@ -31,21 +31,23 @@ export class DiscordCache {
         }
     }
     clear() {
-        debug("Clearing DiscordCache");
         this.#cached.clear();
         this.webhookMap.clear();
     }
-    async fetchChannel(resolvable) {
+    async fetchChannel(resolvable, isDm) {
         const channelId = resolveChannelId(resolvable);
         if (!isNonNilSnowflake(channelId))
             return undefined;
+        if (isDm) {
+            const user = await this.fetchUser(channelId);
+            return user?.dmChannel ?? undefined;
+        }
         const guildId = resolveChannelGuildId(resolvable);
         if (guildId) {
             const guild = await this.fetchGuild(guildId);
             return guild?.channels?.cache.get(channelId);
         }
-        const user = await this.fetchUser(channelId);
-        return user?.dmChannel ?? undefined;
+        return undefined;
     }
     async fetchChannelAndThread(resolvable) {
         const threadOrChannel = await this.fetchChannel(resolvable);
@@ -98,7 +100,7 @@ export class DiscordCache {
         if (!isNonNilSnowflake(messageId))
             return undefined;
         const cache = this.#cached.has(messageId);
-        const channel = await this.fetchChannel(discordKey);
+        const channel = await this.fetchChannel(discordKey, discordKey.isDm ? true : undefined);
         const message = isMessageTarget(channel) ? await channel.messages.fetch({ message: messageId, cache, force: !cache }) : undefined;
         this.#cached.set(messageId, true);
         return message;
@@ -141,8 +143,7 @@ export class DiscordCache {
         const channelId = resolveChannelId(channelIdResolvable);
         if (!isNonNilSnowflake(guildId) || !isNonNilSnowflake(channelId))
             return undefined;
-        const discordKey = new DiscordKey(guildId, channelId);
-        const { channel } = await this.fetchChannelAndThread(discordKey);
+        const { channel } = await this.fetchChannelAndThread({ guildId, id: channelId });
         return isWebhookChannel(channel) ? channel : undefined;
     }
     hasManageWebhooksPerm(channel) {
@@ -176,9 +177,8 @@ export class DiscordCache {
         const webhook = await this.fetchWebhook(guildIdResolvable, channelIdResolvable, webhookOptions);
         if (!webhook)
             return undefined;
-        const discordKey = new DiscordKey(webhook.guildId, channelIdResolvable);
-        const channel = await this.fetchChannel(discordKey);
-        if (!isMessageTarget(channel))
+        const channel = await this.fetchWebhookChannel(guildIdResolvable, channelIdResolvable);
+        if (!channel)
             return undefined;
         const options = {
             before: channel.lastMessageId ?? undefined,
