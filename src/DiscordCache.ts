@@ -1,15 +1,15 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
 import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
-import { DiscordApiError } from "../DiscordApiError.js";
-import { DiscordKey } from "../DiscordKey.js";
-import { getPermsFor } from "../permissions/getPermsFor.js";
-import { resolveChannelGuildId } from "../resolve/internal/resolveChannelGuildId.js";
-import { resolveChannelId, type CanBeChannelIdResolvable, type ChannelIdResolvable } from "../resolve/resolveChannelId.js";
-import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "../resolve/resolveGuildId.js";
-import { resolveRoleId, type CanBeRoleIdResolvable } from "../resolve/resolveRoleId.js";
-import { resolveUserId, type CanBeUserIdResolvable } from "../resolve/resolveUserId.js";
-import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type NonThreadChannel, type WebhookChannel } from "../types/types.js";
+import { DiscordApiError } from "./DiscordApiError.js";
+import { DiscordKey } from "./DiscordKey.js";
+import { getPermsFor } from "./permissions/getPermsFor.js";
+import { resolveChannelGuildId } from "./resolve/internal/resolveChannelGuildId.js";
+import { resolveChannelId, type CanBeChannelIdResolvable, type ChannelIdResolvable } from "./resolve/resolveChannelId.js";
+import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
+import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
+import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
+import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type NonThreadChannel, type WebhookChannel } from "./types/types.js";
 
 //#region Helpers
 

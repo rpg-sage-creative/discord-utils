@@ -1,14 +1,14 @@
 import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { Client, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
-import { DiscordApiError } from "../DiscordApiError.js";
-import { DiscordKey } from "../DiscordKey.js";
-import { getPermsFor } from "../permissions/getPermsFor.js";
-import { resolveChannelGuildId } from "../resolve/internal/resolveChannelGuildId.js";
-import { resolveChannelId } from "../resolve/resolveChannelId.js";
-import { resolveGuildId } from "../resolve/resolveGuildId.js";
-import { resolveRoleId } from "../resolve/resolveRoleId.js";
-import { resolveUserId } from "../resolve/resolveUserId.js";
-import { isMessageTarget, isNonThread, isThread, isWebhookChannel } from "../types/types.js";
+import { DiscordApiError } from "./DiscordApiError.js";
+import { DiscordKey } from "./DiscordKey.js";
+import { getPermsFor } from "./permissions/getPermsFor.js";
+import { resolveChannelGuildId } from "./resolve/internal/resolveChannelGuildId.js";
+import { resolveChannelId } from "./resolve/resolveChannelId.js";
+import { resolveGuildId } from "./resolve/resolveGuildId.js";
+import { resolveRoleId } from "./resolve/resolveRoleId.js";
+import { resolveUserId } from "./resolve/resolveUserId.js";
+import { isMessageTarget, isNonThread, isThread, isWebhookChannel } from "./types/types.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelIdResolvable, name) {
     const channelId = resolveChannelId(channelIdResolvable);

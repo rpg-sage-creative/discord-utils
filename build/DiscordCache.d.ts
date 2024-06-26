@@ -1,11 +1,11 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
-import { DiscordKey } from "../DiscordKey.js";
-import { type CanBeChannelIdResolvable, type ChannelIdResolvable } from "../resolve/resolveChannelId.js";
-import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "../resolve/resolveGuildId.js";
-import { type CanBeRoleIdResolvable } from "../resolve/resolveRoleId.js";
-import { type CanBeUserIdResolvable } from "../resolve/resolveUserId.js";
-import { type MessageChannel, type NonThreadChannel } from "../types/types.js";
+import { DiscordKey } from "./DiscordKey.js";
+import { type CanBeChannelIdResolvable, type ChannelIdResolvable } from "./resolve/resolveChannelId.js";
+import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
+import { type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
+import { type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
+import { type MessageChannel, type NonThreadChannel } from "./types/types.js";
 type ClientGuildResolvable = Guild | {
     client: Client;
     guild: Optional<Guild>;
