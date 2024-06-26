@@ -39,6 +39,6 @@ export declare class DiscordKey implements MessageReference {
     toMessageUrl(): string | undefined;
     toUrl(): string;
     static createKey(...resolvables: Optional<SnowflakeResolvable>[]): string;
-    static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial): DiscordKey;
+    static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReference): DiscordKey;
     static fromUrl(url: string): DiscordKey | undefined;
 }
