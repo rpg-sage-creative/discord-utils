@@ -23,7 +23,7 @@ export async function test_toHumanReadable(discordCache, { CHANNEL_ID, GUILD_ID,
 	const role = await discordCache.fetchGuildRole(ROLE_ID);
 	assert("RPG Sage (Dev)#​Developer", toHumanReadable, role);
 
-	const webhook = await discordCache.fetchWebhook(GUILD_ID, CHANNEL_ID);
+	const webhook = await discordCache.fetchWebhook({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 	assert("@​RPG Sage (Dev)$SageDialogWebhookName", toHumanReadable, webhook);
 
 }

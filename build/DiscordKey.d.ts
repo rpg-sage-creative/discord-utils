@@ -1,8 +1,9 @@
 import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { type Interaction, type MessageReference } from "discord.js";
+import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
 import { type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
-export declare class DiscordKey implements MessageReference {
+export declare class DiscordKey implements MessageReference, ChannelReference {
     get guildId(): Snowflake | undefined;
     get channelId(): Snowflake;
     get messageId(): Snowflake | undefined;
