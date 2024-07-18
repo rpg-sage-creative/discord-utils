@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
+import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel, type MessageReference } from "discord.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable } from "./resolve/resolveChannelReference.js";
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
@@ -32,7 +32,7 @@ export declare class DiscordCache {
     fetchGuildName(resolvable: Optional<CanBeGuildIdResolvable>, defaultValue?: string): Promise<string>;
     fetchGuildMember(resolvable: Optional<CanBeUserIdResolvable>): Promise<GuildMember | undefined>;
     fetchGuildMemberRole(userId: Snowflake, roleId: Snowflake): Promise<Role | undefined>;
-    fetchMessage(discordKey: DiscordKey): Promise<Message | undefined>;
+    fetchMessage(keyOrReference: DiscordKey | MessageReference): Promise<Message | undefined>;
     fetchGuildRole(roleIdResolvable: Optional<CanBeRoleIdResolvable>): Promise<Role | undefined>;
     fetchUser(userIdResolvable: Optional<CanBeUserIdResolvable>): Promise<User | undefined>;
     private webhookMap;

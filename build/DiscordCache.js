@@ -93,7 +93,8 @@ export class DiscordCache {
         const guildMember = await this.fetchGuildMember(userId);
         return guildMember?.roles.cache.get(roleId);
     }
-    async fetchMessage(discordKey) {
+    async fetchMessage(keyOrReference) {
+        const discordKey = keyOrReference instanceof DiscordKey ? keyOrReference : DiscordKey.from(keyOrReference);
         const { messageId } = discordKey;
         if (!isNonNilSnowflake(messageId))
             return undefined;
