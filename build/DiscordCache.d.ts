@@ -23,7 +23,7 @@ export declare class DiscordCache {
     #private;
     client: Client;
     guild?: Optional<Guild>;
-    constructor(client: Client, guild?: Optional<Guild>, channel?: Optional<Channel>);
+    private constructor();
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
     fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelIdResolvable>, isDm?: true): Promise<T | undefined>;
