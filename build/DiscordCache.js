@@ -1,5 +1,5 @@
 import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -33,19 +33,28 @@ export class DiscordCache {
         this.#cached.clear();
         this.webhookMap.clear();
     }
-    async fetchChannel(resolvable, isDm) {
+    async fetchChannel(resolvable) {
         const { guildId, channelId } = resolveChannelReference(resolvable) ?? {};
-        if (!isNonNilSnowflake(channelId))
+        if (!channelId || !guildId)
             return undefined;
-        if (isDm) {
-            const user = await this.fetchUser(channelId);
-            return user?.dmChannel ?? undefined;
-        }
-        if (guildId) {
-            const guild = await this.fetchGuild(guildId);
-            return guild?.channels?.cache.get(channelId);
-        }
-        return undefined;
+        const guild = await this.fetchGuild(guildId);
+        if (!guild)
+            return undefined;
+        const cache = this.#cached.has(channelId);
+        const channel = await guild.channels.fetch(channelId, { cache, force: !cache });
+        this.#cached.set(channelId, true);
+        return channel ?? undefined;
+    }
+    async fetchDmChannel({ userId, channelId }) {
+        const user = await this.fetchUser(userId);
+        if (!user)
+            return undefined;
+        if (user.dmChannel?.id !== channelId)
+            return undefined;
+        const cache = this.#cached.has(channelId);
+        const channel = await user.dmChannel.fetch(!cache);
+        this.#cached.set(channelId, true);
+        return channel;
     }
     async fetchChannelAndThread(resolvable) {
         const threadOrChannel = await this.fetchChannel(resolvable);
@@ -93,13 +102,15 @@ export class DiscordCache {
         const guildMember = await this.fetchGuildMember(userId);
         return guildMember?.roles.cache.get(roleId);
     }
-    async fetchMessage(keyOrReference) {
+    async fetchMessage(keyOrReference, userId) {
         const discordKey = keyOrReference instanceof DiscordKey ? keyOrReference : DiscordKey.from(keyOrReference);
         const { messageId } = discordKey;
         if (!isNonNilSnowflake(messageId))
             return undefined;
         const cache = this.#cached.has(messageId);
-        const channel = await this.fetchChannel(discordKey, discordKey.isDm ? true : undefined);
+        const channel = discordKey.isDm
+            ? await this.fetchDmChannel({ userId, channelId: discordKey.channelId })
+            : await this.fetchChannel(discordKey);
         const message = isMessageTarget(channel) ? await channel.messages.fetch({ message: messageId, cache, force: !cache }) : undefined;
         this.#cached.set(messageId, true);
         return message;

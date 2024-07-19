@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel, type MessageReference } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel, type MessageReference } from "discord.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable } from "./resolve/resolveChannelReference.js";
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
@@ -26,13 +26,17 @@ export declare class DiscordCache {
     private constructor();
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
-    fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>, isDm?: true): Promise<T | undefined>;
+    fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
+    fetchDmChannel({ userId, channelId }: {
+        userId: Snowflake;
+        channelId: Snowflake;
+    }): Promise<DMChannel | undefined>;
     fetchChannelAndThread(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<ChannelAndThread>;
     fetchGuild(resolvable: Optional<CanBeGuildIdResolvable>): Promise<Guild | undefined>;
     fetchGuildName(resolvable: Optional<CanBeGuildIdResolvable>, defaultValue?: string): Promise<string>;
     fetchGuildMember(resolvable: Optional<CanBeUserIdResolvable>): Promise<GuildMember | undefined>;
     fetchGuildMemberRole(userId: Snowflake, roleId: Snowflake): Promise<Role | undefined>;
-    fetchMessage(keyOrReference: DiscordKey | MessageReference): Promise<Message | undefined>;
+    fetchMessage(keyOrReference: DiscordKey | MessageReference, userId: Snowflake): Promise<Message | undefined>;
     fetchGuildRole(roleIdResolvable: Optional<CanBeRoleIdResolvable>): Promise<Role | undefined>;
     fetchUser(userIdResolvable: Optional<CanBeUserIdResolvable>): Promise<User | undefined>;
     private webhookMap;

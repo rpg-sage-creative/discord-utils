@@ -1,6 +1,6 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
 import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel, type MessageReference } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel, type MessageReference } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -52,20 +52,33 @@ export class DiscordCache {
 
 	//#region channel
 
-	public async fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>, isDm?: true): Promise<T | undefined> {
+	public async fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
 		const { guildId, channelId } = resolveChannelReference(resolvable) ?? { };
-		if (!isNonNilSnowflake(channelId)) return undefined; //NOSONAR
+		if (!channelId || !guildId) return undefined; //NOSONAR
 
-		if (isDm) {
-			const user = await this.fetchUser(channelId);
-			return user?.dmChannel as T ?? undefined;
-		}
+		const guild = await this.fetchGuild(guildId);
+		if (!guild) return undefined;
 
-		if (guildId) {
-			const guild = await this.fetchGuild(guildId);
-			return guild?.channels?.cache.get(channelId) as T;
-		}
-		return undefined;
+		const cache = this.#cached.has(channelId);
+		const channel = await guild.channels.fetch(channelId, { cache, force:!cache });
+
+		this.#cached.set(channelId, true);
+
+		return channel as T ?? undefined;
+	}
+
+	public async fetchDmChannel({ userId, channelId }: { userId:Snowflake, channelId:Snowflake }): Promise<DMChannel | undefined> {
+		const user = await this.fetchUser(userId);
+		if (!user) return undefined;
+		if (user.dmChannel?.id !== channelId) return undefined;
+
+		const cache = this.#cached.has(channelId);
+
+		const channel = await user.dmChannel.fetch(!cache);
+
+		this.#cached.set(channelId, true);
+
+		return channel;
 	}
 
 	public async fetchChannelAndThread(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<ChannelAndThread> {
@@ -146,13 +159,15 @@ export class DiscordCache {
 
 	//#region message
 
-	public async fetchMessage(keyOrReference: DiscordKey | MessageReference): Promise<Message | undefined> {
+	public async fetchMessage(keyOrReference: DiscordKey | MessageReference, userId: Snowflake): Promise<Message | undefined> {
 		const discordKey = keyOrReference instanceof DiscordKey ? keyOrReference : DiscordKey.from(keyOrReference);
 		const { messageId } = discordKey;
 		if (!isNonNilSnowflake(messageId)) return undefined; //NOSONAR
 
 		const cache = this.#cached.has(messageId);
-		const channel = await this.fetchChannel(discordKey, discordKey.isDm ? true : undefined);
+		const channel = discordKey.isDm
+			? await this.fetchDmChannel({ userId, channelId:discordKey.channelId })
+			: await this.fetchChannel(discordKey);
 		const message = isMessageTarget(channel) ? await channel.messages.fetch({ message:messageId, cache, force:!cache }) : undefined;
 
 		this.#cached.set(messageId, true);
