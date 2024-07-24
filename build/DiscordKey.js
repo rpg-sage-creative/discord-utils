@@ -81,7 +81,7 @@ export class DiscordKey {
     }
     static from(resolvable) {
         if ("messageId" in resolvable) {
-            return new DiscordKey(resolvable.guildId, resolvable.channelId, resolvable.messageId);
+            return new DiscordKey(resolvable.guildId, resolvable.channelId, undefined, resolvable.messageId);
         }
         if ("message" in resolvable) {
             resolvable = resolvable.message;
