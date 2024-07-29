@@ -1,3 +1,4 @@
+import {} from "@rsc-utils/string-utils";
 export function createMentionRegex(type, options) {
     const capture = options?.capture;
     const flags = options?.globalFlag ? "g" : "";

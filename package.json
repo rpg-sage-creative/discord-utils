@@ -1,6 +1,6 @@
 {
 	"name": "@rsc-utils/discord-utils",
-	"version": "0.0.36",
+	"version": "0.0.40",
 	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
 	"type": "module",
@@ -10,13 +10,12 @@
 		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh"
 	},
 	"devDependencies": {
-		"@types/node": "^18.18.7"
+		"@types/node": "^18.19.34"
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
-		"discord-api-types": "^0.27.3",
-		"discord.js": "^13.17.1",
+		"discord.js": "^14.15.3",
 		"emoji-regex": "^10.3.0",
 		"xregexp": "^5.1.1"
 	}

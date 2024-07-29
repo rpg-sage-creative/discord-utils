@@ -1,4 +1,7 @@
-import { Formatters } from "discord.js";
-export function toUserMention(id) {
-    return id ? Formatters.userMention(id) : null;
+import {} from "@rsc-utils/core-utils";
+import { userMention } from "discord.js";
+import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
+export function toUserMention(resolvable) {
+    const id = resolveSnowflake(resolvable);
+    return id ? userMention(id) : undefined;
 }

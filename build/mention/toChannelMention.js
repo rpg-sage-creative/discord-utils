@@ -1,4 +1,7 @@
-import { Formatters } from "discord.js";
-export function toChannelMention(id) {
-    return id ? Formatters.channelMention(id) : null;
+import {} from "@rsc-utils/core-utils";
+import { channelMention } from "discord.js";
+import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
+export function toChannelMention(resolvable) {
+    const id = resolveSnowflake(resolvable);
+    return id ? channelMention(id) : undefined;
 }

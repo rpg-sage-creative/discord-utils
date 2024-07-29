@@ -1,3 +1,4 @@
+import {} from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import { getDiscordEmojiRegexSource } from "./getDiscordEmojiRegexSource.js";
 import { getUnicodeEmojiRegexSource } from "./getUnicodeEmojiRegexSource.js";

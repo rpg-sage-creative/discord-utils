@@ -1,8 +1,11 @@
 import { chunk, isNotBlank } from "@rsc-utils/string-utils";
-import { MessageEmbed } from "discord.js";
-import { DiscordMaxValues } from "../DiscordMaxValues.js";
+import { resolveColor } from "discord.js";
+import { EmbedBuilder } from "../embed/EmbedBuilder.js";
+import {} from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
+import { resolveEmbed } from "../embed/resolveEmbed.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 function getValueToAppend(value, newLine, title) {
     const titleOut = isNotBlank(value) && title ? "### " : "";
     const newLineOut = newLine ? "\n" : "";
@@ -10,28 +13,32 @@ function getValueToAppend(value, newLine, title) {
     return titleOut + newLineOut + valueOut;
 }
 function embedsToContent(embeds) {
-    const content = embeds?.map(embed => {
+    const content = embeds?.map(_embed => {
+        const embed = resolveEmbed(_embed);
         let text = "";
-        text += getValueToAppend(embed.title, !!text, true);
-        text += getValueToAppend(embed.description, !!text, false);
-        if (embed.fields?.length) {
-            embed.fields.forEach(field => {
-                text += getValueToAppend(field.name, !!text, true);
-                text += getValueToAppend(field.value, !!text, false);
-            });
-        }
+        text += getValueToAppend(embed.title, false, true);
+        let newLine = text.length > 0;
+        text += getValueToAppend(embed.description, newLine);
+        newLine ||= text.length > 0;
+        embed.fields?.forEach(field => {
+            text += getValueToAppend(field.name, newLine, true);
+            newLine ||= text.length > 0;
+            text += getValueToAppend(field.value, newLine);
+            newLine ||= text.length > 0;
+        });
         return text;
     }).join("\n\n");
     return content?.trim()
         ? content
         : undefined;
 }
-function contentToEmbeds(content, color) {
+function contentToEmbeds(content, colorResolvable) {
     const trimmedContent = content?.trim();
     if (trimmedContent?.length) {
         const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
         if (chunks.length) {
-            return chunks.map(description => new MessageEmbed({ color, description }));
+            const color = colorResolvable ? resolveColor(colorResolvable) : undefined;
+            return chunks.map(description => new EmbedBuilder({ color, description }));
         }
     }
     return undefined;
@@ -52,9 +59,10 @@ function mergeContent(content, embeds) {
     return undefined;
 }
 function mergeEmbeds(content, embeds, color) {
-    const contentEmbeds = contentToEmbeds(content, embeds?.[0].color ?? color);
-    const hasContentEmbeds = !!contentEmbeds?.length;
     const hasEmbeds = !!embeds?.length;
+    const embedColor = hasEmbeds ? resolveEmbed(embeds[0]).color : undefined;
+    const contentEmbeds = contentToEmbeds(content, embedColor ?? color);
+    const hasContentEmbeds = !!contentEmbeds?.length;
     if (hasContentEmbeds && hasEmbeds) {
         return contentEmbeds.concat(embeds);
     }
@@ -67,7 +75,7 @@ function mergeEmbeds(content, embeds, color) {
     return undefined;
 }
 export function splitMessageOptions(msgOptions, splitOptions) {
-    const { attachments, components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
+    const { components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
     const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) ?? [];
     const allIncomingEmbeds = convertedEmbeds.concat(embeds ?? []);
     let contentToChunk;
@@ -83,7 +91,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
         embedsToPost = allIncomingEmbeds;
     }
     if (replyingTo && contentToChunk) {
-        contentToChunk = replyingTo + "\n\n" + contentToChunk;
+        contentToChunk = `${replyingTo}\n\n${contentToChunk}`;
     }
     const payloads = [];
     const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
@@ -94,7 +102,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             ...baseOptions
         });
     });
-    let blankContent = (contentToChunk ? null : replyingTo) ?? splitOptions?.blankContentValue?.trim();
+    let blankContent = (contentToChunk ? undefined : replyingTo) ?? splitOptions?.blankContentValue?.trim();
     if (!blankContent?.length) {
         blankContent = undefined;
     }
@@ -102,7 +110,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
         const embedLength = getEmbedLength(embed);
         const payload = payloads[payloads.length - 1];
         if (payload) {
-            const embedsLength = getTotalEmbedLength(payload.embeds);
+            const embedsLength = getTotalEmbedLength([...payload.embeds ?? []]);
             if (embedsLength + embedLength < DiscordMaxValues.embed.totalLength) {
                 payload.embeds.push(embed);
             }
@@ -114,11 +122,10 @@ export function splitMessageOptions(msgOptions, splitOptions) {
             payloads.push({ content: blankContent, embeds: [embed], ...baseOptions });
         }
     });
-    if (attachments?.length || components?.length || files?.length) {
+    if (components?.length || files?.length) {
         if (!payloads.length) {
             payloads.push({});
         }
-        payloads[0].attachments = attachments;
         payloads[0].components = components;
         payloads[0].files = files;
     }

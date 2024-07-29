@@ -7,5 +7,4 @@ runTests(async function testOthers() {
 	error("Create url tests!");
 	error("Create DiscordKey tests!");
 	error("Create errorHandler tests!");
-	error("Create toHumanReadable tests!");
 }, true);

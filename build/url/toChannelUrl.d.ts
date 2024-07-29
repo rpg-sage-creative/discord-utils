@@ -1,3 +1,7 @@
-import type { Channel, Message, MessageReference } from "discord.js";
-import type { DiscordKey } from "../DiscordKey.js";
-export declare function toChannelUrl(ref: Channel | DiscordKey | Message | MessageReference): string;
+import { type Optional } from "@rsc-utils/core-utils";
+import { type Channel, type MessageReference } from "discord.js";
+import { type MessageOrPartial } from "../types/types.js";
+type ChannelResolvable = Channel | MessageOrPartial | MessageReference;
+export declare function toChannelUrl(ref: ChannelResolvable): string;
+export declare function toChannelUrl(ref: Optional<ChannelResolvable>): string | undefined;
+export {};

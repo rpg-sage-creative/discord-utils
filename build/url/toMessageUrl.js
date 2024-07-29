@@ -7,8 +7,13 @@ export function toMessageUrl(ref) {
             return createUrl(ref.guildId, ref.channelId, ref.messageId);
         }
     }
-    else if (ref.id) {
-        return createUrl(ref.guildId, ref.channelId, ref.id);
+    else {
+        if (ref.url) {
+            return ref.url;
+        }
+        if (ref.id) {
+            return createUrl(ref.guildId, ref.channelId, ref.id);
+        }
     }
-    return null;
+    return undefined;
 }

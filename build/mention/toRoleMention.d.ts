@@ -1,2 +1,3 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-export declare function toRoleMention(id: Optional<Snowflake>): string | null;
+import { type Optional } from "@rsc-utils/core-utils";
+import { type SnowflakeResolvable } from "../resolve/resolveSnowflake.js";
+export declare function toRoleMention(resolvable: Optional<SnowflakeResolvable>): string | undefined;

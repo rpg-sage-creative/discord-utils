@@ -1,7 +1,10 @@
-import { DiscordMaxValues } from "../DiscordMaxValues.js";
-import { getEmbedLength } from "./getEmbedLength.js";
-export function validateEmbedLengths(embed) {
+import { embedLength } from "discord.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
+import {} from "./EmbedResolvable.js";
+import { resolveEmbed } from "./resolveEmbed.js";
+export function validateEmbedLengths(resolvable) {
     const max = DiscordMaxValues.embed;
+    const embed = resolveEmbed(resolvable);
     const titleLength = embed.title?.length ?? 0;
     if (titleLength > max.titleLength) {
         return false;
@@ -29,7 +32,7 @@ export function validateEmbedLengths(embed) {
             return false;
         }
     }
-    if (getEmbedLength(embed) > max.totalLength) {
+    if (embedLength(embed) > max.totalLength) {
         return false;
     }
     return true;

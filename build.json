@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.36",
-"branch":"main",
-"commit":"e52f2e156a89b2b7571264f45a924d985d7d44e4",
-"commitSubject":"include updates from sage",
-"commitTs":1717623703000,
-"commitDate":"2024-06-05-1441",
-"buildTs":1717623745000,
-"buildDate":"2024-06-05-1442",
+"version":"0.0.40",
+"branch":"updated-packages",
+"commit":"e8a595facbd0b0769e34b28c0ead08a723f170bc",
+"commitSubject":"use resolveEmbed when referencing Embeds",
+"commitTs":1721325062000,
+"commitDate":"2024-07-18-1051",
+"buildTs":1721325091000,
+"buildDate":"2024-07-18-1051",
 "author":"Randal"
 }
