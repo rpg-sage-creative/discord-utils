@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.40",
-"branch":"updated-packages",
-"commit":"e8a595facbd0b0769e34b28c0ead08a723f170bc",
-"commitSubject":"use resolveEmbed when referencing Embeds",
-"commitTs":1721325062000,
-"commitDate":"2024-07-18-1051",
-"buildTs":1721325091000,
-"buildDate":"2024-07-18-1051",
+"version":"0.0.41",
+"branch":"main",
+"commit":"64f5bfea5a287f85731efa053a860ffc417e1399",
+"commitSubject":"Merge pull request #1 from rpg-sage-creative/updated-packages",
+"commitTs":1722296225000,
+"commitDate":"2024-07-29-1637",
+"buildTs":1722296316000,
+"buildDate":"2024-07-29-1638",
 "author":"Randal"
 }
