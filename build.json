@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.41",
+"version":"0.0.42",
 "branch":"main",
-"commit":"64f5bfea5a287f85731efa053a860ffc417e1399",
-"commitSubject":"Merge pull request #1 from rpg-sage-creative/updated-packages",
-"commitTs":1722296225000,
-"commitDate":"2024-07-29-1637",
-"buildTs":1722296316000,
-"buildDate":"2024-07-29-1638",
+"commit":"df5ff47c1e1d5e0c0015bfbeaea3bbdbb35ea96f",
+"commitSubject":"update options for addShortText and addParagraph",
+"commitTs":1722381182000,
+"commitDate":"2024-07-30-1613",
+"buildTs":1722381984000,
+"buildDate":"2024-07-30-1626",
 "author":"Randal"
 }
