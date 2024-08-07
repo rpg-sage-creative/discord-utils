@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.42",
+"version":"0.0.43",
 "branch":"main",
-"commit":"df5ff47c1e1d5e0c0015bfbeaea3bbdbb35ea96f",
-"commitSubject":"update options for addShortText and addParagraph",
-"commitTs":1722381182000,
-"commitDate":"2024-07-30-1613",
-"buildTs":1722381984000,
-"buildDate":"2024-07-30-1626",
+"commit":"526081e561a84cb89adb2b0e371b18a060bdbb24",
+"commitSubject":"add pushIfValid for embed array manipulation",
+"commitTs":1723073778000,
+"commitDate":"2024-08-07-1636",
+"buildTs":1723073807000,
+"buildDate":"2024-08-07-1636",
 "author":"Randal"
 }
