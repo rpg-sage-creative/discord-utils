@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.43",
+"version":"0.0.44",
 "branch":"main",
-"commit":"526081e561a84cb89adb2b0e371b18a060bdbb24",
-"commitSubject":"add pushIfValid for embed array manipulation",
-"commitTs":1723073778000,
-"commitDate":"2024-08-07-1636",
-"buildTs":1723073807000,
-"buildDate":"2024-08-07-1636",
+"commit":"a7dbd85f70134e1141f6d3c1c2f4d456a0dcc27b",
+"commitSubject":"allow multiple embeds to be added; check max embed count",
+"commitTs":1723132234000,
+"commitDate":"2024-08-08-0850",
+"buildTs":1723132258000,
+"buildDate":"2024-08-08-0850",
 "author":"Randal"
 }
