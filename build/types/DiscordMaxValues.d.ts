@@ -42,6 +42,16 @@ export declare const DiscordMaxValues: {
             placeholderLength: number;
         };
     };
+    /** modal popups */
+    modal: {
+        field: {
+            count: number;
+            idLength: number;
+            labelLength: number;
+            placeholderLength: number;
+            valueLength: number;
+        };
+    };
     /** message embeds */
     embed: {
         titleLength: number;

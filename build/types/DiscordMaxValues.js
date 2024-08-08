@@ -34,6 +34,15 @@ export const DiscordMaxValues = {
             placeholderLength: 150
         }
     },
+    modal: {
+        field: {
+            count: 5,
+            idLength: 100,
+            labelLength: 45,
+            placeholderLength: 100,
+            valueLength: 4000
+        }
+    },
     embed: {
         titleLength: 256,
         descriptionLength: 4096,
