@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.44",
+"version":"0.0.45",
 "branch":"main",
-"commit":"a7dbd85f70134e1141f6d3c1c2f4d456a0dcc27b",
-"commitSubject":"allow multiple embeds to be added; check max embed count",
-"commitTs":1723132234000,
-"commitDate":"2024-08-08-0850",
-"buildTs":1723132258000,
-"buildDate":"2024-08-08-0850",
+"commit":"15daf7c4537483c68d7c110f9bb4304785758446",
+"commitSubject":"add parseReference; move parseId tests",
+"commitTs":1724353210000,
+"commitDate":"2024-08-22-1200",
+"buildTs":1724353238000,
+"buildDate":"2024-08-22-1200",
 "author":"Randal"
 }
