@@ -1,5 +1,5 @@
 import { assert, runTests } from "@rsc-utils/core-utils";
-import { parseId } from "../build/index.js";
+import { parseId } from "../../build/index.js";
 
 runTests(async function test_parseId() {
 	const id = "1234567890123456";
