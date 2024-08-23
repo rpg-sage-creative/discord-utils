@@ -6,7 +6,7 @@ import { IDS } from "../DiscordCache.mjs";
  * @param {DiscordCache} discordCache
  * @param {IDS} ids
  */
-export async function test_toHumanReadable(discordCache, { CHANNEL_ID, GUILD_ID, ROLE_ID, SUPER_USER_ID }) {
+export async function test_toHumanReadable(discordCache, { CHANNEL_ID, GUILD_ID, ROLE_ID, SUPER_USER_ID, WEBHOOK_ID }) {
 
 	const channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 	assert("RPG Sage (Dev)#​pf2e-ic", toHumanReadable, channel);
@@ -25,5 +25,6 @@ export async function test_toHumanReadable(discordCache, { CHANNEL_ID, GUILD_ID,
 
 	const webhook = await discordCache.fetchWebhook({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 	assert("@​RPG Sage (Dev)$SageDialogWebhookName", toHumanReadable, webhook);
+	assert(WEBHOOK_ID, () => webhook.id);
 
 }
