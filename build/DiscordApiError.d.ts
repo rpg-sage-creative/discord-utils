@@ -7,11 +7,7 @@ export declare class DiscordApiError {
     protected asString: string;
     protected constructor(error: TDiscordApiError);
     get isFetchWebhooks(): boolean;
-    get isInvalidFormBody(): boolean;
     get isMissingPermissions(): boolean;
-    get isUnknownGuild(): boolean;
-    get isUnknownMember(): boolean;
-    get isUnknownUser(): boolean;
     /** Tries to process various DiscordApiErrors and returns true if logged in some way. */
     process(): boolean;
     static from(reason: unknown): DiscordApiError | undefined;
