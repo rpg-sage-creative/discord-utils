@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.45",
+"version":"0.0.46",
 "branch":"main",
-"commit":"15daf7c4537483c68d7c110f9bb4304785758446",
-"commitSubject":"add parseReference; move parseId tests",
-"commitTs":1724353210000,
-"commitDate":"2024-08-22-1200",
-"buildTs":1724353238000,
-"buildDate":"2024-08-22-1200",
+"commit":"49e0370142ef3f43773f633ab3e4cca91374c3ca",
+"commitSubject":"allow parseReference to accept Message and Channel objects",
+"commitTs":1724457599000,
+"commitDate":"2024-08-23-1659",
+"buildTs":1724457642000,
+"buildDate":"2024-08-23-1700",
 "author":"Randal"
 }
