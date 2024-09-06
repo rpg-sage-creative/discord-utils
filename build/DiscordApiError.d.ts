@@ -6,6 +6,8 @@ export declare class DiscordApiError {
     error: TDiscordApiError;
     protected asString: string;
     protected constructor(error: TDiscordApiError);
+    get isAvatarUrl(): boolean;
+    get isEmbedThumbnailUrl(): boolean;
     get isFetchWebhooks(): boolean;
     get isMissingPermissions(): boolean;
     /** Tries to process various DiscordApiErrors and returns true if logged in some way. */

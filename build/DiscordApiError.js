@@ -26,11 +26,18 @@ export class DiscordApiError {
         this.error = error;
         this.asString = formatArg(error);
     }
+    get isAvatarUrl() { return this.asString.includes("avatar_url[URL_TYPE_INVALID_URL]"); }
+    get isEmbedThumbnailUrl() { return this.asString.includes("thumbnail.url[URL_TYPE_INVALID_URL]"); }
     get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
     get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
     process() {
         if (isErrorCode(this.error.code)) {
-            error(this.error);
+            if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
+                warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
+            }
+            else {
+                error(this.error);
+            }
             return true;
         }
         if (this.isFetchWebhooks && this.isMissingPermissions) {
