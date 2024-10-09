@@ -1,9 +1,12 @@
 import { error, formatArg, warn } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "./humanReadable/toHumanReadable.js";
-export function isDiscordApiError(reason) {
-    return reason?.name === "DiscordAPIError"
-        || isErrorCode(reason?.code)
-        || isWarnCode(reason?.code);
+export function isDiscordApiError(reason, code) {
+    if (reason?.name === "DiscordAPIError") {
+        if (code)
+            return reason.code === code;
+        return isErrorCode(reason?.code) || isWarnCode(reason?.code);
+    }
+    return false;
 }
 function isErrorCode(code) {
     return code === 50035;
