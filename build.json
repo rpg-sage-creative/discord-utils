@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.47",
+"version":"0.0.48",
 "branch":"main",
-"commit":"44c5912422a62aef0269e7e57322e0102991fbd7",
-"commitSubject":"expand arg type for toUserMention",
-"commitTs":1727990132000,
-"commitDate":"2024-10-03-1415",
-"buildTs":1727990162000,
-"buildDate":"2024-10-03-1416",
+"commit":"127b3bc9b9f257458559aa1535d6ca6883307639",
+"commitSubject":"allow checking for specific api error codes.",
+"commitTs":1728506266000,
+"commitDate":"2024-10-09-1337",
+"buildTs":1728506303000,
+"buildDate":"2024-10-09-1338",
 "author":"Randal"
 }
