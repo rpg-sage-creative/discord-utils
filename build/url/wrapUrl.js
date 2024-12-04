@@ -1,9 +1,9 @@
-import { createUrlRegex, isWrapped, wrap } from "@rsc-utils/string-utils";
+import { getUrlRegex, isWrapped, wrap } from "@rsc-utils/core-utils";
 export function wrapUrl(content, all) {
     if (all) {
-        const regex = createUrlRegex({ globalFlag: true, wrapChars: "<>", wrapOptional: true });
+        const regex = getUrlRegex({ gFlag: "g", wrapChars: "<>", wrapOptional: true });
         return content.replace(regex, url => isWrapped(url, "<>") ? url : wrap(url, "<>"));
     }
-    const regex = createUrlRegex({ anchored: true });
+    const regex = getUrlRegex({ anchored: true });
     return regex.test(content) ? wrap(content, "<>") : content;
 }

@@ -1,4 +1,4 @@
-import { chunk, isNotBlank } from "@rsc-utils/string-utils";
+import { chunk, isNotBlank } from "@rsc-utils/core-utils";
 import { resolveColor } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import {} from "../embed/EmbedResolvable.js";

@@ -10,13 +10,14 @@
 		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh"
 	},
 	"devDependencies": {
-		"@types/node": "^18.19.34"
+		"@types/jest": "^29.5.14",
+		"@types/node": "^18.19.67",
+		"jest": "^29.7.0"
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
-		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
-		"discord.js": "^14.15.3",
-		"emoji-regex": "^10.3.0",
-		"xregexp": "^5.1.1"
+		"discord.js": "^14.16.3",
+		"emoji-regex-xs": "^1.0.0",
+		"regex": "^5.0.2"
 	}
 }

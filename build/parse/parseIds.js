@@ -1,6 +1,6 @@
 import { isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
-import { createMentionRegex } from "./createMentionRegex.js";
+import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
+import { getMentionRegex } from "./getMentionRegex.js";
 function isMentionIdType(type) {
     return ["channel", "role", "user"].includes(type);
 }
@@ -24,10 +24,10 @@ function getMentionKey(type) {
 }
 function getContentMentionIds(type, content) {
     if (isMentionIdType(type) && content) {
-        const globalRegex = createMentionRegex(type, { globalFlag: true });
+        const globalRegex = getMentionRegex({ gFlag: "g", type });
         const mentions = content.match(globalRegex) ?? [];
         if (mentions.length) {
-            const regex = createMentionRegex(type);
+            const regex = getMentionRegex({ type });
             return mentions.map(mention => regex.exec(mention)?.groups?.[getGroupKey(type)]);
         }
     }
@@ -42,10 +42,10 @@ function getMessageMentionIds(type, message) {
 }
 function getContentUrlIds(type, content) {
     if (isUrlIdType(type) && content) {
-        const globalRegex = createDiscordUrlRegex(type, { globalFlag: true });
+        const globalRegex = getDiscordUrlRegex({ gFlag: "g", type });
         const urls = content.match(globalRegex) ?? [];
         if (urls.length) {
-            const regex = createDiscordUrlRegex(type);
+            const regex = getDiscordUrlRegex({ type });
             return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
         }
     }

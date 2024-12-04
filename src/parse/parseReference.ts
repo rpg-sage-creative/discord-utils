@@ -1,13 +1,13 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { unwrap } from "@rsc-utils/string-utils";
+import { unwrap, type Optional } from "@rsc-utils/core-utils";
 import type { Channel, MessageReference } from "discord.js";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import type { MessageOrPartial } from "../types/types.js";
+import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
 
 type ReferenceType = "channel" | "message";
 
 function parseString(url: string, type: ReferenceType): MessageReference | undefined {
-	const regex = createDiscordUrlRegex(type);
+	const regex = getDiscordUrlRegex({ anchored:true, capture:type, type });
+	// unwrapping before calling allows us to use the capture groups
 	const match = regex.exec(unwrap(url, "<>"));
 	if (match?.groups) {
 		// cast to MessageReference to allow guildId to be undefined
@@ -15,7 +15,7 @@ function parseString(url: string, type: ReferenceType): MessageReference | undef
 
 		// update guildId as needed
 		if (guildId === "@me") {
-			guildId = undefined;
+			guildId = undefined!;
 		}
 
 		return { guildId, channelId, messageId };
@@ -35,7 +35,7 @@ function parseChannel(channel: Channel): MessageReference | undefined {
 	return {
 		guildId: "guildId" in channel ? channel.guildId ?? undefined : undefined,
 		channelId: channel.id,
-		messageId: undefined
+		messageId: undefined!
 	};
 }
 
@@ -47,8 +47,12 @@ export function parseReference(value: Optional<Channel | MessageOrPartial>): Mes
 
 export function parseReference(value: Optional<string | MessageOrPartial | Channel>, type?: ReferenceType): MessageReference | undefined {
 	if (value) {
-		if (typeof(value) === "string") return parseString(value, type ?? "message");
-		if ("channelId" in value) return parseMessage(value);
+		if (typeof(value) === "string") {
+			return parseString(value, type ?? "message");
+		}
+		if ("channelId" in value) {
+			return parseMessage(value);
+		}
 		return parseChannel(value);
 	}
 	return undefined;

@@ -1,6 +1,6 @@
 import { isNilSnowflake, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import {} from "discord.js";
-import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
+import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
 import { resolveSnowflake } from "./resolve/resolveSnowflake.js";
 import { isGuildBased, isMessage, isThread } from "./types/types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
@@ -97,12 +97,12 @@ export class DiscordKey {
         return new DiscordKey(guildId, channel?.id, undefined, messageId);
     }
     static fromUrl(url) {
-        const messageMatch = createDiscordUrlRegex("message").exec(url);
+        const messageMatch = getDiscordUrlRegex({ type: "message" }).exec(url);
         if (messageMatch?.groups) {
             const { guildId, channelId, messageId } = messageMatch.groups;
             return new DiscordKey(guildId, channelId, channelId, messageId);
         }
-        const channelMatch = createDiscordUrlRegex("channel").exec(url);
+        const channelMatch = getDiscordUrlRegex({ type: "channel" }).exec(url);
         if (channelMatch?.groups) {
             const { guildId, channelId } = channelMatch.groups;
             return new DiscordKey(guildId, channelId, channelId);

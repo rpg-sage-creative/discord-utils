@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { type Optional } from "@rsc-utils/core-utils";
 import type { Channel, MessageReference } from "discord.js";
 import type { MessageOrPartial } from "../types/types.js";
 type ReferenceType = "channel" | "message";

@@ -1,7 +1,7 @@
-import { unwrap } from "@rsc-utils/string-utils";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
+import { unwrap } from "@rsc-utils/core-utils";
+import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
 function parseString(url, type) {
-    const regex = createDiscordUrlRegex(type);
+    const regex = getDiscordUrlRegex({ anchored: true, capture: type, type });
     const match = regex.exec(unwrap(url, "<>"));
     if (match?.groups) {
         let { guildId, channelId, messageId } = match.groups;
@@ -28,10 +28,12 @@ function parseChannel(channel) {
 }
 export function parseReference(value, type) {
     if (value) {
-        if (typeof (value) === "string")
+        if (typeof (value) === "string") {
             return parseString(value, type ?? "message");
-        if ("channelId" in value)
+        }
+        if ("channelId" in value) {
             return parseMessage(value);
+        }
         return parseChannel(value);
     }
     return undefined;

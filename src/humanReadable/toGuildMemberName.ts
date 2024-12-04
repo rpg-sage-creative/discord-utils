@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE, type Optional } from "@rsc-utils/core-utils";
 import type { GuildMember } from "discord.js";
 import { toUserName } from "./toUserName.js";
 

@@ -1,4 +1,4 @@
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { toUserName } from "./toUserName.js";
 export function toGuildMemberName(member) {
     if (member) {

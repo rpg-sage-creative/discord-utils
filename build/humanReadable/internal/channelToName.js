@@ -1,4 +1,4 @@
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { isDMBased, isGroupDMBased } from "../../types/types.js";
 import { toGuildName } from "../toGuildName.js";
 import { toUserName } from "../toUserName.js";
