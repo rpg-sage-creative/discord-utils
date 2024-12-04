@@ -5,7 +5,7 @@ import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable }
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { type MessageChannel, type NonThreadChannel } from "./types/types.js";
+import { type MessageChannel, type NonThreadChannel } from "./types/index.js";
 type ClientGuildResolvable = Guild | {
     client: Client;
     guild: Optional<Guild>;

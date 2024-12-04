@@ -1,11 +1,11 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
-import { isDMBased, isGroupDMBased } from "../../types/types.js";
+import { isDMBasedChannel, isGroupDMBasedChannel } from "../../types/index.js";
 import { toGuildName } from "../toGuildName.js";
 import { toUserName } from "../toUserName.js";
 export function channelToName(channel) {
     if (channel) {
-        if (isDMBased(channel)) {
-            if (isGroupDMBased(channel)) {
+        if (isDMBasedChannel(channel)) {
+            if (isGroupDMBasedChannel(channel)) {
                 return channel.recipients.map(toUserName).join(",");
             }
             return toUserName(channel.recipient);

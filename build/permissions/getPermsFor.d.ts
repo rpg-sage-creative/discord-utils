@@ -1,5 +1,5 @@
 import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
-import { type WebhookChannel } from "../types/types.js";
+import type { WebhookChannel } from "../types/types.js";
 type AccessResults = {
     /** perms.has("ManageChannels") */
     canManageChannel: boolean;

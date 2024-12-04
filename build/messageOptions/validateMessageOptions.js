@@ -1,7 +1,6 @@
-import {} from "discord.js";
-import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { validateEmbedLengths } from "../embed/validateEmbedLengths.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 export function validateMessageOptions(options) {
     const contentLength = options.content?.length ?? 0;
     if (contentLength > DiscordMaxValues.message.contentLength) {

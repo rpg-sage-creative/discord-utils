@@ -1,5 +1,5 @@
-import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { type Channel } from "discord.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { Channel } from "discord.js";
 /**
  * Determines if we can send messages to the given channel.
  * If not a text channel, always false.
@@ -9,5 +9,3 @@ import { type Channel } from "discord.js";
  * @returns true if we can send to the channel
  */
 export declare function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): boolean;
-export declare function canReactTo(botId: Snowflake, channel: Optional<Channel>): boolean;
-export declare function canWebhookTo(botId: Snowflake, channel: Optional<Channel>): boolean;

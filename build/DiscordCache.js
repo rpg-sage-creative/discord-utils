@@ -7,7 +7,7 @@ import { resolveChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveGuildId } from "./resolve/resolveGuildId.js";
 import { resolveRoleId } from "./resolve/resolveRoleId.js";
 import { resolveUserId } from "./resolve/resolveUserId.js";
-import { isMessageTarget, isNonThread, isThread, isWebhookChannel } from "./types/types.js";
+import { isMessageTarget, isNonThreadChannel, isThreadChannel, isWebhookChannel } from "./types/index.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelReferenceResolvable, name) {
     const channelId = resolveChannelReference(channelReferenceResolvable);
@@ -58,11 +58,11 @@ export class DiscordCache {
     }
     async fetchChannelAndThread(resolvable) {
         const threadOrChannel = await this.fetchChannel(resolvable);
-        if (isThread(threadOrChannel)) {
+        if (isThreadChannel(threadOrChannel)) {
             const parentChannel = await this.fetchChannel(threadOrChannel.parent);
             return { channel: parentChannel, thread: threadOrChannel };
         }
-        if (isNonThread(threadOrChannel)) {
+        if (isNonThreadChannel(threadOrChannel)) {
             return { channel: threadOrChannel };
         }
         return {};
@@ -174,7 +174,7 @@ export class DiscordCache {
         const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
         if (!this.hasManageWebhooksPerm(channel))
             return undefined;
-        if (!isThread(channel)) {
+        if (!isThreadChannel(channel)) {
             const webhookName = options?.name ?? SageDialogWebhookName;
             const webhookArgs = { ...options, name: webhookName };
             const webhook = await channel.createWebhook(webhookArgs).catch(DiscordApiError.process);

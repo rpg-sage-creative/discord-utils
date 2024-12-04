@@ -2,7 +2,7 @@ import type { Optional } from "@rsc-utils/core-utils";
 import { chunk, isNotBlank } from "@rsc-utils/core-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
-import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
+import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { resolveEmbed } from "../embed/resolveEmbed.js";

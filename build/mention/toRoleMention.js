@@ -1,4 +1,3 @@
-import {} from "@rsc-utils/core-utils";
 import { roleMention } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
 export function toRoleMention(resolvable) {

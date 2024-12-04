@@ -1,5 +1,5 @@
 import { embedLength, type APIEmbed } from "discord.js";
-import { type EmbedResolvable } from "./EmbedResolvable.js";
+import type { EmbedResolvable } from "./EmbedResolvable.js";
 import { resolveEmbed } from "./resolveEmbed.js";
 
 export function getEmbedLength(embed: EmbedResolvable): number {

@@ -1,4 +1,3 @@
-import {} from "@rsc-utils/core-utils";
 import { GuildMember, User, userMention } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
 export function toUserMention(resolvable) {

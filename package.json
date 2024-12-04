@@ -19,5 +19,10 @@
 		"discord.js": "^14.16.3",
 		"emoji-regex-xs": "^1.0.0",
 		"regex": "^5.0.2"
+	},
+	"jest": {
+		"setupFiles": [
+			"<rootDir>/test/jest-global.mjs"
+		]
 	}
 }
