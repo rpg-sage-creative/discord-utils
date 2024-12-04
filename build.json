@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.0.48",
+"version":"0.1.0",
 "branch":"main",
-"commit":"127b3bc9b9f257458559aa1535d6ca6883307639",
-"commitSubject":"allow checking for specific api error codes.",
-"commitTs":1728506266000,
-"commitDate":"2024-10-09-1337",
-"buildTs":1728506303000,
-"buildDate":"2024-10-09-1338",
+"commit":"fe09a30a4700c27ace7ba75000e1eca8e75fe075",
+"commitSubject":"conversion to new core-utils and jest complete",
+"commitTs":1733353792000,
+"commitDate":"2024-12-04-1509",
+"buildTs":1733353811000,
+"buildDate":"2024-12-04-1510",
 "author":"Randal"
 }
