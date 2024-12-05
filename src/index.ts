@@ -13,3 +13,4 @@ export * from "./url/index.js";
 export * from "./DiscordApiError.js";
 export * from "./DiscordCache.js";
 export * from "./DiscordKey.js";
+export * from "./isUnsafeName.js";
