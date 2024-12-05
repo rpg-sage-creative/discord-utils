@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.1.0",
+"version":"0.1.1",
 "branch":"main",
-"commit":"fe09a30a4700c27ace7ba75000e1eca8e75fe075",
-"commitSubject":"conversion to new core-utils and jest complete",
-"commitTs":1733353792000,
-"commitDate":"2024-12-04-1509",
-"buildTs":1733353811000,
-"buildDate":"2024-12-04-1510",
+"commit":"2f7f6ca7f9387c20d1227088bc5f431b542f08f9",
+"commitSubject":"add isUnsafeName",
+"commitTs":1733377948000,
+"commitDate":"2024-12-04-2152",
+"buildTs":1733377993000,
+"buildDate":"2024-12-04-2153",
 "author":"Randal"
 }
