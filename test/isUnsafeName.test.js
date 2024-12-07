@@ -1,36 +1,58 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { isUnsafeName } from "../build/index.js";
-import { toString } from "./toString.mjs";
 
 describe("isUnsafeName", () => {
 
-	const tests = [
+	describe("control values", () => {
 
-		{ input:"discord", expected:"discord" },
-		{ input:"dlscord", expected:"discord" },
-		{ input:"d1scord", expected:"discord" },
-		{ input:"disc0rd", expected:"discord" },
-		{ input:"d1sc0rd", expected:"discord" },
-		{ input:"d15c0rd", expected:"discord" },
-		{ input:"dl5c0rd", expected:"discord" },
+		const tests = [
+			{ input:"Accord", expected:false },
+			{ input:"Dismantle", expected:false },
 
-		{ input:"DiScOrD", expected:"discord" },
-		{ input:"D1ScorD", expected:"discord" },
-		{ input:"DiSc0rD", expected:"discord" },
-		{ input:"D1Sc0rD", expected:"discord" },
-		{ input:"D15c0rD", expected:"discord" },
-		{ input:"Dl5c0rD", expected:"discord" },
-
-		{ input:"Accord", expected:false },
-		{ input:"Dismantle", expected:false },
-
-		{ input:undefined, expected:false },
-		{ input:null, expected:false },
-		{ input:"", expected:false },
-	];
-	tests.forEach(({ input, expected }) => {
-		test(`isUnsafeName(${toString(input)}) === ${toString(expected)}`, () => {
-			expect(isUnsafeName(input)).toBe(expected);
+			{ input:undefined, expected:false },
+			{ input:null, expected:false },
+			{ input:"", expected:false },
+		];
+		tests.forEach(({ input, expected }) => {
+			test(`isUnsafeName(${toString(input)}) === ${toString(expected)}`, () => {
+				expect(isUnsafeName(input)).toBe(expected);
+			});
 		});
+
+	});
+
+	describe(`"discord"`, () => {
+
+		const discord = "discord";
+
+		const letters = [
+			"d",
+			"il1",
+			"s5",
+			"c",
+			"o0",
+			"r",
+			"d"
+		];
+
+		const variants = new Set([discord]);
+
+		letters.forEach((chars, letterIndex) => {
+			chars.split("").forEach(char => {
+				[...variants].forEach(variant => {
+					const word = variant.split("");
+					word[letterIndex] = char;
+					variants.add(word.join(""));
+				});
+			});
+		});
+
+		variants.forEach(variant => {
+			test(`isUnsafe(${toLiteral(variant)}) === ${toLiteral(discord)}`, () => {
+				expect(isUnsafeName(variant)).toBe(discord);
+			});
+		});
+
 	});
 
 });
