@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.1.1",
+"version":"0.1.2",
 "branch":"main",
-"commit":"2f7f6ca7f9387c20d1227088bc5f431b542f08f9",
-"commitSubject":"add isUnsafeName",
-"commitTs":1733377948000,
-"commitDate":"2024-12-04-2152",
-"buildTs":1733377993000,
-"buildDate":"2024-12-04-2153",
+"commit":"e1e3b9231164aeb0814e436d316e51e117c44063",
+"commitSubject":"improve isUnsafeName and tests",
+"commitTs":1733597019000,
+"commitDate":"2024-12-07-1043",
+"buildTs":1733597108000,
+"buildDate":"2024-12-07-1045",
 "author":"Randal"
 }
