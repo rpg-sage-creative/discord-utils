@@ -5,7 +5,7 @@ export function isUnsafeName(name: Optional<string>): "discord" | false {
 	if (name) { // NOSONAR (I am leaving the code like this in case we wanna add other words later)
 
 		/*
-		"discord" (as of 204/12/07)
+		"discord" (as of 2024/12/07)
 		Invalid:
 			d: d
 			i: [il1]
