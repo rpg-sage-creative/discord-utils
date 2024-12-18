@@ -14,7 +14,7 @@ function nameToRegex(name, anchored) {
     const regex = anchored ? `^${source}$` : source;
     return new RegExp(regex);
 }
-function getUnsafeData() {
+function getUnsafeNameData() {
     return [
         { type: "anchored", value: "everyone" },
         { type: "anchored", value: "here" },
@@ -27,7 +27,7 @@ function getUnsafeData() {
 export function isUnsafeName(name) {
     if (name) {
         const lower = name.toLowerCase().trim();
-        const unsafeData = getUnsafeData();
+        const unsafeData = getUnsafeNameData();
         for (const pair of unsafeData) {
             const { type, value } = pair;
             if (["anchored", "partial"].includes(type) && nameToRegex(value, type === "anchored").test(lower)) {

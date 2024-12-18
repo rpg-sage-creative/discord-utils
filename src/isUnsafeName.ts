@@ -23,8 +23,10 @@ function nameToRegex(name: string, anchored: boolean): RegExp {
 	return new RegExp(regex);
 }
 
-type UnsafeData = {
+export type UnsafeNameData = {
+	/** sets how the value is tested */
 	type: "anchored" | "chars" | "partial";
+	/** the value found */
 	value: string;
 };
 
@@ -37,7 +39,7 @@ type UnsafeData = {
  *
  * @todo make this a text file or something that can be reloaded without a restart.
  */
-function getUnsafeData(): UnsafeData[] {
+function getUnsafeNameData(): UnsafeNameData[] {
 	return [
 		{ type:"anchored", value:"everyone" },
 		{ type:"anchored", value:"here" },
@@ -54,11 +56,11 @@ function getUnsafeData(): UnsafeData[] {
 }
 
 /** Checks to see if the name contains something that Discord won't allow. */
-export function isUnsafeName(name: Optional<string>): UnsafeData | false {
+export function isUnsafeName(name: Optional<string>): UnsafeNameData | false {
 	if (name) {
 		const lower = name.toLowerCase().trim();
 
-		const unsafeData = getUnsafeData();
+		const unsafeData = getUnsafeNameData();
 		for (const pair of unsafeData) {
 			const { type, value } = pair;
 
