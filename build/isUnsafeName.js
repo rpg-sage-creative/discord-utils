@@ -31,10 +31,10 @@ export function isUnsafeName(name) {
         for (const pair of unsafeData) {
             const { type, value } = pair;
             if (["anchored", "partial"].includes(type) && nameToRegex(value, type === "anchored").test(lower)) {
-                return pair;
+                return value;
             }
             if (type === "chars" && lower.includes(value)) {
-                return pair;
+                return value;
             }
         }
     }

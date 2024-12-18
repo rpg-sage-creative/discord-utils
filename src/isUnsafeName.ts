@@ -23,7 +23,7 @@ function nameToRegex(name: string, anchored: boolean): RegExp {
 	return new RegExp(regex);
 }
 
-export type UnsafeNameData = {
+type UnsafeNameData = {
 	/** sets how the value is tested */
 	type: "anchored" | "chars" | "partial";
 	/** the value found */
@@ -55,8 +55,12 @@ function getUnsafeNameData(): UnsafeNameData[] {
 	];
 }
 
-/** Checks to see if the name contains something that Discord won't allow. */
-export function isUnsafeName(name: Optional<string>): UnsafeNameData | false {
+/**
+ * Checks to see if the name contains something that Discord won't allow.
+ * If found, returns the "root" value being looked for, not the specific variant.
+ * If not round, returns false.
+ */
+export function isUnsafeName(name: Optional<string>): string | false {
 	if (name) {
 		const lower = name.toLowerCase().trim();
 
@@ -65,11 +69,11 @@ export function isUnsafeName(name: Optional<string>): UnsafeNameData | false {
 			const { type, value } = pair;
 
 			if (["anchored", "partial"].includes(type) && nameToRegex(value, type === "anchored").test(lower)) {
-				return pair;
+				return value;
 			}
 
 			if (type === "chars" && lower.includes(value)) {
-				return pair;
+				return value;
 			}
 		}
 	}

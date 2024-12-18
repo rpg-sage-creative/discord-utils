@@ -1,9 +1,7 @@
 import type { Optional } from "@rsc-utils/core-utils";
-export type UnsafeNameData = {
-    /** sets how the value is tested */
-    type: "anchored" | "chars" | "partial";
-    /** the value found */
-    value: string;
-};
-/** Checks to see if the name contains something that Discord won't allow. */
-export declare function isUnsafeName(name: Optional<string>): UnsafeNameData | false;
+/**
+ * Checks to see if the name contains something that Discord won't allow.
+ * If found, returns the "root" value being looked for, not the specific variant.
+ * If not round, returns false.
+ */
+export declare function isUnsafeName(name: Optional<string>): string | false;
