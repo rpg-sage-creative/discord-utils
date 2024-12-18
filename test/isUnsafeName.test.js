@@ -21,9 +21,46 @@ describe("isUnsafeName", () => {
 
 	});
 
+	describe(`"everyone"`, () => {
+
+		const unsafeData = { type:"anchored", value:"everyone" };
+
+		const tests = [
+			"everyone",
+			"EVERYONE",
+			"3veryone",
+			"every0ne",
+		];
+
+		tests.forEach(input => {
+			test(`isUnsafe(${toLiteral(input)}) === ${toLiteral(unsafeData)}`, () => {
+				expect(isUnsafeName(input)).toStrictEqual(unsafeData);
+			});
+		});
+
+	});
+
+	describe(`"here"`, () => {
+
+		const unsafeData = { type:"anchored", value:"here" };
+
+		const tests = [
+			"here",
+			"HERE",
+			"h3r3",
+		];
+
+		tests.forEach(input => {
+			test(`isUnsafe(${toLiteral(input)}) === ${toLiteral(unsafeData)}`, () => {
+				expect(isUnsafeName(input)).toStrictEqual(unsafeData);
+			});
+		});
+
+	});
+
 	describe(`"discord"`, () => {
 
-		const discord = "discord";
+		const unsafeData = { type:"partial", value:"discord" };
 
 		const letters = [
 			"d",
@@ -35,7 +72,7 @@ describe("isUnsafeName", () => {
 			"d"
 		];
 
-		const variants = new Set([discord]);
+		const variants = new Set(["discord"]);
 
 		letters.forEach((chars, letterIndex) => {
 			chars.split("").forEach(char => {
@@ -43,16 +80,61 @@ describe("isUnsafeName", () => {
 					const word = variant.split("");
 					word[letterIndex] = char;
 					variants.add(word.join(""));
+					variants.add(word.join("").toUpperCase());
 				});
 			});
 		});
 
 		variants.forEach(variant => {
-			test(`isUnsafe(${toLiteral(variant)}) === ${toLiteral(discord)}`, () => {
-				expect(isUnsafeName(variant)).toBe(discord);
+			test(`isUnsafe(${toLiteral(variant)}) === ${toLiteral(unsafeData)}`, () => {
+				expect(isUnsafeName(variant)).toStrictEqual(unsafeData);
 			});
 		});
 
+	});
+
+
+	describe(`"clyde"`, () => {
+
+		const unsafeData = { type:"partial", value:"clyde" };
+
+		const letters = [
+			"c",
+			"l",
+			"y",
+			"d",
+			"e3",
+		];
+
+		const variants = new Set(["clyde"]);
+
+		letters.forEach((chars, letterIndex) => {
+			chars.split("").forEach(char => {
+				[...variants].forEach(variant => {
+					const word = variant.split("");
+					word[letterIndex] = char;
+					variants.add(word.join(""));
+					variants.add(word.join("").toUpperCase());
+				});
+			});
+		});
+
+		variants.forEach(variant => {
+			test(`isUnsafe(${toLiteral(variant)}) === ${toLiteral(unsafeData)}`, () => {
+				expect(isUnsafeName(variant)).toStrictEqual(unsafeData);
+			});
+		});
+
+	});
+
+	describe('"```"', () => {
+		const unsafeData = { type:"chars", value:"```" };
+		const tests = ["a ```code block```"];
+		tests.forEach(input => {
+			test(`isUnsafeName(${toLiteral(input)}) === ${toLiteral(unsafeData)}`, () => {
+				expect(isUnsafeName(input)).toStrictEqual(unsafeData);
+			});
+		});
 	});
 
 });
