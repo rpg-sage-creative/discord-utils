@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { parseReference } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("parse", () => {
 	describe("parseReference", () => {
@@ -25,7 +25,7 @@ describe("parse", () => {
 			{ url:"<https://discord.com/channels/@me/1182487240534937610>", type:"channel", expected:{ guildId:undefined, channelId:"1182487240534937610", messageId:undefined } },
 		];
 		tests.forEach(({ url, type, expected }) => {
-			test(`parseReference(${toString(url)}, ${toString(type)}) === ${toString(expected)}`, () => {
+			test(`parseReference(${toLiteral(url)}, ${toLiteral(type)}) === ${toLiteral(expected)}`, () => {
 				expect(parseReference(url, type)).toStrictEqual(expected);
 			});
 		});
