@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { wrapUrl } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("url", () => {
 	describe("wrapUrl", () => {
@@ -20,7 +20,7 @@ describe("url", () => {
 			{ input:multipleUrlsBefore, all:true, expected:multipleUrlsAfter },
 		];
 		tests.forEach(({ input, all, expected }) => {
-			test(`wrapUrl(${toString(input)}, ${toString(all)}) === ${toString(expected)}`, () => {
+			test(`wrapUrl(${toLiteral(input)}, ${toLiteral(all)}) === ${toLiteral(expected)}`, () => {
 				expect(wrapUrl(input, all)).toBe(expected);
 			});
 		});

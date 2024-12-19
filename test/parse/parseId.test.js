@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { parseId } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("parse", () => {
 	describe("parseId", () => {
@@ -39,7 +39,7 @@ describe("parse", () => {
 			{ input:messageUrl, type:"message", expected:"1192628934014140476" },
 		];
 		tests.forEach(({ input, type, expected }) => {
-			test(`parseId(${toString(input)}, ${toString(type)}) === ${toString(expected)}`, () => {
+			test(`parseId(${toLiteral(input)}, ${toLiteral(type)}) === ${toLiteral(expected)}`, () => {
 				expected
 				? expect(parseId(input, type)).toBe(expected)
 				: expect(parseId(input, type)).toBeUndefined();

@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { toUserMention } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("mention", () => {
 	describe("toUserMention", () => {
@@ -7,7 +7,7 @@ describe("mention", () => {
 			{ input:"1234567890123456", expected:`<@1234567890123456>` },
 		];
 		tests.forEach(({ input, expected }) => {
-			test(`toUserMention(${toString(input)}) === ${toString(expected)}`, () => {
+			test(`toUserMention(${toLiteral(input)}) === ${toLiteral(expected)}`, () => {
 				expect(toUserMention(input)).toBe(expected);
 			});
 		});

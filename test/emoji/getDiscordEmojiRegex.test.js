@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { getDiscordEmojiRegex } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("emoji", () => {
 	describe("getDiscordEmojiRegex", () => {
@@ -11,13 +11,13 @@ describe("emoji", () => {
 			// { options:{}, input:"INPUT", testResult:false, execResults:null, matchResults:null },
 		];
 		tests.forEach(({ options, input, testResult, execResults, matchResults }) => {
-			test(`getDiscordEmojiRegex(${toString(options)}).test(${toString(input)})`, () => {
+			test(`getDiscordEmojiRegex(${toLiteral(options)}).test(${toLiteral(input)})`, () => {
 				expect(getDiscordEmojiRegex(options).test(input)).toBe(testResult);
 			});
-			test(`getDiscordEmojiRegex(${toString(options)}).exec(${toString(input)}) equals ${toString(execResults)}`, () => {
+			test(`getDiscordEmojiRegex(${toLiteral(options)}).exec(${toLiteral(input)}) equals ${toLiteral(execResults)}`, () => {
 				expect(String(getDiscordEmojiRegex(options).exec(input))).toBe(String(execResults));
 			});
-			test(`${toString(input)}.match(getDiscordEmojiRegex(${toString({...options,gFlag:"g"})})) equals ${toString(matchResults)}`, () => {
+			test(`${toLiteral(input)}.match(getDiscordEmojiRegex(${toLiteral({...options,gFlag:"g"})})) equals ${toLiteral(matchResults)}`, () => {
 				expect(String(input.match(getDiscordEmojiRegex({...options,gFlag:"g"})))).toBe(String(matchResults));
 			});
 		});

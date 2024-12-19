@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { safeMentions } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("mention", () => {
 	describe("safeMentions", () => {
@@ -8,7 +8,7 @@ describe("mention", () => {
 			{ input:"two @everyone", expected:"two @\u200Beveryone" },
 		];
 		tests.forEach(({ input, expected }) => {
-			test(`safeMentions(${toString(input)}) === ${toString(expected)}`, () => {
+			test(`safeMentions(${toLiteral(input)}) === ${toLiteral(expected)}`, () => {
 				expect(safeMentions(input)).toBe(expected);
 			});
 		});

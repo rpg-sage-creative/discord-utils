@@ -1,5 +1,5 @@
+import { toLiteral } from "@rsc-utils/core-utils";
 import { getUnicodeEmojiRegex } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 describe("emoji", () => {
 	describe("getUnicodeEmojiRegex", () => {
@@ -20,10 +20,10 @@ describe("emoji", () => {
 		];
 
 		tests.forEach(({ options, input, testResult, execResults, matchResults, captureGroup, captureValue }) => {
-			test(`getUnicodeEmojiRegex(${toString(options)}).test(${toString(input)})`, () => {
+			test(`getUnicodeEmojiRegex(${toLiteral(options)}).test(${toLiteral(input)})`, () => {
 				expect(getUnicodeEmojiRegex(options).test(input)).toBe(testResult);
 			});
-			test(`getUnicodeEmojiRegex(${toString(options)}).exec(${toString(input)}) equals ${toString(execResults)}`, () => {
+			test(`getUnicodeEmojiRegex(${toLiteral(options)}).exec(${toLiteral(input)}) equals ${toLiteral(execResults)}`, () => {
 				const results = getUnicodeEmojiRegex(options).exec(input);
 				if (execResults === null) {
 					expect(results).toBeNull();
@@ -32,12 +32,12 @@ describe("emoji", () => {
 				}
 			});
 			if (captureGroup || captureValue) {
-				test(`getUnicodeEmojiRegex(${toString(options)}).exec(${toString(input)}).${captureGroup} === ${toString(captureValue)}`, () => {
+				test(`getUnicodeEmojiRegex(${toLiteral(options)}).exec(${toLiteral(input)}).${captureGroup} === ${toLiteral(captureValue)}`, () => {
 					const results = getUnicodeEmojiRegex(options).exec(input);
 					expect(results?.groups?.[captureGroup]).toBe(captureValue);
 				});
 			}
-			test(`${toString(input)}.match(getUnicodeEmojiRegex(${toString({...options,gFlag:"g"})})) equals ${toString(matchResults)}`, () => {
+			test(`${toLiteral(input)}.match(getUnicodeEmojiRegex(${toLiteral({...options,gFlag:"g"})})) equals ${toLiteral(matchResults)}`, () => {
 				if (matchResults === null) {
 					expect(input.match(getUnicodeEmojiRegex({...options,gFlag:"g"}))).toBeNull();
 				}else {
