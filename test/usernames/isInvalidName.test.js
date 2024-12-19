@@ -1,5 +1,5 @@
 import { toLiteral } from "@rsc-utils/core-utils";
-import { isUnsafeName } from "../build/index.js";
+import { isInvalidName } from "../../build/index.js";
 
 /** returns all the letters that might be used to create a variant of a username */
 function getLetterVariants(letter) {
@@ -34,7 +34,7 @@ function createVariants(value) {
 	return variants;
 }
 
-describe("isUnsafeName", () => {
+describe("isInvalidName", () => {
 
 	describe("control values", () => {
 
@@ -47,24 +47,41 @@ describe("isUnsafeName", () => {
 			{ input:"", expected:false },
 		];
 		tests.forEach(({ input, expected }) => {
-			test(`isUnsafeName(${toLiteral(input)}) === ${toLiteral(expected)}`, () => {
-				expect(isUnsafeName(input)).toBe(expected);
+			test(`isInvalidName(${toLiteral(input)}) === ${toLiteral(expected)}`, () => {
+				expect(isInvalidName(input)).toBe(expected);
 			});
 		});
 
 	});
 
-	const values = ["everyone", "here", "discord", "clyde", "wumpus", "```"];
+	const tests = [
+		{ name:"everyone", anchored:true, variants:true },
+		{ name:"here",     anchored:true, variants:true },
 
-	values.forEach(value => {
+		{ name:"discord",  variants:true },
+		{ name:"clyde"     },
+		{ name:"wumpus",   },
 
-		describe(`"${value}"`, () => {
-			const variants = createVariants(value);
-			variants.forEach(variant => {
-				test(`isUnsafe(${toLiteral(variant)}) === ${toLiteral(value)}`, () => {
-					expect(isUnsafeName(variant)).toBe(value);
+		{ name:"```" },
+	];
+
+	tests.forEach(({ name, anchored, variants }) => {
+
+		describe(`"${name}"`, () => {
+
+			const inputs = variants ? createVariants(name) : [name];
+
+			inputs.forEach(input => {
+				test(`isInvalidName(${toLiteral(input)}) === ${toLiteral(name)}`, () => {
+					expect(isInvalidName(input)).toBe(name);
 				});
 			});
+
+			const unanchored = `${name} unanchored`;
+			test(`isInvalidName(${toLiteral(unanchored)}) === ${toLiteral(anchored ? false : name)}`, () => {
+				expect(isInvalidName(unanchored)).toBe(anchored ? false : name);
+			});
+
 		});
 
 	});

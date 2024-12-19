@@ -11,7 +11,7 @@ export * from "./permissions/index.js";
 export * from "./resolve/index.js";
 export * from "./types/index.js";
 export * from "./url/index.js";
+export * from "./usernames/index.js";
 export * from "./DiscordApiError.js";
 export * from "./DiscordCache.js";
 export * from "./DiscordKey.js";
-export * from "./isUnsafeName.js";
