@@ -9,30 +9,30 @@ export const DiscordMaxValues = {
             choice: {
                 count: 25,
                 nameLength: 100,
-                valueLength: 100
-            }
+                valueLength: 100,
+            },
         },
         totalLength: 8000,
         slashCount: 100,
         messageCount: 5,
-        userCount: 5
+        userCount: 5,
     },
     component: {
         button: {
             idLength: 100,
-            labelLength: 80
+            labelLength: 80,
         },
         row: {
             count: 5,
             buttonCount: 5,
-            selectCount: 1
+            selectCount: 1,
         },
         select: {
             idLength: 100,
             labelLength: 80,
             optionCount: 25,
-            placeholderLength: 150
-        }
+            placeholderLength: 150,
+        },
     },
     modal: {
         field: {
@@ -40,8 +40,8 @@ export const DiscordMaxValues = {
             idLength: 100,
             labelLength: 45,
             placeholderLength: 100,
-            valueLength: 4000
-        }
+            valueLength: 4000,
+        },
     },
     embed: {
         titleLength: 256,
@@ -49,15 +49,26 @@ export const DiscordMaxValues = {
         field: {
             count: 25,
             nameLength: 256,
-            valueLength: 1024
+            valueLength: 1024,
         },
         footerTextLength: 2048,
         authorNameLength: 256,
-        totalLength: 6000
+        totalLength: 6000,
     },
     message: {
         contentLength: 2000,
         embedCount: 10,
     },
-    usernameLength: 80
+    user: {
+        username: {
+            minLength: 1,
+            maxLength: 32,
+        }
+    },
+    webhook: {
+        username: {
+            minLength: 1,
+            maxLength: 80,
+        }
+    },
 };

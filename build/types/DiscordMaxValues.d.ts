@@ -71,5 +71,17 @@ export declare const DiscordMaxValues: {
         embedCount: number;
     };
     /** user */
-    usernameLength: number;
+    user: {
+        username: {
+            minLength: number;
+            maxLength: number;
+        };
+    };
+    /** webhook */
+    webhook: {
+        username: {
+            minLength: number;
+            maxLength: number;
+        };
+    };
 };
