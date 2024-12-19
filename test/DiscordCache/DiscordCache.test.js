@@ -1,7 +1,6 @@
-import { captureProcessExit } from "@rsc-utils/core-utils";
+import { captureProcessExit, toLiteral } from "@rsc-utils/core-utils";
 import { Client } from "discord.js";
 import { DiscordCache, toChannelUrl, toHumanReadable, toMessageUrl, toUserUrl } from "../../build/index.js";
-import { toString } from "../toString.mjs";
 
 /** @type {Client} */
 let client;
@@ -14,7 +13,7 @@ beforeAll(async () => {
 	await new Promise((resolve, reject) => {
 		client = new Client({ intents:global.intents });
 		client.once("ready", async () => resolve(client));
-		client.login(global.token, reject);
+		client.login(global.token).catch(reject);
 	});
 	discordCache = await DiscordCache.from(client, global.ids.GUILD_ID);
 });
@@ -25,13 +24,13 @@ describe("DiscordCache", () => {
 
 	const { SAGE_ID, GUILD_ID } = global.ids;
 
-	test(`setSageId(${toString(SAGE_ID)})`, () => {
+	test(`setSageId(${toLiteral(SAGE_ID)})`, () => {
 		DiscordCache.setSageId(SAGE_ID);
 		expect(DiscordCache.getSageId()).toBe(SAGE_ID);
 	});
 
 
-	test(`discordCache = await DiscordCache.from(client, ${toString(GUILD_ID)})`, () => {
+	test(`discordCache = await DiscordCache.from(client, ${toLiteral(GUILD_ID)})`, () => {
 		expect(discordCache).toBeDefined();
 		expect(discordCache.guild.id).toBe(GUILD_ID);
 	});
@@ -88,12 +87,12 @@ describe("url", () => {
 		/** @type {import("discord.js").GuildTextBasedChannel} */
 		let channel;
 
-		test(`fetching channel to test: ${toString({ channelId:CHANNEL_ID, guildId:GUILD_ID })}`, async () => {
+		test(`fetching channel to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID })}`, async () => {
 			channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 			expect(channel).toBeDefined();
 		});
 
-		test(`toChannelUrl(channel) === channel.url === ${toString(CHANNEL_LINK)}`, async () => {
+		test(`toChannelUrl(channel) === channel.url === ${toLiteral(CHANNEL_LINK)}`, async () => {
 			expect(toChannelUrl(channel)).toBe(channel?.url);
 			expect(toChannelUrl(channel)).toBe(CHANNEL_LINK);
 		});
@@ -101,12 +100,12 @@ describe("url", () => {
 		/** @type {import("discord.js").Message} */
 		let message;
 
-		test(`fetching message to test: ${toString({ channelId:CHANNEL_ID, guildId:GUILD_ID, message:MESSAGE_ID })}`, async () => {
+		test(`fetching message to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID, message:MESSAGE_ID })}`, async () => {
 			message = await channel?.messages.fetch({ message:MESSAGE_ID, cache:true, force:true });
 			expect(message).toBeDefined();
 		});
 
-		test(`toChannelUrl(message) === message.channel.url === ${toString(CHANNEL_LINK)}`, async () => {
+		test(`toChannelUrl(message) === message.channel.url === ${toLiteral(CHANNEL_LINK)}`, async () => {
 			expect(toChannelUrl(message)).toBe(message?.channel?.url);
 			expect(toChannelUrl(message)).toBe(CHANNEL_LINK);
 		});
@@ -122,7 +121,7 @@ describe("url", () => {
 		/** @type {import("discord.js").GuildTextBasedChannel} */
 		let channel;
 
-		test(`fetching channel to test: ${toString({ channelId:CHANNEL_ID, guildId:GUILD_ID })}`, async () => {
+		test(`fetching channel to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID })}`, async () => {
 			channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 			expect(channel).toBeDefined();
 		});
@@ -130,12 +129,12 @@ describe("url", () => {
 		/** @type {import("discord.js").Message} */
 		let message;
 
-		test(`fetching message to test: ${toString({ channelId:CHANNEL_ID, guildId:GUILD_ID, message:MESSAGE_ID })}`, async () => {
+		test(`fetching message to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID, message:MESSAGE_ID })}`, async () => {
 			message = await channel?.messages.fetch({ message:MESSAGE_ID, cache:true, force:true });
 			expect(message).toBeDefined();
 		});
 
-		test(`toMessageUrl(message) === message.url === ${toString(MESSAGE_LINK)}`, async () => {
+		test(`toMessageUrl(message) === message.url === ${toLiteral(MESSAGE_LINK)}`, async () => {
 			expect(toMessageUrl(message)).toBe(message?.url);
 			expect(toMessageUrl(message)).toBe(MESSAGE_LINK);
 		});
@@ -151,12 +150,12 @@ describe("url", () => {
 		/** @type {import("discord.js").User} */
 		let user;
 
-		test(`fetching user to test: ${toString(SUPER_USER_ID)}`, async () => {
+		test(`fetching user to test: ${toLiteral(SUPER_USER_ID)}`, async () => {
 			user = await discordCache.fetchUser(SUPER_USER_ID);
 			expect(user).toBeDefined();
 		});
 
-		test(`toUserUrl(user) === ${toString(SUPER_USER_LINK)}`, async () => {
+		test(`toUserUrl(user) === ${toLiteral(SUPER_USER_LINK)}`, async () => {
 			expect(toUserUrl(user)).toBe(SUPER_USER_LINK);
 		});
 
