@@ -15,7 +15,7 @@ function letterToCharacterClass(letter: string): string {
 	}
 }
 
-type UnsafeNameData = {
+type InvalidName = {
 	anchored?: boolean;
 	escaped?: boolean;
 	name: string;
@@ -31,7 +31,7 @@ type UnsafeNameData = {
  *
  * @todo make this a text file or something that can be reloaded without a restart.
  */
-function getInvalidNames(): UnsafeNameData[] {
+function getInvalidNames(): InvalidName[] {
 	return [
 		{ name:"everyone", anchored:true, variants:true },
 		{ name:"here",     anchored:true, variants:true },
@@ -53,10 +53,8 @@ export function isInvalidName(name: Optional<string>): string | false {
 	if (name) {
 		const lower = name.toLowerCase().trim();
 
-		const unsafeData = getInvalidNames();
-		for (const pair of unsafeData) {
-			const { anchored, escaped, name, variants } = pair;
-
+		const invalidNames = getInvalidNames();
+		for (const { anchored, escaped, name, variants } of invalidNames) {
 			let source = name;
 			if (escaped) {
 				source = escapeRegex(source);

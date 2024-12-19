@@ -21,9 +21,8 @@ function getInvalidNames() {
 export function isInvalidName(name) {
     if (name) {
         const lower = name.toLowerCase().trim();
-        const unsafeData = getInvalidNames();
-        for (const pair of unsafeData) {
-            const { anchored, escaped, name, variants } = pair;
+        const invalidNames = getInvalidNames();
+        for (const { anchored, escaped, name, variants } of invalidNames) {
             let source = name;
             if (escaped) {
                 source = escapeRegex(source);

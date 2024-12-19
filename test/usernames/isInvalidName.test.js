@@ -46,6 +46,7 @@ describe("isInvalidName", () => {
 			{ input:null, expected:false },
 			{ input:"", expected:false },
 		];
+
 		tests.forEach(({ input, expected }) => {
 			test(`isInvalidName(${toLiteral(input)}) === ${toLiteral(expected)}`, () => {
 				expect(isInvalidName(input)).toBe(expected);
@@ -78,6 +79,7 @@ describe("isInvalidName", () => {
 			});
 
 			const unanchored = `${name} unanchored`;
+
 			test(`isInvalidName(${toLiteral(unanchored)}) === ${toLiteral(anchored ? false : name)}`, () => {
 				expect(isInvalidName(unanchored)).toBe(anchored ? false : name);
 			});
