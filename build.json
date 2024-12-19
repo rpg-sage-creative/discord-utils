@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.1.2",
+"version":"0.1.3",
 "branch":"main",
-"commit":"e1e3b9231164aeb0814e436d316e51e117c44063",
-"commitSubject":"improve isUnsafeName and tests",
-"commitTs":1733597019000,
-"commitDate":"2024-12-07-1043",
-"buildTs":1733597108000,
-"buildDate":"2024-12-07-1045",
+"commit":"58aee25b57b633e66f65ab7204e8a4c2289d2ce9",
+"commitSubject":"add ability to test webhook unsernames against discord",
+"commitTs":1734647640000,
+"commitDate":"2024-12-19-1434",
+"buildTs":1734647659000,
+"buildDate":"2024-12-19-1434",
 "author":"Randal"
 }
