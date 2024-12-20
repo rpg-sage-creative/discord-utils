@@ -9,16 +9,14 @@ function letterToCharacterClass(letter) {
         default: return letter;
     }
 }
-function getInvalidWebhookUsernames() {
-    return [
-        { name: "everyone", anchored: true, variants: true },
-        { name: "here", anchored: true, variants: true },
-        { name: "discord", variants: true },
-        { name: "clyde" },
-        { name: "wumpus", },
-        { name: "```" },
-    ];
-}
+const invalidNames = [
+    { name: "everyone", anchored: true, variants: true },
+    { name: "here", anchored: true, variants: true },
+    { name: "discord", variants: true },
+    { name: "clyde" },
+    { name: "wumpus", },
+    { name: "```" },
+];
 function createInvalidTestRegex({ anchored, name, variants }) {
     let source = name;
     if (variants) {
@@ -39,7 +37,6 @@ export function isInvalidWebhookUsername(name) {
     if (name.length < minLength || name.length > maxLength) {
         return true;
     }
-    const invalidNames = getInvalidWebhookUsernames();
     for (const invalidName of invalidNames) {
         const regex = createInvalidTestRegex(invalidName);
         if (regex.test(name)) {
@@ -47,4 +44,24 @@ export function isInvalidWebhookUsername(name) {
         }
     }
     return false;
+}
+export function addInvalidWebhookUsername(username = "UNDEFINED USERNAME", invalidName) {
+    const found = invalidNames.find(invalid => invalid.name === invalidName);
+    const old = { ...found };
+    const anchored = username.length === invalidName.length;
+    const variant = !username.toLowerCase().includes(invalidName.toLowerCase());
+    if (!found) {
+        const invalidUsername = { name: invalidName, anchored };
+        invalidNames.push(invalidUsername);
+        return { old, new: invalidUsername };
+    }
+    if (found.anchored && !anchored) {
+        found.anchored = false;
+        return { old, new: found };
+    }
+    if (!found.variants && variant) {
+        found.variants = true;
+        return { old, new: found };
+    }
+    return { found };
 }
