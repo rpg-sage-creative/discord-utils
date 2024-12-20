@@ -1,16 +1,16 @@
 import { error, formatArg, warn } from "@rsc-utils/core-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";
-import { toHumanReadable, type Readable } from "./humanReadable/toHumanReadable.js";
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
 
 type ErrorCode = 10003 | 10004 | 10007 | 10008 | 10011 | 10013 | 10014 | 10015 | 10062 | 50035;
 
 export function isDiscordApiError(reason: unknown): reason is TDiscordApiError;
-export function isDiscordApiError<T extends ErrorCode>(reason: unknown, code: T): reason is (TDiscordApiError & { code:T });
-export function isDiscordApiError(reason: any, code?: number): reason is TDiscordApiError {
-	if (reason?.name === "DiscordAPIError") {
-		if (code) return reason.code === code;
+export function isDiscordApiError<T extends ErrorCode>(reason: unknown, codes: T): reason is (TDiscordApiError & { code:T });
+export function isDiscordApiError<T extends ErrorCode>(reason: unknown, ...codes: T[]): reason is TDiscordApiError;
+export function isDiscordApiError(reason: any, ...codes: number[]): reason is TDiscordApiError {
+	if (/DiscordAPIError(\[\d+\])?/.test(String(reason?.name))) {
+		if (codes.some(code => reason.code === code)) return true;
 		return isErrorCode(reason?.code) || isWarnCode(reason?.code);
 	}
 	return false;
@@ -45,13 +45,20 @@ export class DiscordApiError {
 
 	public get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
 
+	public get isUsername() { return this.asString.includes("username[USERNAME_INVALID_CONTAINS]"); }
+	public getInvalidUsername() { return /Username cannot contain "(?<name>[^"]+)"/.exec(this.asString)?.groups?.name; }
+
 	public get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
 
 	/** Tries to process various DiscordApiErrors and returns true if logged in some way. */
 	public process(): boolean {
+		if (this.isUsername) {
+			error({ invalidUsername:this.getInvalidUsername() });
+			return true;
+		}
 		if (isErrorCode(this.error.code)) {
 			if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
-				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`)
+				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
 			}else {
 				error(this.error);
 			}
@@ -72,15 +79,16 @@ export class DiscordApiError {
 		return isDiscordApiError(reason) ? new DiscordApiError(reason) : undefined;
 	}
 
-	public static process<T extends any = undefined>(err: unknown, options?: { errMsg?:unknown; target?:Readable; retVal?:T; }): T {
-		const processed = DiscordApiError.from(err)?.process() ?? false;
-		if (!processed) {
-			if (options?.target || options?.errMsg) {
-				error([toHumanReadable(options.target), options.errMsg].filter(o => o).join(": "));
-			}else {
-				error(err);
+	public static process(err: unknown): undefined {
+		DiscordApiError.from(err)?.process();
+		return undefined;
+	}
+
+	public static ignore<T extends ErrorCode>(...codes: T[]): (reason: unknown) => undefined {
+		return (reason: unknown) => {
+			if (!isDiscordApiError(reason, ...codes)) {
+				DiscordApiError.process(reason);
 			}
-		}
-		return options?.retVal as T;
+		};
 	}
 }

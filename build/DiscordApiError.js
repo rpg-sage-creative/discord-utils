@@ -1,9 +1,8 @@
 import { error, formatArg, warn } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "./humanReadable/toHumanReadable.js";
-export function isDiscordApiError(reason, code) {
-    if (reason?.name === "DiscordAPIError") {
-        if (code)
-            return reason.code === code;
+export function isDiscordApiError(reason, ...codes) {
+    if (/DiscordAPIError(\[\d+\])?/.test(String(reason?.name))) {
+        if (codes.some(code => reason.code === code))
+            return true;
         return isErrorCode(reason?.code) || isWarnCode(reason?.code);
     }
     return false;
@@ -32,8 +31,14 @@ export class DiscordApiError {
     get isAvatarUrl() { return this.asString.includes("avatar_url[URL_TYPE_INVALID_URL]"); }
     get isEmbedThumbnailUrl() { return this.asString.includes("thumbnail.url[URL_TYPE_INVALID_URL]"); }
     get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
+    get isUsername() { return this.asString.includes("username[USERNAME_INVALID_CONTAINS]"); }
+    getInvalidUsername() { return /Username cannot contain "(?<name>[^"]+)"/.exec(this.asString)?.groups?.name; }
     get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
     process() {
+        if (this.isUsername) {
+            error({ invalidUsername: this.getInvalidUsername() });
+            return true;
+        }
         if (isErrorCode(this.error.code)) {
             if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
                 warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
@@ -56,16 +61,15 @@ export class DiscordApiError {
     static from(reason) {
         return isDiscordApiError(reason) ? new DiscordApiError(reason) : undefined;
     }
-    static process(err, options) {
-        const processed = DiscordApiError.from(err)?.process() ?? false;
-        if (!processed) {
-            if (options?.target || options?.errMsg) {
-                error([toHumanReadable(options.target), options.errMsg].filter(o => o).join(": "));
+    static process(err) {
+        DiscordApiError.from(err)?.process();
+        return undefined;
+    }
+    static ignore(...codes) {
+        return (reason) => {
+            if (!isDiscordApiError(reason, ...codes)) {
+                DiscordApiError.process(reason);
             }
-            else {
-                error(err);
-            }
-        }
-        return options?.retVal;
+        };
     }
 }
