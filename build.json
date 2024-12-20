@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.1.3",
+"version":"0.1.4",
 "branch":"main",
-"commit":"58aee25b57b633e66f65ab7204e8a4c2289d2ce9",
-"commitSubject":"add ability to test webhook unsernames against discord",
-"commitTs":1734647640000,
-"commitDate":"2024-12-19-1434",
-"buildTs":1734647659000,
-"buildDate":"2024-12-19-1434",
+"commit":"ce864e9cd389916427fbec5ecbfa2cfd7439c70e",
+"commitSubject":"improve .process; add isUsername/getInvalidUsername",
+"commitTs":1734738353000,
+"commitDate":"2024-12-20-1545",
+"buildTs":1734738376000,
+"buildDate":"2024-12-20-1546",
 "author":"Randal"
 }
