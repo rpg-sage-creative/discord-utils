@@ -1,8 +1,8 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 function addZeroWidthSpaces(value) {
     return value
-        .replace(/^@/, `@${ZERO_WIDTH_SPACE}`)
-        .replace(/(?<=\|)\|/g, `${ZERO_WIDTH_SPACE}|`);
+        .replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
+        .replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`);
 }
 export function toUserName(user) {
     if (user) {
