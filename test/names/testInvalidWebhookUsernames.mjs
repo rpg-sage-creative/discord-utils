@@ -64,8 +64,8 @@ async function main() {
 
 	if (client) {
 		const invalidNames = [
-			{ name:"everyone", anchored:true, variants:true },
-			{ name:"here",     anchored:true, variants:true },
+			{ name:"everyone" },
+			{ name:"here" },
 
 			{ name:"discord",  variants:true },
 			{ name:"clyde"     },
@@ -73,15 +73,22 @@ async function main() {
 
 			{ name:"```" },
 		];
+		const variantPairs = [
+			["e", "3"],
+			["e", "ë"],
+			["s", "5"],
+		];
 		const tests = [];
 		invalidNames.forEach(({ name, anchored, variants }) => {
-			const variant = name.replace(/e/, "3").replace(/s/, "5");
-			tests.push({ username:name, content:`testing ${toLiteral(name)}`, throws:true });
-			tests.push({ username:`unanchored ${name}`, content:`testing ${toLiteral(`unanchored ${name}`)}`, throws:!anchored });
-			if (variant !== name) {
-				tests.push({ username:variant, content:`testing ${toLiteral(variant)}`, throws:variants });
-				tests.push({ username:`unanchored ${variant}`, content:`testing ${toLiteral(`unanchored ${variant}`)}`, throws:!anchored&&variants });
-			}
+			variantPairs.forEach(variantPair => {
+				const variant = name.replace(variantPair[0], variantPair[1]);
+				tests.push({ username:name, content:`testing ${toLiteral(name)}`, throws:true });
+				tests.push({ username:`unanchored ${name}`, content:`testing ${toLiteral(`unanchored ${name}`)}`, throws:!anchored });
+				if (variant !== name) {
+					tests.push({ username:variant, content:`testing ${toLiteral(variant)}`, throws:variants });
+					tests.push({ username:`unanchored ${variant}`, content:`testing ${toLiteral(`unanchored ${variant}`)}`, throws:!anchored&&variants });
+				}
+			});
 		});
 		console.log(`${tests.length} tests ...`);
 

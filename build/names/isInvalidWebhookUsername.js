@@ -2,7 +2,7 @@ import {} from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 function letterToCharacterClass(letter) {
     switch (letter) {
-        case "e": return "[e3]";
+        case "e": return "[eë3]";
         case "i": return "[il1]";
         case "o": return "[o0]";
         case "s": return "[s5]";
@@ -10,8 +10,8 @@ function letterToCharacterClass(letter) {
     }
 }
 const invalidNames = [
-    { name: "everyone", anchored: true, variants: true },
-    { name: "here", anchored: true, variants: true },
+    { name: "everyone" },
+    { name: "here" },
     { name: "discord", variants: true },
     { name: "clyde" },
     { name: "wumpus", },

@@ -4,7 +4,7 @@ import { isInvalidWebhookUsername } from "../../build/index.js";
 /** returns all the letters that might be used to create a variant of a username */
 function getLetterVariants(letter) {
 	switch(letter) {
-		case "e": return "e3";
+		case "e": return "eë3";
 		case "i": return "il1";
 		case "o": return "o0";
 		case "s": return "s5";
@@ -61,8 +61,8 @@ describe("names", () => {
 		});
 
 		const tests = [
-			{ name:"everyone", anchored:true, variants:true },
-			{ name:"here",     anchored:true, variants:true },
+			{ name:"everyone" },
+			{ name:"here" },
 
 			{ name:"discord",  variants:true },
 			{ name:"clyde"     },
