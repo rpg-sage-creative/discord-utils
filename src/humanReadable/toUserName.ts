@@ -1,16 +1,6 @@
-import { ZERO_WIDTH_SPACE, type Optional } from "@rsc-utils/core-utils";
-import type { APIUser, PartialRecipient, PartialUser, User } from "discord.js";
-
-type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
-
-function addZeroWidthSpaces(value: string): string {
-	return value
-		// avoid @here and @everybody
-		.replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
-		// fix spoilers
-		.replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`)
-		;
-}
+import type { Optional } from "@rsc-utils/core-utils";
+import type { UserResolvable } from "../types/types.js";
+import { addZeroWidthSpaces } from "./addZeroWidthSpaces.js";
 
 /** Returns the user name as a readable mention or "@UnknownUser" */
 export function toUserName(user: Optional<UserResolvable>): string {

@@ -1,9 +1,4 @@
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
-function addZeroWidthSpaces(value) {
-    return value
-        .replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
-        .replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`);
-}
+import { addZeroWidthSpaces } from "./addZeroWidthSpaces.js";
 export function toUserName(user) {
     if (user) {
         if ("displayName" in user && user.displayName) {
