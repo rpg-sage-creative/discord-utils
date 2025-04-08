@@ -13,5 +13,6 @@ type Format =
  | "F"
 /** Short Date/Time: 5 March 2020 11:28 */
  | "f";
+/** Creates a Discord formatted relative timestamp for the given Format. */
 export declare function toDiscordDate(ts: number | Date, format: Format): string;
 export {};
