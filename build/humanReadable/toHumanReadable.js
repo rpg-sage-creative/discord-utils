@@ -16,6 +16,9 @@ export function toHumanReadable(target) {
                 return toUserName(target);
             }
         }
+        if ("username" in target) {
+            return toUserName(target);
+        }
         if ("channel" in target) {
             return toChannelName(target);
         }
