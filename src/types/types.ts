@@ -1,4 +1,4 @@
-import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
 
 export type DInteraction<Cached extends CacheType = CacheType>
 	= ButtonInteraction<Cached> // button
@@ -23,6 +23,11 @@ export type DMBasedChannel = PartialGroupDMChannel | DMChannel | PartialDMChanne
 
 /** Channel you can send a message to. */
 export type MessageChannel = Exclude<Channel, CategoryChannel | ForumChannel | MediaChannel | PartialGroupDMChannel>;
+
+export type SMessage = Message & { channel:MessageChannel; };
+export type SPartialMessage = Partialize<SMessage, 'type' | 'system' | 'pinned' | 'tts', 'content' | 'cleanContent' | 'author'>;
+
+export type SMessageOrPartial = SMessage | SPartialMessage;
 
 export type MessageOrPartial = Message | PartialMessage;
 
