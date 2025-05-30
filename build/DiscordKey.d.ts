@@ -7,6 +7,7 @@ export declare class DiscordKey implements MessageReference, ChannelReference {
     get guildId(): Snowflake | undefined;
     get channelId(): Snowflake;
     get messageId(): Snowflake | undefined;
+    get type(): number;
     get userId(): Snowflake | undefined;
     server: Snowflake;
     channel: Snowflake;

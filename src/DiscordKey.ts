@@ -19,6 +19,9 @@ export class DiscordKey implements MessageReference, ChannelReference {
 	public get messageId(): Snowflake | undefined {
 		return this.hasMessage ? this.message : undefined;
 	}
+	public get type(): number {
+		return 0;
+	}
 	//#endregion
 
 	//#region MessageReferenceAdjacent

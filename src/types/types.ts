@@ -1,4 +1,6 @@
-import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+
+export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
 export type DInteraction<Cached extends CacheType = CacheType>
 	= ButtonInteraction<Cached> // button
@@ -28,7 +30,6 @@ export type SMessage = Message & { channel:MessageChannel; };
 export type SPartialMessage = Partialize<SMessage, 'type' | 'system' | 'pinned' | 'tts', 'content' | 'cleanContent' | 'author'>;
 
 export type SMessageOrPartial = SMessage | SPartialMessage;
-
 export type MessageOrPartial = Message | PartialMessage;
 
 /** User or Channel you can send a message to. */
@@ -38,9 +39,12 @@ export type NonThreadChannel = Exclude<Channel, AnyThreadChannel>;
 
 export type ReactionOrPartial = MessageReaction | PartialMessageReaction;
 
+/** User or PartialUser */
 export type UserOrPartial = User | PartialUser;
 
 export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 
 /** Channels that can have webhooks. */
-export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel>;
+export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel | ForumChannel | MediaChannel>;
+
+//#endregion

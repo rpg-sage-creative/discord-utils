@@ -14,6 +14,9 @@ export class DiscordKey {
     get messageId() {
         return this.hasMessage ? this.message : undefined;
     }
+    get type() {
+        return 0;
+    }
     get userId() {
         return this.isDm ? this.channel : undefined;
     }
