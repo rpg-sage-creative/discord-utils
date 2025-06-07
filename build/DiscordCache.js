@@ -7,7 +7,10 @@ import { resolveChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveGuildId } from "./resolve/resolveGuildId.js";
 import { resolveRoleId } from "./resolve/resolveRoleId.js";
 import { resolveUserId } from "./resolve/resolveUserId.js";
-import { isMessageTarget, isNonThreadChannel, isThreadChannel, isWebhookChannel } from "./types/index.js";
+import { isMessageTarget } from "./types/typeGuards/isMessageTarget.js";
+import { isNonThreadChannel } from "./types/typeGuards/isNonThreadChannel.js";
+import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
+import { isWebhookChannel } from "./types/typeGuards/isWebhookChannel.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelReferenceResolvable, name) {
     const channelId = resolveChannelReference(channelReferenceResolvable);
@@ -108,7 +111,7 @@ export class DiscordCache {
         if (!isNonNilSnowflake(messageId))
             return undefined;
         const cache = this.#cached.has(messageId);
-        const channel = discordKey.isDm
+        const channel = discordKey.isDm && userId
             ? await this.fetchDmChannel({ userId, channelId: discordKey.channelId })
             : await this.fetchChannel(discordKey);
         const message = isMessageTarget(channel)

@@ -3,8 +3,10 @@ import type { Interaction, MessageReference } from "discord.js";
 import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
 import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
-import { isGuildBasedChannel, isMessage, isThreadChannel } from "./types/index.js";
-import type { MessageOrPartial, MessageTarget, ReactionOrPartial } from "./types/types.js";
+import type { MessageOrPartial, MessageReferenceOrPartial, MessageTarget, ReactionOrPartial } from "./types/index.js";
+import { isGuildBasedChannel } from "./types/typeGuards/isGuildBasedChannel.js";
+import { isMessage } from "./types/typeGuards/isMessage.js";
+import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 
@@ -111,7 +113,7 @@ export class DiscordKey implements MessageReference, ChannelReference {
 		return resolvables.map(resolvable => resolveSnowflake(resolvable, true)).join("-");
 	}
 
-	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReference): DiscordKey {
+	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReferenceOrPartial): DiscordKey {
 		if ("messageId" in resolvable) {
 			return new DiscordKey(resolvable.guildId, resolvable.channelId, undefined, resolvable.messageId);
 		}
