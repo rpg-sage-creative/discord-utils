@@ -1,7 +1,7 @@
 import { unwrap } from "@rsc-utils/core-utils";
 import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
 function parseString(url, type) {
-    const regex = getDiscordUrlRegex({ type });
+    const regex = getDiscordUrlRegex({ anchored: true, capture: "discordUrl", type });
     const match = regex.exec(unwrap(url, "<>"));
     if (match?.groups) {
         let { guildId, channelId, messageId } = match.groups;

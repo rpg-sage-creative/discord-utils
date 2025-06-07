@@ -6,7 +6,7 @@ import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
 type ReferenceType = "channel" | "message";
 
 function parseString(url: string, type: ReferenceType): MessageReference | undefined {
-	const regex = getDiscordUrlRegex({ type });
+	const regex = getDiscordUrlRegex({ anchored:true, capture:"discordUrl", type });
 	const match = regex.exec(unwrap(url, "<>"));
 	if (match?.groups) {
 		// cast to MessageReference to allow guildId to be undefined
