@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { chunk, isNotBlank } from "@rsc-utils/core-utils";
+import { chunk, isNotBlank, type Optional } from "@rsc-utils/core-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
@@ -124,6 +123,16 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
 	const { components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
 
+	// let's do some name maintenance here ...
+	if ("username" in baseOptions) {
+		const { username } = baseOptions;
+		if (typeof(username) === "string") {
+			if (username.length > DiscordMaxValues.webhook.username.maxLength) {
+				baseOptions.username = `${username.slice(0, 79)}…`;
+			}
+		}
+	}
+
 	// convert incoming embedContent to embeds
 	const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) as MsgEmbed[] ?? [];
 
@@ -200,7 +209,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	if (components?.length || files?.length) {
 		// if we somehow don't have a payload, add one
 		if (!payloads.length) {
-			payloads.push({ } as T);
+			payloads.push({ ...baseOptions } as T);
 		}
 
 		// only include attachments in the first payload

@@ -75,6 +75,14 @@ function mergeEmbeds(content, embeds, color) {
 }
 export function splitMessageOptions(msgOptions, splitOptions) {
     const { components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
+    if ("username" in baseOptions) {
+        const { username } = baseOptions;
+        if (typeof (username) === "string") {
+            if (username.length > DiscordMaxValues.webhook.username.maxLength) {
+                baseOptions.username = `${username.slice(0, 79)}…`;
+            }
+        }
+    }
     const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) ?? [];
     const allIncomingEmbeds = convertedEmbeds.concat(embeds ?? []);
     let contentToChunk;
@@ -123,7 +131,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
     });
     if (components?.length || files?.length) {
         if (!payloads.length) {
-            payloads.push({});
+            payloads.push({ ...baseOptions });
         }
         payloads[0].components = components;
         payloads[0].files = files;
