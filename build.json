@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.2.0",
+"version":"0.2.1",
 "branch":"main",
-"commit":"d021f2d61f73d80caeaf9b5b032a0d78fc8161cb",
-"commitSubject":"update types to use SMessage",
-"commitTs":1749277160000,
-"commitDate":"2025-06-06-2319",
-"buildTs":1749278442000,
-"buildDate":"2025-06-06-2340",
+"commit":"69280855878159d991d4cdf9180ca7530331a77c",
+"commitSubject":"update core-utils and io-utils",
+"commitTs":1749364389000,
+"commitDate":"2025-06-07-2333",
+"buildTs":1749364408000,
+"buildDate":"2025-06-07-2333",
 "author":"Randal"
 }
