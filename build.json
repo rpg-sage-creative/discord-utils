@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.2.5",
+"version":"0.2.6",
 "branch":"main",
-"commit":"14280bcbd127450087f3d60f0d76f050a9c7d699",
-"commitSubject":"update discord.js",
-"commitTs":1753078368000,
-"commitDate":"2025-07-20-2312",
-"buildTs":1753078399000,
-"buildDate":"2025-07-20-2313",
+"commit":"06948cbe5da3b09c85a0364753ed75a0f10011b2",
+"commitSubject":"update core-utils and io-utils",
+"commitTs":1753143136000,
+"commitDate":"2025-07-21-1712",
+"buildTs":1753143154000,
+"buildDate":"2025-07-21-1712",
 "author":"Randal"
 }
