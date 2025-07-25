@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.2.6",
+"version":"0.2.7",
 "branch":"main",
-"commit":"06948cbe5da3b09c85a0364753ed75a0f10011b2",
-"commitSubject":"update core-utils and io-utils",
-"commitTs":1753143136000,
-"commitDate":"2025-07-21-1712",
-"buildTs":1753143154000,
-"buildDate":"2025-07-21-1712",
+"commit":"5fb004b24bd0aea65f8fb70651143de13aa41ad2",
+"commitSubject":"add discord specific env getters",
+"commitTs":1753472367000,
+"commitDate":"2025-07-25-1239",
+"buildTs":1753472680000,
+"buildDate":"2025-07-25-1244",
 "author":"Randal"
 }
