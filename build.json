@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.2.7",
+"version":"0.2.8",
 "branch":"main",
-"commit":"5fb004b24bd0aea65f8fb70651143de13aa41ad2",
-"commitSubject":"add discord specific env getters",
-"commitTs":1753472367000,
-"commitDate":"2025-07-25-1239",
-"buildTs":1753472680000,
-"buildDate":"2025-07-25-1244",
+"commit":"0b37cfcd7d7112618c1ee66d67f9e2b4bbc8e60f",
+"commitSubject":"add getSuperAdminIds",
+"commitTs":1754524226000,
+"commitDate":"2025-08-06-1650",
+"buildTs":1754524251000,
+"buildDate":"2025-08-06-1650",
 "author":"Randal"
 }
