@@ -1,6 +1,7 @@
 export * from "./getHomeServerId.js";
 export * from "./getRollemId.js";
 export * from "./getSuperAdminId.js";
+export * from "./getSuperAdminIds.js";
 export * from "./getSuperUserId.js";
 export * from "./getToken.js";
 export * from "./SageId.js";
