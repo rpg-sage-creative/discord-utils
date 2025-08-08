@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.2.8",
+"version":"0.2.9",
 "branch":"main",
-"commit":"0b37cfcd7d7112618c1ee66d67f9e2b4bbc8e60f",
-"commitSubject":"add getSuperAdminIds",
-"commitTs":1754524226000,
-"commitDate":"2025-08-06-1650",
-"buildTs":1754524251000,
-"buildDate":"2025-08-06-1650",
+"commit":"46bb32c0f436bfefa66e36b3aa89301ed045a9c9",
+"commitSubject":"update core-utils and io-utils",
+"commitTs":1754691868000,
+"commitDate":"2025-08-08-1524",
+"buildTs":1754691888000,
+"buildDate":"2025-08-08-1524",
 "author":"Randal"
 }
