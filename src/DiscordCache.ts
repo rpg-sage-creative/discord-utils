@@ -1,6 +1,6 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
 import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -33,7 +33,7 @@ export class DiscordCache {
 
 	#cached: Map<string, boolean>;
 
-	private constructor(public client: Client, public guild?: Optional<Guild>, channel?: Optional<Channel>) {
+	private constructor(public client: Client, public guild?: Optional<Guild>, channel?: Optional<GameChannel>) {
 		this.#cached = new Map();
 		this.webhookMap = new Map();
 
