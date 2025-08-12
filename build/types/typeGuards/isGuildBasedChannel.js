@@ -1,4 +1,1 @@
-import { isChannel } from "./isChannel.js";
-export function isGuildBasedChannel(value) {
-    return isChannel(value) && "guild" in value;
-}
+export { isGameChannel as isGuildBasedChannel } from "./isGameChannel.js";

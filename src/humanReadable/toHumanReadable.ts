@@ -1,13 +1,14 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { Channel, Guild, GuildMember, GuildPreview, Webhook } from "discord.js";
+import type { Channel, Guild, GuildMember, GuildPreview, Role, Webhook } from "discord.js";
 import type { MessageOrPartial, UserResolvable } from "../types/types.js";
 import { toChannelName } from "./toChannelName.js";
 import { toGuildMemberName } from "./toGuildMemberName.js";
 import { toGuildName } from "./toGuildName.js";
 import { toUserName } from "./toUserName.js";
 import { toWebhookName } from "./toWebhookName.js";
+import { roleToName } from "./internal/roleToName.js";
 
-export type Readable = Channel | Guild | GuildPreview | GuildMember | MessageOrPartial | UserResolvable | Webhook;
+export type Readable = Channel | Guild | GuildPreview | GuildMember | MessageOrPartial | Role | UserResolvable | Webhook;
 
 /**
  * Returns a string that represents the Discord object in a meaningful way.
@@ -47,6 +48,11 @@ export function toHumanReadable<T extends Readable>(target: Optional<T>): string
 		// Guild or GuildPreview
 		if ("discoverySplash" in target) {
 			return toGuildName(target);
+		}
+
+		// Role
+		if ("setHoist" in target) {
+			return roleToName(target);
 		}
 
 		// Channel

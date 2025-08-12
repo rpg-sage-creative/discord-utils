@@ -1,11 +1,17 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { AnyThreadChannel, Channel, TextChannel } from "discord.js";
+import type { Channel, TextChannel } from "discord.js";
 import type { UserOrPartial } from "../types.js";
-import { isGameChannel } from "./isGameChannel.js";
+import type { ThreadGameChannel } from "./isThreadGameChannel.js";
 
 /** Channels Sage can send messages to. */
-export type TextGameChannel = TextChannel | AnyThreadChannel;
+export type TextGameChannel = TextChannel | ThreadGameChannel;
 
 export function isTextGameChannel(channel?: Optional<Channel | UserOrPartial>): channel is TextGameChannel {
-	return isGameChannel(channel) && "send" in channel;
+	if (channel && "isThread" in channel) {
+		return channel.type === 0 //ChannelType.GuildText
+			|| channel.type === 11 //ChannelType.PublicThread
+			|| channel.type === 12 //ChannelType.PrivateThread
+			;
+	}
+	return false;
 }

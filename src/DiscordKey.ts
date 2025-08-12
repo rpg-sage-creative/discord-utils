@@ -4,11 +4,8 @@ import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
 import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
 import type { MessageOrPartial, MessageReferenceOrPartial, MessageTarget, ReactionOrPartial } from "./types/index.js";
-import { isGuildBasedChannel } from "./types/typeGuards/isGuildBasedChannel.js";
-import { isMessage } from "./types/typeGuards/isMessage.js";
-import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
-import { toChannelUrl } from "./url/toChannelUrl.js";
-import { toMessageUrl } from "./url/toMessageUrl.js";
+import { isGuildBasedChannel, isMessage, isThreadGameChannel } from "./types/typeGuards/index.js";
+import { toChannelUrl, toMessageUrl } from "./url/index.js";
 
 export class DiscordKey implements MessageReference, ChannelReference {
 	//#region ChannelReference/MessageReference
@@ -123,7 +120,7 @@ export class DiscordKey implements MessageReference, ChannelReference {
 		const channel = "channel" in resolvable ? resolvable.channel : resolvable;
 		const guildId = isGuildBasedChannel(channel) ? channel.guildId : undefined;
 		const messageId = isMessage(resolvable) ? resolvable.id : undefined;
-		if (isThreadChannel(channel)) {
+		if (isThreadGameChannel(channel)) {
 			const threadId = channel.id;
 			const channelId = channel.parent?.id;
 			return new DiscordKey(guildId, channelId, threadId, messageId);

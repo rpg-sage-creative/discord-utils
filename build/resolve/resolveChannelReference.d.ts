@@ -1,12 +1,11 @@
 import type { Optional, OrUndefined, Snowflake } from "@rsc-utils/core-utils";
-import type { Channel } from "discord.js";
 import type { DiscordKey } from "../DiscordKey.js";
-import type { MessageOrPartial } from "../types/types.js";
+import type { GameChannel, MessageOrPartial } from "../types/index.js";
 export type ChannelReference = {
     guildId?: Snowflake;
     channelId: Snowflake;
 };
-export type ChannelReferenceResolvable = Channel | MessageOrPartial | ChannelReference;
+export type ChannelReferenceResolvable = GameChannel | MessageOrPartial | ChannelReference;
 export type CanBeChannelReferenceResolvable = ChannelReferenceResolvable | DiscordKey;
 /** Resolves to Snowflake. */
 export declare function resolveChannelReference(resolvable: ChannelReferenceResolvable): ChannelReference;

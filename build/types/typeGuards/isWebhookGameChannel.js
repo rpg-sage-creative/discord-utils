@@ -1,4 +1,7 @@
-import { isGameChannel } from "./isGameChannel.js";
 export function isWebhookGameChannel(channel) {
-    return isGameChannel(channel) && "fetchWebhooks" in channel;
+    if (channel && "isThread" in channel) {
+        return channel.type === 0
+            || channel.type === 15;
+    }
+    return false;
 }

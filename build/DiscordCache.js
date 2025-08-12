@@ -7,10 +7,7 @@ import { resolveChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveGuildId } from "./resolve/resolveGuildId.js";
 import { resolveRoleId } from "./resolve/resolveRoleId.js";
 import { resolveUserId } from "./resolve/resolveUserId.js";
-import { isMessageTarget } from "./types/typeGuards/isMessageTarget.js";
-import { isNonThreadChannel } from "./types/typeGuards/isNonThreadChannel.js";
-import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
-import { isWebhookChannel } from "./types/typeGuards/isWebhookChannel.js";
+import { isMessageTarget, isNonThreadGameChannel, isTextGameChannel, isThreadGameChannel, isWebhookGameChannel } from "./types/typeGuards/index.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelReferenceResolvable, name) {
     const channelId = resolveChannelReference(channelReferenceResolvable);
@@ -61,11 +58,11 @@ export class DiscordCache {
     }
     async fetchChannelAndThread(resolvable) {
         const threadOrChannel = await this.fetchChannel(resolvable);
-        if (isThreadChannel(threadOrChannel)) {
+        if (isThreadGameChannel(threadOrChannel)) {
             const parentChannel = await this.fetchChannel(threadOrChannel.parent);
             return { channel: parentChannel, thread: threadOrChannel };
         }
-        if (isNonThreadChannel(threadOrChannel)) {
+        if (isNonThreadGameChannel(threadOrChannel)) {
             return { channel: threadOrChannel };
         }
         return {};
@@ -140,25 +137,34 @@ export class DiscordCache {
     }
     webhookMap;
     async fetchWebhook(channelReferenceResolvable, options) {
-        const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
-        if (!this.hasManageWebhooksPerm(channel)) {
+        const { webhookChannel } = await this.fetchWebhookChannels(channelReferenceResolvable);
+        if (!this.hasManageWebhooksPerm(webhookChannel)) {
             return undefined;
         }
         const webhookName = options?.name ?? SageDialogWebhookName;
-        const webhookKey = createWebhookKey(channel, webhookName);
+        const webhookKey = createWebhookKey(webhookChannel, webhookName);
         if (!this.webhookMap.has(webhookKey)) {
-            const webhooksCollection = await channel.fetchWebhooks().catch(DiscordApiError.process);
+            const webhooksCollection = await webhookChannel.fetchWebhooks().catch(DiscordApiError.process);
             const webhook = webhooksCollection?.find(w => w.name === webhookName);
             this.webhookMap.set(webhookKey, webhook);
         }
         return this.webhookMap.get(webhookKey);
     }
-    async fetchWebhookChannel(channelReferenceResolvable) {
+    async fetchWebhookChannels(channelReferenceResolvable) {
         const { guildId, channelId } = resolveChannelReference(channelReferenceResolvable);
-        if (!isNonNilSnowflake(guildId) || !isNonNilSnowflake(channelId))
-            return undefined;
-        const { channel } = await this.fetchChannelAndThread({ guildId, channelId });
-        return isWebhookChannel(channel) ? channel : undefined;
+        if (!isNonNilSnowflake(guildId) || !isNonNilSnowflake(channelId)) {
+            return {};
+        }
+        const { channel, thread } = await this.fetchChannelAndThread({ guildId, channelId });
+        if (isWebhookGameChannel(channel)) {
+            if (isTextGameChannel(channel)) {
+                return { webhookChannel: channel, messageChannel: thread ?? channel };
+            }
+            if (thread) {
+                return { webhookChannel: channel, messageChannel: thread };
+            }
+        }
+        return {};
     }
     hasManageWebhooksPerm(channel) {
         if (!channel)
@@ -174,32 +180,29 @@ export class DiscordCache {
         const existing = await this.fetchWebhook(channelReferenceResolvable, options);
         if (existing)
             return existing;
-        const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
-        if (!this.hasManageWebhooksPerm(channel))
+        const { webhookChannel } = await this.fetchWebhookChannels(channelReferenceResolvable);
+        if (!this.hasManageWebhooksPerm(webhookChannel))
             return undefined;
-        if (!isThreadChannel(channel)) {
-            const webhookName = options?.name ?? SageDialogWebhookName;
-            const webhookArgs = { ...options, name: webhookName };
-            const webhook = await channel.createWebhook(webhookArgs).catch(DiscordApiError.process);
-            const key = createWebhookKey(channel, webhookName);
-            this.webhookMap.set(key, webhook ?? undefined);
-            return webhook;
-        }
-        return undefined;
+        const webhookName = options?.name ?? SageDialogWebhookName;
+        const webhookArgs = { ...options, name: webhookName };
+        const webhook = await webhookChannel.createWebhook(webhookArgs).catch(DiscordApiError.process);
+        const key = createWebhookKey(webhookChannel, webhookName);
+        this.webhookMap.set(key, webhook ?? undefined);
+        return webhook;
     }
     async findLastWebhookMessageByAuthor(channelReferenceResolvable, webhookOptions, filter) {
         const webhook = await this.fetchWebhook(channelReferenceResolvable, webhookOptions);
         if (!webhook)
             return undefined;
-        const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
-        if (!channel)
+        const { messageChannel } = await this.fetchWebhookChannels(channelReferenceResolvable);
+        if (!messageChannel)
             return undefined;
         const options = {
-            before: channel.lastMessageId ?? undefined,
+            before: messageChannel.lastMessageId ?? undefined,
             limit: 25,
             cache: true
         };
-        const collection = await channel.messages.fetch(options).catch(DiscordApiError.process);
+        const collection = await messageChannel.messages.fetch(options).catch(DiscordApiError.process);
         if (!collection)
             return undefined;
         const webhookId = webhook.id;

@@ -1,15 +1,15 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { Channel } from "discord.js";
-import { isDMBasedChannel } from "../types/typeGuards/isDMBasedChannel.js";
+import type { Channel, DMChannel } from "discord.js";
 import { getPermsFor } from "./getPermsFor.js";
 import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js";
+import type { TextGameChannel } from "../types/index.js";
 
-export function canReactTo(botId: Snowflake, channel: Optional<Channel>): boolean {
+export function canReactTo(botId: Snowflake, channel: Optional<Channel>): channel is TextGameChannel | DMChannel {
 	if (!channel) {
 		return false;
 	}
 
-	if (isDMBasedChannel(channel)) {
+	if (channel.isDMBased()) {
 		return true;
 	}
 

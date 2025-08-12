@@ -1,11 +1,19 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { AnyThreadChannel, Channel } from "discord.js";
+import type { Channel, ChannelType, PrivateThreadChannel, PublicThreadChannel } from "discord.js";
 import type { UserOrPartial } from "../types.js";
-import { isGameChannel } from "./isGameChannel.js";
+
+export type PublicThreadGameChannel = PublicThreadChannel & {
+	type: ChannelType.PublicThread;
+};
 
 /** Channels Sage can check notpermissions in. */
-export type ThreadGameChannel = AnyThreadChannel;
+export type ThreadGameChannel = PublicThreadGameChannel | PrivateThreadChannel;
 
 export function isThreadGameChannel(channel?: Optional<Channel | UserOrPartial>): channel is ThreadGameChannel {
-	return isGameChannel(channel) && channel.isThread();
+	if (channel && "isThread" in channel) {
+		return channel.type === 11 //ChannelType.PublicThread
+			|| channel.type === 12 //ChannelType.PrivateThread
+			;
+	}
+	return false;
 }

@@ -1,6 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import type { Channel } from "discord.js";
-import { isDMBasedChannel } from "../types/typeGuards/isDMBasedChannel.js";
 import { getPermsFor } from "./getPermsFor.js";
 import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js";
 
@@ -13,14 +12,9 @@ import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js
  * @returns true if we can send to the channel
  */
 export function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): boolean {
-	if (!channel) {
+	if (!channel?.isSendable()) {
 		return false;
 	}
-
-	if (isDMBasedChannel(channel)) {
-		return true;
-	}
-
 
 	if (isLockedOrArchivedThread(channel) && !channel.sendable) {
 		return false;

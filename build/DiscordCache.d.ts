@@ -1,18 +1,18 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable } from "./resolve/resolveChannelReference.js";
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import type { MessageChannel, MessageReferenceOrPartial, NonThreadChannel } from "./types/types.js";
+import type { GameChannel, MessageReferenceOrPartial, NonThreadGameChannel, TextGameChannel, ThreadGameChannel } from "./types/index.js";
 type ClientGuildResolvable = Guild | {
     client: Client;
     guild: Optional<Guild>;
 };
 type ChannelAndThread = {
-    channel?: NonThreadChannel;
-    thread?: AnyThreadChannel;
+    channel?: NonThreadGameChannel;
+    thread?: ThreadGameChannel;
 };
 type WebhookOptions = {
     avatar?: string;
@@ -26,7 +26,7 @@ export declare class DiscordCache {
     private constructor();
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
-    fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
+    fetchChannel<T extends GameChannel = GameChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
     fetchDmChannel({ userId, channelId }: {
         userId: Snowflake;
         channelId: Snowflake;
@@ -41,7 +41,7 @@ export declare class DiscordCache {
     fetchUser(userIdResolvable: Optional<CanBeUserIdResolvable>): Promise<User | undefined>;
     private webhookMap;
     fetchWebhook(channelReferenceResolvable: ChannelReferenceResolvable, options?: WebhookOptions): Promise<Webhook | undefined>;
-    private fetchWebhookChannel;
+    private fetchWebhookChannels;
     /**
      * Reusable code to check and log when we don't have permissions.
      * Logging is done here, once, because this is sometimes called twice in fetchOrCreateWebhook.
@@ -49,7 +49,7 @@ export declare class DiscordCache {
     private hasManageWebhooksPerm;
     fetchOrCreateWebhook(channelReferenceResolvable: ChannelReferenceResolvable, options?: WebhookOptions): Promise<Webhook | undefined>;
     findLastWebhookMessageByAuthor(channelReferenceResolvable: ChannelReferenceResolvable, webhookOptions: WebhookOptions, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | undefined>;
-    static filterChannelMessages(channel: MessageChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]>;
+    static filterChannelMessages(channel: TextGameChannel | DMChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]>;
     static from(guildResolvable: ClientGuildResolvable): DiscordCache;
     static from(client: Client, guildIdResolvable: GuildIdResolvable): Promise<DiscordCache>;
     private static SAGE_ID;

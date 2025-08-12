@@ -1,4 +1,8 @@
-import { isGameChannel } from "./isGameChannel.js";
 export function isNonThreadGameChannel(channel) {
-    return isGameChannel(channel) && !channel.isThread();
+    if (channel && "isThread" in channel) {
+        return channel.type === 0
+            || channel.type === 4
+            || channel.type === 15;
+    }
+    return false;
 }

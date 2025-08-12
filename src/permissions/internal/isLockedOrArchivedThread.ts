@@ -1,8 +1,8 @@
-import type { AnyThreadChannel, Channel } from "discord.js";
-import { isThreadChannel } from "../../types/typeGuards/isThreadChannel.js";
+import type { Channel } from "discord.js";
+import { isThreadGameChannel, type ThreadGameChannel } from "../../types/typeGuards/isThreadGameChannel.js";
 
-export function isLockedOrArchivedThread(channel: Channel): channel is AnyThreadChannel {
-	if (isThreadChannel(channel)) {
+export function isLockedOrArchivedThread(channel: Channel): channel is ThreadGameChannel {
+	if (isThreadGameChannel(channel)) {
 		if (channel.locked) {
 			return true;
 		}

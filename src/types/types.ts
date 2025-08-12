@@ -1,6 +1,5 @@
-import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
-
-export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
+import type { AnySelectMenuInteraction, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CommandInteraction, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+import type { TextGameChannel } from "./typeGuards/isTextGameChannel.js";
 
 export type DInteraction<Cached extends CacheType = CacheType>
 	= ButtonInteraction<Cached> // button
@@ -21,21 +20,15 @@ export type DRepliableInteraction<Cached extends CacheType = CacheType>
 	| ModalSubmitInteraction<Cached>
 	;
 
-export type DMBasedChannel = PartialGroupDMChannel | DMChannel | PartialDMChannel;
-
-/** Channel you can send a message to. */
-export type MessageChannel = Exclude<Channel, CategoryChannel | ForumChannel | MediaChannel | PartialGroupDMChannel>;
-
-export type SMessage = Message & { channel:MessageChannel; };
+/** Special Sage Message that type guards the channel to a TextGameChannel */
+export type SMessage = Message & { channel:TextGameChannel; };
+/** Partial version of SMessage */
 export type SPartialMessage = Partialize<SMessage, 'type' | 'system' | 'pinned' | 'tts', 'content' | 'cleanContent' | 'author'>;
 
 export type SMessageOrPartial = SMessage | SPartialMessage;
 export type MessageOrPartial = Message | PartialMessage;
 
-/** User or Channel you can send a message to. */
-export type MessageTarget = User | MessageChannel;
-
-export type NonThreadChannel = Exclude<Channel, AnyThreadChannel>;
+export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
 export type ReactionOrPartial = MessageReaction | PartialMessageReaction;
 
@@ -43,9 +36,6 @@ export type ReactionOrPartial = MessageReaction | PartialMessageReaction;
 export type UserOrPartial = User | PartialUser;
 
 export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
-
-/** Channels that can have webhooks. */
-export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel | ForumChannel | MediaChannel>;
 
 //#endregion
 

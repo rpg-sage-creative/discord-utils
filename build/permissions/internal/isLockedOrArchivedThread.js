@@ -1,6 +1,6 @@
-import { isThreadChannel } from "../../types/typeGuards/isThreadChannel.js";
+import { isThreadGameChannel } from "../../types/typeGuards/isThreadGameChannel.js";
 export function isLockedOrArchivedThread(channel) {
-    if (isThreadChannel(channel)) {
+    if (isThreadGameChannel(channel)) {
         if (channel.locked) {
             return true;
         }
