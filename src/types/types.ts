@@ -48,3 +48,7 @@ export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel | ForumChannel | MediaChannel>;
 
 //#endregion
+
+
+
+
