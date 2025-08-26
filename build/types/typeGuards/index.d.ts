@@ -1,3 +1,4 @@
+export * from "./hasSupportedParentChannel.js";
 export * from "./isChannel.js";
 export * from "./isDMBasedChannel.js";
 export * from "./isGameChannel.js";
@@ -7,6 +8,11 @@ export * from "./isMessage.js";
 export * from "./isMessageTarget.js";
 export * from "./isNonThreadChannel.js";
 export * from "./isNonThreadGameChannel.js";
+export * from "./isSupportedChannel.js";
+export * from "./isSupportedGameChannel.js";
+export * from "./isSupportedGameTextChannel.js";
+export * from "./isSupportedParentChannel.js";
+export * from "./isSupportedTextChannel.js";
 export * from "./isTextGameChannel.js";
 export * from "./isThreadChannel.js";
 export * from "./isThreadGameChannel.js";
