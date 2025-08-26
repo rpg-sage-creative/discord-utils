@@ -4,7 +4,6 @@ export * from "./isGameChannel.js";
 export * from "./isGuildBasedChannel.js";
 export * from "./isMessage.js";
 export * from "./isMessageTarget.js";
-export * from "./isNonThreadChannel.js";
 export * from "./isNonThreadGameChannel.js";
 export * from "./isSupportedChannel.js";
 export * from "./isSupportedGameChannel.js";
