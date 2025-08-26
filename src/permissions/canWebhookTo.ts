@@ -1,6 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import type { Channel } from "discord.js";
-import { isDMBasedChannel } from "../types/typeGuards/isDMBasedChannel.js";
 import { getPermsFor } from "./getPermsFor.js";
 import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js";
 
@@ -9,7 +8,7 @@ export function canWebhookTo(botId: Snowflake, channel: Optional<Channel>): bool
 		return false;
 	}
 
-	if (isDMBasedChannel(channel)) {
+	if (channel.isDMBased()) {
 		return false;
 	}
 
