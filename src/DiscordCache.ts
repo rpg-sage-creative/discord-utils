@@ -1,6 +1,6 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
+import { NIL_SNOWFLAKE, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -9,10 +9,9 @@ import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } f
 import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
 import { isMessageTarget } from "./types/typeGuards/isMessageTarget.js";
-import { isNonThreadChannel } from "./types/typeGuards/isNonThreadChannel.js";
-import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
-import { isWebhookChannel } from "./types/typeGuards/isWebhookChannel.js";
-import type { MessageChannel, MessageReferenceOrPartial, NonThreadChannel, WebhookChannel } from "./types/types.js";
+import { isSupportedChannel, type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel } from "./types/typeGuards/isSupportedChannel.js";
+import { isSupportedWebhookChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupportedWebhookChannel.js";
+import type { MessageReferenceOrPartial } from "./types/types.js";
 
 //#region Helpers
 
@@ -21,7 +20,9 @@ const SageDialogWebhookName = "SageDialogWebhookName";
 type ClientGuildResolvable = Guild
 	| { client: Client; guild: Optional<Guild>; };
 
-type ChannelAndThread = { channel?:NonThreadChannel; thread?:AnyThreadChannel; };
+type ChannelAndThread = { channel?:SupportedNonThreadChannel; thread?:SupportedThreadChannel; };
+type WebhookChannelAndThread = { channel:SupportedWebhookChannel; thread?:SupportedThreadChannel; };
+type WebhookAndChannel = { webhook?:Webhook; channel?:SupportedWebhookChannel; hasPerms?:boolean; };
 
 type WebhookOptions = { avatar?:string; name?:string; type?:"dialog" };
 
@@ -70,6 +71,13 @@ export class DiscordCache {
 
 		return channel as T ?? undefined;
 	}
+	public async fetchSupportedChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
+		const channel = await this.fetchChannel(resolvable);
+		if (isSupportedChannel(channel)) {
+			return channel as T;
+		}
+		return undefined;
+	}
 
 	public async fetchDmChannel({ userId, channelId }: { userId:Snowflake, channelId:Snowflake }): Promise<DMChannel | undefined> {
 		const user = await this.fetchUser(userId);
@@ -86,13 +94,13 @@ export class DiscordCache {
 	}
 
 	public async fetchChannelAndThread(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<ChannelAndThread> {
-		const threadOrChannel = await this.fetchChannel(resolvable);
-		if (isThreadChannel(threadOrChannel)) {
-			const parentChannel = await this.fetchChannel<NonThreadChannel>(threadOrChannel.parent);
+		const threadOrChannel = await this.fetchSupportedChannel(resolvable);
+		if (threadOrChannel?.isThread()) {
+			const parentChannel = await this.fetchSupportedChannel<SupportedNonThreadChannel>(threadOrChannel.parent);
 			return { channel:parentChannel, thread:threadOrChannel };
 		}
-		if (isNonThreadChannel(threadOrChannel)) {
-			return { channel:threadOrChannel };
+		if (threadOrChannel) {
+			return { channel:threadOrChannel as SupportedNonThreadChannel };
 		}
 		return { };
 	}
@@ -219,10 +227,15 @@ export class DiscordCache {
 
 	private webhookMap: Map<string, Webhook | undefined>;
 
-	public async fetchWebhook(channelReferenceResolvable: ChannelReferenceResolvable, options?: WebhookOptions): Promise<Webhook | undefined> {
+	public async fetchWebhookAndChannel(channelReferenceResolvable: ChannelReferenceResolvable, options?: WebhookOptions): Promise<WebhookAndChannel> {
 		const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
-		if (!this.hasManageWebhooksPerm(channel)) {
-			return undefined;
+		if (!channel) {
+			return { };
+		}
+
+		const hasPerms = this.hasManageWebhooksPerm(channel);
+		if (!hasPerms) {
+			return { channel, hasPerms };
 		}
 
 		const webhookName = options?.name ?? SageDialogWebhookName;
@@ -232,15 +245,27 @@ export class DiscordCache {
 			const webhook = webhooksCollection?.find(w => w.name === webhookName);
 			this.webhookMap.set(webhookKey, webhook);
 		}
-		return this.webhookMap.get(webhookKey);
+
+		const webhook = this.webhookMap.get(webhookKey);
+		return { webhook, channel, hasPerms };
 	}
 
-	private async fetchWebhookChannel(channelReferenceResolvable: ChannelReferenceResolvable): Promise<WebhookChannel | undefined> {
+	public async fetchWebhook(channelReferenceResolvable: ChannelReferenceResolvable, options?: WebhookOptions): Promise<Webhook | undefined> {
+		const webhookAndChannel = await this.fetchWebhookAndChannel(channelReferenceResolvable, options);
+		return webhookAndChannel?.webhook;
+	}
+
+	private async fetchWebhookChannelAndThread(channelReferenceResolvable: ChannelReferenceResolvable): Promise<WebhookChannelAndThread | undefined> {
 		const { guildId, channelId } = resolveChannelReference(channelReferenceResolvable);
 		if (!isNonNilSnowflake(guildId) || !isNonNilSnowflake(channelId)) return undefined; // NOSONAR
 
-		const { channel } = await this.fetchChannelAndThread({ guildId, channelId });
-		return isWebhookChannel(channel) ? channel : undefined;
+		const channelAndThread = await this.fetchChannelAndThread({ guildId, channelId });
+		return isSupportedWebhookChannel(channelAndThread.channel) ? channelAndThread as WebhookChannelAndThread : undefined;
+	}
+
+	private async fetchWebhookChannel(channelReferenceResolvable: ChannelReferenceResolvable): Promise<SupportedWebhookChannel | undefined> {
+		const channelAndThread = await this.fetchWebhookChannelAndThread(channelReferenceResolvable);
+		return channelAndThread?.channel;
 	}
 
 	//#endregion
@@ -249,7 +274,7 @@ export class DiscordCache {
 	 * Reusable code to check and log when we don't have permissions.
 	 * Logging is done here, once, because this is sometimes called twice in fetchOrCreateWebhook.
 	 */
-	private hasManageWebhooksPerm(channel: Optional<WebhookChannel>): channel is WebhookChannel {
+	private hasManageWebhooksPerm(channel: Optional<SupportedWebhookChannel>): channel is SupportedWebhookChannel {
 		if (!channel) return false; // NOSONAR
 
 		const key = `${channel.id}-canManageWebhooks`;
@@ -262,76 +287,81 @@ export class DiscordCache {
 	}
 
 	public async fetchOrCreateWebhook(channelReferenceResolvable: ChannelReferenceResolvable, options?: WebhookOptions): Promise<Webhook | undefined> {
-		const existing = await this.fetchWebhook(channelReferenceResolvable, options);
+		const { webhook:existing, channel, hasPerms } = await this.fetchWebhookAndChannel(channelReferenceResolvable, options);
 		if (existing) return existing; // NOSONAR
 
-		const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
-		if (!this.hasManageWebhooksPerm(channel)) return undefined; // NOSONAR
+		if (!channel || !hasPerms) return undefined; // NOSONAR
 
-		if (!isThreadChannel(channel)) {
-			const webhookName = options?.name ?? SageDialogWebhookName;
-			const webhookArgs = { ...options, name:webhookName };
-			const webhook = await channel.createWebhook(webhookArgs).catch(DiscordApiError.process);
-			const key = createWebhookKey(channel, webhookName);
-			this.webhookMap.set(key, webhook ?? undefined);
-			return webhook;
-		}
-
-		return undefined;
+		const webhookName = options?.name ?? SageDialogWebhookName;
+		const webhookArgs = { ...options, name:webhookName };
+		const webhook = await channel.createWebhook(webhookArgs).catch(DiscordApiError.process);
+		const key = createWebhookKey(channel, webhookName);
+		this.webhookMap.set(key, webhook ?? undefined);
+		return webhook;
 	}
 
-	public async findLastWebhookMessageByAuthor(channelReferenceResolvable: ChannelReferenceResolvable, webhookOptions: WebhookOptions, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | undefined> {
-		const webhook = await this.fetchWebhook(channelReferenceResolvable, webhookOptions);
-		if (!webhook) return undefined; // NOSONAR
+	// public async findLastWebhookMessageByAuthor(channelReferenceResolvable: ChannelReferenceResolvable, webhookOptions: WebhookOptions, filter: (authorName: string, index: number, messages: Message[]) => Promise<unknown>): Promise<Message | undefined> {
+	// 	const webhook = await this.fetchWebhook(channelReferenceResolvable, webhookOptions);
+	// 	if (!webhook) return undefined; // NOSONAR
 
-		const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
-		if (!channel) return undefined; // NOSONAR
+	// 	const channelAndThread = await this.fetchWebhookChannelAndThread(channelReferenceResolvable);
+	// 	if (!channelAndThread?.channel) return undefined; // NOSONAR
 
-		const options = {
-			before: channel.lastMessageId ?? undefined,
-			limit: 25,
-			cache: true
-		};
-		const collection = await channel.messages.fetch(options).catch(DiscordApiError.process);
-		if (!collection) return undefined; // NOSONAR
+	// 	const { channel, thread } = channelAndThread;
 
-		const webhookId = webhook.id;
-		const array = Array.from(collection.values());
-		for (let index = 0, length = array.length; index < length; index++) {
-			const message = array[index];
-			if (message.webhookId === webhookId) {
-				const authorName = message.author?.username;
-				if (await filter(authorName, index, array)) {
-					return message;
-				}
-			}
-		}
+	// 	const options = {
+	// 		before: thread?.lastMessageId ?? channel.lastMessageId ?? undefined,
+	// 		limit: 25,
+	// 		cache: true
+	// 	};
 
-		return undefined;
-	}
+	// 	// if we have a thread, we want to search it for the message
+	// 	let messages = thread?.messages;
+	// 	// GuildForm doesn't have messages, so we can't look there
+	// 	if ("messages" in channel) {
+	// 		messages ??= channel.messages;
+	// 	}
 
-	public static async filterChannelMessages(channel: MessageChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]> {
-		if (!channel) return []; // NOSONAR
+	// 	const collection = await messages?.fetch(options).catch(DiscordApiError.process);
+	// 	if (!collection) return undefined; // NOSONAR
 
-		const before = lastMessageId ?? channel.lastMessageId ?? undefined;
-		const cache = true;
-		if (!limit) limit = 25; // NOSONAR
-		const options = { before, cache, limit };
+	// 	const webhookId = webhook.id;
+	// 	const array = Array.from(collection.values());
+	// 	for (let index = 0, length = array.length; index < length; index++) {
+	// 		const message = array[index];
+	// 		if (message.webhookId === webhookId) {
+	// 			const authorName = message.author?.username;
+	// 			if (await filter(authorName, index, array)) {
+	// 				return message;
+	// 			}
+	// 		}
+	// 	}
 
-		const collection = await channel.messages.fetch(options).catch(DiscordApiError.process);
-		if (!collection) return []; // NOSONAR
+	// 	return undefined;
+	// }
 
-		const array = Array.from(collection.values());
-		if (!filter) return array; // NOSONAR
+	// public static async filterChannelMessages(channel: SupportedMessagesChannel, filter: (message: Message, index: number, messages: Message[]) => Promise<unknown>, lastMessageId?: Snowflake, limit?: number): Promise<Message[]> {
+	// 	if (!channel) return []; // NOSONAR
 
-		const filtered: Message[] = [];
-		for (let i = 0, message = array[i]; i < array.length; i++, message = array[i]) {
-			if (await filter(message, i, array).catch(errorReturnFalse)) {
-				filtered.push(message);
-			}
-		}
-		return filtered;
-	}
+	// 	const before = lastMessageId ?? channel.lastMessageId ?? undefined;
+	// 	const cache = true;
+	// 	if (!limit) limit = 25; // NOSONAR
+	// 	const options = { before, cache, limit };
+
+	// 	const collection = await channel.messages.fetch(options).catch(DiscordApiError.process);
+	// 	if (!collection) return []; // NOSONAR
+
+	// 	const array = Array.from(collection.values());
+	// 	if (!filter) return array; // NOSONAR
+
+	// 	const filtered: Message[] = [];
+	// 	for (let i = 0, message = array[i]; i < array.length; i++, message = array[i]) {
+	// 		if (await filter(message, i, array).catch(errorReturnFalse)) {
+	// 			filtered.push(message);
+	// 		}
+	// 	}
+	// 	return filtered;
+	// }
 
 	public static from(guildResolvable: ClientGuildResolvable): DiscordCache;
 	public static from(client: Client, guildIdResolvable: GuildIdResolvable): Promise<DiscordCache>;

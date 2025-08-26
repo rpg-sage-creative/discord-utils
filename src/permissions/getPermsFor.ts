@@ -1,7 +1,7 @@
 import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { isGuildBasedChannel, isThreadChannel, isWebhookChannel } from "../types/index.js";
-import type { WebhookChannel } from "../types/types.js";
+import { isGuildBasedChannel } from "../types/typeGuards/isGuildBasedChannel.js";
+import { isSupportedWebhookChannel, type SupportedWebhookChannel } from "../types/typeGuards/isSupportedWebhookChannel.js";
 
 type AccessResults = {
 	/** perms.has("ManageChannels") */
@@ -26,7 +26,7 @@ type AccessResults = {
 	canSendWebhooks: boolean;
 
 	/** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
-	webhookChannel?: WebhookChannel;
+	webhookChannel?: SupportedWebhookChannel;
 
 	canSendPolls: boolean;
 };
@@ -80,7 +80,7 @@ export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleRe
 	}
 
 	// check for thread and ensure we have the correct channel for perms checking
-	const isThread = isThreadChannel(channel);
+	const isThread = channel.isThread();
 	const channelWithPerms = isThread ? channel.parent : channel;
 	if (!isGuildBasedChannel(channelWithPerms)) {
 		return emptyResults();
@@ -93,7 +93,7 @@ export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleRe
 	const isInChannel = isThread ? channel.guildMembers.has(memberOrRoleId) : channel.members.has(memberOrRoleId);
 	const canSendMessages = perms?.has(isThread ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages) ?? false;
 	const canAddReactions = perms?.has(PermissionFlagsBits.AddReactions) ?? false;
-	const canSendWebhooks = canManageWebhooks && isWebhookChannel(channelWithPerms);
+	const canSendWebhooks = canManageWebhooks && isSupportedWebhookChannel(channelWithPerms);
 	const webhookChannel = canSendWebhooks ? channelWithPerms : undefined;
 	const canSendPolls = perms?.has(PermissionFlagsBits.SendPolls) ?? false;
 

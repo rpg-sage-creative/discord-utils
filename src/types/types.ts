@@ -1,4 +1,4 @@
-import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
 
 export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
@@ -43,9 +43,6 @@ export type ReactionOrPartial = MessageReaction | PartialMessageReaction;
 export type UserOrPartial = User | PartialUser;
 
 export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
-
-/** Channels that can have webhooks. */
-export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel | ForumChannel | MediaChannel>;
 
 //#endregion
 

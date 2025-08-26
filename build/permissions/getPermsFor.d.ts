@@ -1,5 +1,5 @@
 import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
-import type { WebhookChannel } from "../types/types.js";
+import { type SupportedWebhookChannel } from "../types/typeGuards/isSupportedWebhookChannel.js";
 type AccessResults = {
     /** perms.has("ManageChannels") */
     canManageChannel: boolean;
@@ -16,7 +16,7 @@ type AccessResults = {
     /** canManageWebhooks and "fetchWebhooks" in channel */
     canSendWebhooks: boolean;
     /** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
-    webhookChannel?: WebhookChannel;
+    webhookChannel?: SupportedWebhookChannel;
     canSendPolls: boolean;
 };
 type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;

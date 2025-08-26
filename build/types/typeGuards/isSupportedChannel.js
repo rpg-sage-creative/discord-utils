@@ -1,4 +1,4 @@
-import { ChannelType } from "discord.js";
+import { ChannelType, TextChannel } from "discord.js";
 import { isSupportedParentChannel } from "./isSupportedParentChannel.js";
 export function isSupportedChannel(channel) {
     if (!channel)

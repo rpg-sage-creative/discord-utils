@@ -1,6 +1,7 @@
 import { PermissionFlagsBits } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { isGuildBasedChannel, isThreadChannel, isWebhookChannel } from "../types/index.js";
+import { isGuildBasedChannel } from "../types/typeGuards/isGuildBasedChannel.js";
+import { isSupportedWebhookChannel } from "../types/typeGuards/isSupportedWebhookChannel.js";
 function emptyResults() {
     return {
         canManageChannel: false,
@@ -18,7 +19,7 @@ export function getPermsFor(channel, memberOrRole, ...checked) {
     if (!memberOrRoleId || !isGuildBasedChannel(channel)) {
         return emptyResults();
     }
-    const isThread = isThreadChannel(channel);
+    const isThread = channel.isThread();
     const channelWithPerms = isThread ? channel.parent : channel;
     if (!isGuildBasedChannel(channelWithPerms)) {
         return emptyResults();
@@ -30,7 +31,7 @@ export function getPermsFor(channel, memberOrRole, ...checked) {
     const isInChannel = isThread ? channel.guildMembers.has(memberOrRoleId) : channel.members.has(memberOrRoleId);
     const canSendMessages = perms?.has(isThread ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages) ?? false;
     const canAddReactions = perms?.has(PermissionFlagsBits.AddReactions) ?? false;
-    const canSendWebhooks = canManageWebhooks && isWebhookChannel(channelWithPerms);
+    const canSendWebhooks = canManageWebhooks && isSupportedWebhookChannel(channelWithPerms);
     const webhookChannel = canSendWebhooks ? channelWithPerms : undefined;
     const canSendPolls = perms?.has(PermissionFlagsBits.SendPolls) ?? false;
     if (arguments.length < 3) {
