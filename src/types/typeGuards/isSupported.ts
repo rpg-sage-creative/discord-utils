@@ -3,7 +3,7 @@ import type { AutocompleteInteraction, ButtonInteraction, CategoryChannel, Chann
 
 export type SupportedForumChannel = ForumChannel & { parent:CategoryChannel | null; };
 export type SupportedTextChannel = TextChannel & { parent:CategoryChannel | null; };
-export type SupportedPrivateThreadChannel = PrivateThreadChannel & { parent: SupportedForumChannel | SupportedTextChannel; };
+export type SupportedPrivateThreadChannel = PrivateThreadChannel & { parent: SupportedForumChannel | SupportedTextChannel | null; };
 export type SupportedPublicThreadChannel<Forum extends boolean = boolean> = PublicThreadChannel<Forum> & { parent: SupportedForumChannel | SupportedTextChannel; };
 
 export type HasSupportedParentChannel = SupportedChannel & { parent: SupportedParentChannel; };

@@ -7,7 +7,7 @@ export type SupportedTextChannel = TextChannel & {
     parent: CategoryChannel | null;
 };
 export type SupportedPrivateThreadChannel = PrivateThreadChannel & {
-    parent: SupportedForumChannel | SupportedTextChannel;
+    parent: SupportedForumChannel | SupportedTextChannel | null;
 };
 export type SupportedPublicThreadChannel<Forum extends boolean = boolean> = PublicThreadChannel<Forum> & {
     parent: SupportedForumChannel | SupportedTextChannel;
