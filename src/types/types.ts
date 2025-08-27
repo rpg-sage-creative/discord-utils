@@ -9,7 +9,6 @@ export type SPartialMessage = Partialize<SMessage, 'type' | 'system' | 'pinned' 
 export type SMessageOrPartial = SMessage | SPartialMessage;
 export type MessageOrPartial = Message | PartialMessage;
 
-
 export type ReactionOrPartial = MessageReaction | PartialMessageReaction;
 
 /** User or PartialUser */

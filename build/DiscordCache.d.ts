@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable } from "./resolve/resolveChannelReference.js";
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
@@ -32,8 +32,7 @@ export declare class DiscordCache {
     private constructor();
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
-    fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
-    fetchSupportedChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
+    fetchChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
     fetchDmChannel({ userId, channelId }: {
         userId: Snowflake;
         channelId: Snowflake;

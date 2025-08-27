@@ -1,5 +1,5 @@
-import { NIL_SNOWFLAKE, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
+import { NIL_SNOWFLAKE, error, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { ChannelType, Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -43,12 +43,11 @@ export class DiscordCache {
         const cache = this.#cached.has(channelId);
         const channel = await guild.channels.fetch(channelId, { cache, force: !cache }).catch(DiscordApiError.process);
         this.#cached.set(channelId, true);
-        return channel ?? undefined;
-    }
-    async fetchSupportedChannel(resolvable) {
-        const channel = await this.fetchChannel(resolvable);
         if (isSupportedChannel(channel)) {
             return channel;
+        }
+        if (channel) {
+            error(`Fetched unsupported channel: ${ChannelType[channel.type]} ${channel.url}`);
         }
         return undefined;
     }
@@ -64,9 +63,9 @@ export class DiscordCache {
         return channel;
     }
     async fetchChannelAndThread(resolvable) {
-        const threadOrChannel = await this.fetchSupportedChannel(resolvable);
+        const threadOrChannel = await this.fetchChannel(resolvable);
         if (threadOrChannel?.isThread()) {
-            const parentChannel = await this.fetchSupportedChannel(threadOrChannel.parent);
+            const parentChannel = await this.fetchChannel(threadOrChannel.parent);
             return { channel: parentChannel, thread: threadOrChannel };
         }
         if (threadOrChannel) {

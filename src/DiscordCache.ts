@@ -1,6 +1,6 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
+import { NIL_SNOWFLAKE, error, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { ChannelType, Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -55,7 +55,7 @@ export class DiscordCache {
 
 	//#region channel
 
-	public async fetchChannel<T extends Channel = Channel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
+	public async fetchChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
 		const { guildId, channelId } = resolveChannelReference(resolvable) ?? { };
 		if (!channelId || !guildId) return undefined; //NOSONAR
 
@@ -67,13 +67,14 @@ export class DiscordCache {
 
 		this.#cached.set(channelId, true);
 
-		return channel as T ?? undefined;
-	}
-	public async fetchSupportedChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
-		const channel = await this.fetchChannel(resolvable);
 		if (isSupportedChannel(channel)) {
 			return channel as T;
 		}
+
+		if (channel) {
+			error(`Fetched unsupported channel: ${ChannelType[channel.type]} ${channel.url}`);
+		}
+
 		return undefined;
 	}
 
@@ -92,9 +93,9 @@ export class DiscordCache {
 	}
 
 	public async fetchChannelAndThread(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<ChannelAndThread> {
-		const threadOrChannel = await this.fetchSupportedChannel(resolvable);
+		const threadOrChannel = await this.fetchChannel(resolvable);
 		if (threadOrChannel?.isThread()) {
-			const parentChannel = await this.fetchSupportedChannel<SupportedNonThreadChannel>(threadOrChannel.parent);
+			const parentChannel = await this.fetchChannel<SupportedNonThreadChannel>(threadOrChannel.parent);
 			return { channel:parentChannel, thread:threadOrChannel };
 		}
 		if (threadOrChannel) {
