@@ -5,8 +5,7 @@ import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable }
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel } from "./types/typeGuards/isSupportedChannel.js";
-import { type SupportedWebhookChannel } from "./types/typeGuards/isSupportedWebhookChannel.js";
+import { type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
 import type { MessageReferenceOrPartial } from "./types/types.js";
 type ClientGuildResolvable = Guild | {
     client: Client;

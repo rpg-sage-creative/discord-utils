@@ -1,7 +1,6 @@
 import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { isGuildBasedChannel } from "../types/typeGuards/isGuildBasedChannel.js";
-import { isSupportedWebhookChannel, type SupportedWebhookChannel } from "../types/typeGuards/isSupportedWebhookChannel.js";
+import { isSupportedWebhookChannel, type SupportedWebhookChannel } from "../types/typeGuards/isSupported.js";
 
 type AccessResults = {
 	/** perms.has("ManageChannels") */
@@ -75,14 +74,14 @@ export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleRe
 	const memberOrRoleId = resolveSnowflake(memberOrRole);
 
 	// return false if member or channel are not valid
-	if (!memberOrRoleId || !isGuildBasedChannel(channel)) {
+	if (!memberOrRoleId || !channel || channel.isDMBased()) {
 		return emptyResults();
 	}
 
 	// check for thread and ensure we have the correct channel for perms checking
 	const isThread = channel.isThread();
 	const channelWithPerms = isThread ? channel.parent : channel;
-	if (!isGuildBasedChannel(channelWithPerms)) {
+	if (!channelWithPerms || channelWithPerms.isDMBased()) {
 		return emptyResults();
 	}
 

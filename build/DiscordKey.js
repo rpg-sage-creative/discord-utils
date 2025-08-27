@@ -1,9 +1,7 @@
 import { isNilSnowflake, isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
 import { resolveSnowflake } from "./resolve/resolveSnowflake.js";
-import { isGuildBasedChannel } from "./types/typeGuards/isGuildBasedChannel.js";
 import { isMessage } from "./types/typeGuards/isMessage.js";
-import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 export class DiscordKey {
@@ -91,11 +89,11 @@ export class DiscordKey {
             resolvable = resolvable.message;
         }
         const channel = "channel" in resolvable ? resolvable.channel : resolvable;
-        const guildId = isGuildBasedChannel(channel) ? channel.guildId : undefined;
+        const guildId = channel && "isThread" in channel && !channel.isDMBased() ? channel.guildId : undefined;
         const messageId = isMessage(resolvable) ? resolvable.id : undefined;
-        if (isThreadChannel(channel)) {
+        if (channel && "isThread" in channel && channel.isThread()) {
             const threadId = channel.id;
-            const channelId = channel.parent?.id;
+            const channelId = channel.parentId;
             return new DiscordKey(guildId, channelId, threadId, messageId);
         }
         return new DiscordKey(guildId, channel?.id, undefined, messageId);

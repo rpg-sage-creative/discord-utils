@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { Channel } from "discord.js";
+import type { SupportedChannel } from "../types/typeGuards/isSupported.js";
 import { getPermsFor } from "./getPermsFor.js";
 import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js";
 
@@ -11,7 +11,7 @@ import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js
  * Otherwise, we check the bot's perms to see if it has SEND_MESSAGES or SEND_MESSAGES_IN_THREADS as appropriate.
  * @returns true if we can send to the channel
  */
-export function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): boolean {
+export function canSendMessageTo(botId: Snowflake, channel: Optional<SupportedChannel>): boolean {
 	if (!channel) {
 		return false;
 	}

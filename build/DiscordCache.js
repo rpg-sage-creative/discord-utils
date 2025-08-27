@@ -7,9 +7,7 @@ import { resolveChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveGuildId } from "./resolve/resolveGuildId.js";
 import { resolveRoleId } from "./resolve/resolveRoleId.js";
 import { resolveUserId } from "./resolve/resolveUserId.js";
-import { isMessageTarget } from "./types/typeGuards/isMessageTarget.js";
-import { isSupportedChannel } from "./types/typeGuards/isSupportedChannel.js";
-import { isSupportedWebhookChannel } from "./types/typeGuards/isSupportedWebhookChannel.js";
+import { isSupportedChannel, isSupportedMessagesChannel, isSupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelReferenceResolvable, name) {
     const channelId = resolveChannelReference(channelReferenceResolvable);
@@ -120,7 +118,7 @@ export class DiscordCache {
         const channel = discordKey.isDm && userId
             ? await this.fetchDmChannel({ userId, channelId: discordKey.channelId })
             : await this.fetchChannel(discordKey);
-        const message = isMessageTarget(channel)
+        const message = isSupportedMessagesChannel(channel)
             ? await channel.messages.fetch({ message: messageId, cache, force: !cache }).catch(DiscordApiError.process)
             : undefined;
         this.#cached.set(messageId, true);

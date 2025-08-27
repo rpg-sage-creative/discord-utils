@@ -8,9 +8,7 @@ import { resolveChannelReference, type CanBeChannelReferenceResolvable, type Cha
 import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { isMessageTarget } from "./types/typeGuards/isMessageTarget.js";
-import { isSupportedChannel, type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel } from "./types/typeGuards/isSupportedChannel.js";
-import { isSupportedWebhookChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupportedWebhookChannel.js";
+import { isSupportedChannel, isSupportedMessagesChannel, isSupportedWebhookChannel, type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
 import type { MessageReferenceOrPartial } from "./types/types.js";
 
 //#region Helpers
@@ -180,7 +178,7 @@ export class DiscordCache {
 		const channel = discordKey.isDm && userId
 			? await this.fetchDmChannel({ userId, channelId:discordKey.channelId })
 			: await this.fetchChannel(discordKey);
-		const message = isMessageTarget(channel)
+		const message = isSupportedMessagesChannel(channel)
 			? await channel.messages.fetch({ message:messageId, cache, force:!cache }).catch(DiscordApiError.process)
 			: undefined;
 

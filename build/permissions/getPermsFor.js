@@ -1,7 +1,6 @@
 import { PermissionFlagsBits } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { isGuildBasedChannel } from "../types/typeGuards/isGuildBasedChannel.js";
-import { isSupportedWebhookChannel } from "../types/typeGuards/isSupportedWebhookChannel.js";
+import { isSupportedWebhookChannel } from "../types/typeGuards/isSupported.js";
 function emptyResults() {
     return {
         canManageChannel: false,
@@ -16,12 +15,12 @@ function emptyResults() {
 }
 export function getPermsFor(channel, memberOrRole, ...checked) {
     const memberOrRoleId = resolveSnowflake(memberOrRole);
-    if (!memberOrRoleId || !isGuildBasedChannel(channel)) {
+    if (!memberOrRoleId || !channel || channel.isDMBased()) {
         return emptyResults();
     }
     const isThread = channel.isThread();
     const channelWithPerms = isThread ? channel.parent : channel;
-    if (!isGuildBasedChannel(channelWithPerms)) {
+    if (!channelWithPerms || channelWithPerms.isDMBased()) {
         return emptyResults();
     }
     const perms = channelWithPerms?.permissionsFor(memberOrRoleId);

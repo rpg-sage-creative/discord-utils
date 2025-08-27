@@ -1,12 +1,15 @@
-import { getActionRows } from "./getActionRows.js";
-export function findComponent(message, customId) {
-    const actionRows = getActionRows(message);
-    if (actionRows.length) {
-        for (const row of actionRows) {
-            for (const component of row.components) {
-                if (component.customId === customId) {
-                    return component;
-                }
+export function findComponent(owner, customId) {
+    if (!owner)
+        return undefined;
+    const components = owner.components ?? [];
+    for (const component of components) {
+        if ("customId" in component && component.customId === customId) {
+            return component;
+        }
+        if ("components" in component) {
+            const found = findComponent(component, customId);
+            if (found) {
+                return found;
             }
         }
     }
