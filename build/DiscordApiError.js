@@ -8,7 +8,8 @@ export function isDiscordApiError(reason, ...codes) {
     return false;
 }
 function isErrorCode(code) {
-    return code === 50035;
+    return code === 50001
+        || code === 50035;
 }
 function isWarnCode(code) {
     return code === 10003
