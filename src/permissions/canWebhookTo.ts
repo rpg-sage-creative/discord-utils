@@ -17,5 +17,5 @@ export function canWebhookTo(botId: Snowflake, channel: Optional<SupportedChanne
 	}
 
 	const perms = getPermsFor(channel, botId);
-	return perms.canSendWebhooks;
+	return perms.can("WebhookTo");
 }

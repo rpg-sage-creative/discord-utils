@@ -11,5 +11,5 @@ export function canSendMessageTo(botId, channel) {
         return false;
     }
     const perms = getPermsFor(channel, botId);
-    return perms.canSendMessages;
+    return perms.can("SendTo");
 }

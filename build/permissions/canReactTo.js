@@ -11,5 +11,5 @@ export function canReactTo(botId, channel) {
         return false;
     }
     const perms = getPermsFor(channel, botId);
-    return perms.canAddReactions;
+    return perms.can("AddReactions");
 }

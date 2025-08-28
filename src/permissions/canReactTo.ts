@@ -17,5 +17,5 @@ export function canReactTo(botId: Snowflake, channel: Optional<SupportedChannel>
 	}
 
 	const perms = getPermsFor(channel, botId);
-	return perms.canAddReactions;
+	return perms.can("AddReactions");
 }

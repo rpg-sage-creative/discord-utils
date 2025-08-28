@@ -26,5 +26,5 @@ export function canSendMessageTo(botId: Snowflake, channel: Optional<SupportedCh
 	}
 
 	const perms = getPermsFor(channel, botId);
-	return perms.canSendMessages;
+	return perms.can("SendTo");
 }

@@ -11,5 +11,5 @@ export function canWebhookTo(botId, channel) {
         return false;
     }
     const perms = getPermsFor(channel, botId);
-    return perms.canSendWebhooks;
+    return perms.can("WebhookTo");
 }
