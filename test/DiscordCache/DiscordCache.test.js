@@ -64,7 +64,7 @@ describe("humanReadable", () => {
 
 		test(`toHumanReadable(role)`, async () => {
 			const role = await discordCache.fetchGuildRole(ROLE_ID);
-			expect(toHumanReadable(role)).toBe("RPG Sage (Dev)#​Developer");
+			expect(toHumanReadable(role)).toBe("RPG Sage (Dev)@​Developer");
 		});
 
 		test(`toHumanReadable(webhook)`, async () => {
