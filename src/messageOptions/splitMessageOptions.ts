@@ -101,7 +101,7 @@ function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, 
 	const hasEmbeds = !!embeds?.length;
 
 	// get content embeds
-	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]).color as ColorResolvable : undefined;
+	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]!).color as ColorResolvable : undefined;
 	const contentEmbeds = contentToEmbeds(content, embedColor ?? color);
 	const hasContentEmbeds = !!contentEmbeds?.length;
 
@@ -213,13 +213,13 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 		}
 
 		// only include attachments in the first payload
-		// payloads[0].attachments = attachments;
+		// payloads[0]!.attachments = attachments;
 
 		// only include components in the first payload
-		payloads[0].components = components;
+		payloads[0]!.components = components;
 
 		// only include files in the first payload
-		payloads[0].files = files;
+		payloads[0]!.files = files;
 	}
 
 	return payloads;
