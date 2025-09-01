@@ -7,7 +7,7 @@ import { resolveChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveGuildId } from "./resolve/resolveGuildId.js";
 import { resolveRoleId } from "./resolve/resolveRoleId.js";
 import { resolveUserId } from "./resolve/resolveUserId.js";
-import { isSupportedChannel, isSupportedMessagesChannel, isSupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
+import { isSupportedChannelOrParent, isSupportedMessagesChannel, isSupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
 const SageDialogWebhookName = "SageDialogWebhookName";
 function createWebhookKey(channelReferenceResolvable, name) {
     const channelId = resolveChannelReference(channelReferenceResolvable);
@@ -34,6 +34,9 @@ export class DiscordCache {
         this.webhookMap.clear();
     }
     async fetchChannel(resolvable) {
+        return this.fetchGuildChannel(resolvable);
+    }
+    async fetchGuildChannel(resolvable) {
         const { guildId, channelId } = resolveChannelReference(resolvable) ?? {};
         if (!channelId || !guildId)
             return undefined;
@@ -43,7 +46,7 @@ export class DiscordCache {
         const cache = this.#cached.has(channelId);
         const channel = await guild.channels.fetch(channelId, { cache, force: !cache }).catch(DiscordApiError.process);
         this.#cached.set(channelId, true);
-        if (isSupportedChannel(channel)) {
+        if (isSupportedChannelOrParent(channel)) {
             return channel;
         }
         if (channel) {
@@ -63,9 +66,9 @@ export class DiscordCache {
         return channel;
     }
     async fetchChannelAndThread(resolvable) {
-        const threadOrChannel = await this.fetchChannel(resolvable);
+        const threadOrChannel = await this.fetchGuildChannel(resolvable);
         if (threadOrChannel?.isThread()) {
-            const parentChannel = await this.fetchChannel(threadOrChannel.parent);
+            const parentChannel = await this.fetchGuildChannel(threadOrChannel.parent);
             return { channel: parentChannel, thread: threadOrChannel };
         }
         if (threadOrChannel) {
@@ -116,7 +119,7 @@ export class DiscordCache {
         const cache = this.#cached.has(messageId);
         const channel = discordKey.isDm && userId
             ? await this.fetchDmChannel({ userId, channelId: discordKey.channelId })
-            : await this.fetchChannel(discordKey);
+            : await this.fetchGuildChannel(discordKey);
         const message = isSupportedMessagesChannel(channel)
             ? await channel.messages.fetch({ message: messageId, cache, force: !cache }).catch(DiscordApiError.process)
             : undefined;

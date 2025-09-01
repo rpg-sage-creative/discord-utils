@@ -8,7 +8,7 @@ import { resolveChannelReference, type CanBeChannelReferenceResolvable, type Cha
 import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { isSupportedChannel, isSupportedMessagesChannel, isSupportedWebhookChannel, type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
+import { isSupportedChannelOrParent, isSupportedMessagesChannel, isSupportedWebhookChannel, type SupportedChannelOrParent, type SupportedNonThreadChannel, type SupportedThreadChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
 import type { MessageReferenceOrPartial } from "./types/types.js";
 
 //#region Helpers
@@ -55,7 +55,11 @@ export class DiscordCache {
 
 	//#region channel
 
-	public async fetchChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
+	/** @deprecated use fetchGuildChannel() */
+	public async fetchChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
+		return this.fetchGuildChannel(resolvable);
+	}
+	public async fetchGuildChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
 		const { guildId, channelId } = resolveChannelReference(resolvable) ?? { };
 		if (!channelId || !guildId) return undefined; //NOSONAR
 
@@ -67,7 +71,7 @@ export class DiscordCache {
 
 		this.#cached.set(channelId, true);
 
-		if (isSupportedChannel(channel)) {
+		if (isSupportedChannelOrParent(channel)) {
 			return channel as T;
 		}
 
@@ -93,9 +97,9 @@ export class DiscordCache {
 	}
 
 	public async fetchChannelAndThread(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<ChannelAndThread> {
-		const threadOrChannel = await this.fetchChannel(resolvable);
+		const threadOrChannel = await this.fetchGuildChannel(resolvable);
 		if (threadOrChannel?.isThread()) {
-			const parentChannel = await this.fetchChannel<SupportedNonThreadChannel>(threadOrChannel.parent);
+			const parentChannel = await this.fetchGuildChannel<SupportedNonThreadChannel>(threadOrChannel.parent);
 			return { channel:parentChannel, thread:threadOrChannel };
 		}
 		if (threadOrChannel) {
@@ -178,7 +182,7 @@ export class DiscordCache {
 		const cache = this.#cached.has(messageId);
 		const channel = discordKey.isDm && userId
 			? await this.fetchDmChannel({ userId, channelId:discordKey.channelId })
-			: await this.fetchChannel(discordKey);
+			: await this.fetchGuildChannel(discordKey);
 		const message = isSupportedMessagesChannel(channel)
 			? await channel.messages.fetch({ message:messageId, cache, force:!cache }).catch(DiscordApiError.process)
 			: undefined;

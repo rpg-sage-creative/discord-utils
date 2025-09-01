@@ -25,6 +25,9 @@ export function isSupportedChannel(channel) {
         default: return false;
     }
 }
+export function isSupportedChannelOrParent(channel) {
+    return isSupportedChannel(channel) || isSupportedParentChannel(channel);
+}
 export function isSupportedNonThreadChannel(channel) {
     return isSupportedChannel(channel) && !channel.isThread();
 }

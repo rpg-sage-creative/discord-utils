@@ -5,7 +5,7 @@ import { type CanBeChannelReferenceResolvable, type ChannelReferenceResolvable }
 import { type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { type SupportedChannel, type SupportedNonThreadChannel, type SupportedThreadChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
+import { type SupportedChannelOrParent, type SupportedNonThreadChannel, type SupportedThreadChannel, type SupportedWebhookChannel } from "./types/typeGuards/isSupported.js";
 import type { MessageReferenceOrPartial } from "./types/types.js";
 type ClientGuildResolvable = Guild | {
     client: Client;
@@ -32,7 +32,8 @@ export declare class DiscordCache {
     private constructor();
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
-    fetchChannel<T extends SupportedChannel = SupportedChannel>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
+    fetchChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
+    fetchGuildChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
     fetchDmChannel({ userId, channelId }: {
         userId: Snowflake;
         channelId: Snowflake;

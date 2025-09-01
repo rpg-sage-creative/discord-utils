@@ -1,19 +1,21 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import type { AutocompleteInteraction, ButtonInteraction, CategoryChannel, Channel, ChannelSelectMenuInteraction, ChatInputCommandInteraction, DMChannel, ForumChannel, Interaction, MentionableSelectMenuInteraction, Message, MessageContextMenuCommandInteraction, ModalSubmitInteraction, PartialUser, PrimaryEntryPointCommandInteraction, PrivateThreadChannel, PublicThreadChannel, RoleSelectMenuInteraction, StringSelectMenuInteraction, TextChannel, User, UserContextMenuCommandInteraction, UserSelectMenuInteraction } from "discord.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { AutocompleteInteraction, ButtonInteraction, CategoryChannel, Channel, ChannelSelectMenuInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Interaction, MentionableSelectMenuInteraction, Message, MessageContextMenuCommandInteraction, ModalSubmitInteraction, PartialUser, PrimaryEntryPointCommandInteraction, PrivateThreadChannel, PublicThreadChannel, RoleSelectMenuInteraction, StringSelectMenuInteraction, TextChannel, User, UserContextMenuCommandInteraction, UserSelectMenuInteraction } from "discord.js";
 
-export type SupportedForumChannel = ForumChannel & { parent:CategoryChannel | null; };
-export type SupportedTextChannel = TextChannel & { parent:CategoryChannel | null; };
-export type SupportedPrivateThreadChannel = PrivateThreadChannel & { parent: SupportedForumChannel | SupportedTextChannel | null; };
-export type SupportedPublicThreadChannel<Forum extends boolean = boolean> = PublicThreadChannel<Forum> & { parent: SupportedForumChannel | SupportedTextChannel; };
+export type SupportedCategoryChannel = CategoryChannel & { id:Snowflake; };
+export type SupportedDMChannel = DMChannel & { id:Snowflake; };
+export type SupportedForumChannel = ForumChannel & { id:Snowflake; parent:CategoryChannel | null; };
+export type SupportedTextChannel = TextChannel & { id:Snowflake; parent:CategoryChannel | null; };
+export type SupportedPrivateThreadChannel = PrivateThreadChannel & { id:Snowflake; parent: SupportedForumChannel | SupportedTextChannel | null; };
+export type SupportedPublicThreadChannel<Forum extends boolean = boolean> = PublicThreadChannel<Forum> & { id:Snowflake; parent: SupportedForumChannel | SupportedTextChannel; type:ChannelType.PublicThread; };
 
-export type HasSupportedParentChannel = SupportedChannel & { parent: SupportedParentChannel; };
+export type HasSupportedParentChannel = SupportedChannel & { id:Snowflake; parent: SupportedParentChannel; };
 export function hasSupportedParentChannel(channel: Optional<Channel | User | PartialUser>): channel is HasSupportedParentChannel {
 	if (!channel || !("parent" in channel) || !channel.parent) return false;
 	return isSupportedParentChannel(channel.parent);
 }
 
 /** All valid parent "Channels" for Channels Sage can be active in. */
-export type SupportedParentChannel = CategoryChannel | SupportedForumChannel | SupportedTextChannel;
+export type SupportedParentChannel = SupportedCategoryChannel | SupportedForumChannel | SupportedTextChannel;
 export function isSupportedParentChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedParentChannel {
 	if (!channel || !("type" in channel)) return false;
 	switch(channel.type) {
@@ -24,8 +26,8 @@ export function isSupportedParentChannel(channel: Optional<Channel | User | Part
 	}
 }
 
-/** All Channels Sage can be active in. */
-export type SupportedChannel = DMChannel | SupportedForumChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
+/** All Text Channels Sage can be active in. */
+export type SupportedChannel = SupportedDMChannel | SupportedForumChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
 export function isSupportedChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedChannel {
 	if (!channel || !("type" in channel)) return false;
 	switch(channel.type) {
@@ -38,8 +40,14 @@ export function isSupportedChannel(channel: Optional<Channel | User | PartialUse
 	}
 }
 
+/** All Channels Sage can be active in. */
+export type SupportedChannelOrParent = SupportedChannel | SupportedParentChannel;
+export function isSupportedChannelOrParent(channel: Optional<Channel | User | PartialUser>): channel is SupportedChannelOrParent {
+	return isSupportedChannel(channel) || isSupportedParentChannel(channel);
+}
+
 /** NonThread Channels Sage can be active in. */
-export type SupportedNonThreadChannel = DMChannel | SupportedForumChannel | SupportedTextChannel;
+export type SupportedNonThreadChannel = SupportedDMChannel | SupportedForumChannel | SupportedTextChannel;
 export function isSupportedNonThreadChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedNonThreadChannel {
 	return isSupportedChannel(channel) && !channel.isThread();
 }
@@ -51,7 +59,7 @@ export function isSupportedThreadChannel(channel: Optional<Channel | User | Part
 }
 
 /** Channels with Messages (.messages) Sage can be active in. */
-export type SupportedMessagesChannel = DMChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
+export type SupportedMessagesChannel = SupportedDMChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
 export function isSupportedMessagesChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedMessagesChannel {
 	return isSupportedChannel(channel) && "messages" in channel;
 }
