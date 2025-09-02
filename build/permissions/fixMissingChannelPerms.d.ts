@@ -1,5 +1,5 @@
 import type { GuildMember, PermissionFlagsBits } from "discord.js";
-import type { SupportedGameChannel } from "../types/index.js";
+import type { SupportedCategoryChannel, SupportedGameChannel } from "../types/index.js";
 type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
 type FixPermResults = {
     /** Could Sage manage the channel? */
@@ -18,5 +18,5 @@ type FixPermResults = {
     permsCorrect: boolean;
 };
 /** Checks the given channel to see what perms are missing. */
-export declare function fixMissingChannelPerms(botGuildMember: GuildMember, channel: SupportedGameChannel): Promise<FixPermResults>;
+export declare function fixMissingChannelPerms(botGuildMember: GuildMember, channel: SupportedGameChannel | SupportedCategoryChannel): Promise<FixPermResults>;
 export {};

@@ -32,6 +32,7 @@ export declare class DiscordCache {
     private constructor();
     /** Clears the cache/maps in an attempt to avoid memory leaks. */
     clear(): void;
+    /** @deprecated use fetchGuildChannel() */
     fetchChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
     fetchGuildChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined>;
     fetchDmChannel({ userId, channelId }: {

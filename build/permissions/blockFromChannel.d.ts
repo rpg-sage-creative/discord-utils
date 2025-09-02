@@ -1,5 +1,5 @@
 import type { GuildMember } from "discord.js";
-import type { SupportedGameChannel } from "../types/index.js";
+import type { SupportedCategoryChannel, SupportedGameChannel } from "../types/index.js";
 type BlockResults = {
     /** Could Sage manage the channel? */
     canManageChannel: boolean;
@@ -17,5 +17,5 @@ type BlockResults = {
     blockCorrect: boolean;
 };
 /** Blocks the given target from the given channel. */
-export declare function blockFromChannel(sage: GuildMember, channel: SupportedGameChannel, memberToBlock: GuildMember): Promise<BlockResults>;
+export declare function blockFromChannel(sage: GuildMember, channel: SupportedGameChannel | SupportedCategoryChannel, memberToBlock: GuildMember): Promise<BlockResults>;
 export {};

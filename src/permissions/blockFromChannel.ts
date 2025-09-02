@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/core-utils";
 import type { GuildMember } from "discord.js";
-import type { SupportedGameChannel } from "../types/index.js";
+import type { SupportedCategoryChannel, SupportedGameChannel } from "../types/index.js";
 import { getPermsFor } from "./getPermsFor.js";
 
 /*
@@ -31,7 +31,7 @@ type BlockResults = {
 };
 
 /** Blocks the given target from the given channel. */
-export async function blockFromChannel(sage: GuildMember, channel: SupportedGameChannel, memberToBlock: GuildMember): Promise<BlockResults> {
+export async function blockFromChannel(sage: GuildMember, channel: SupportedGameChannel | SupportedCategoryChannel, memberToBlock: GuildMember): Promise<BlockResults> {
 	const perms = getPermsFor(channel, sage);
 
 	// see if we can manage the channel
