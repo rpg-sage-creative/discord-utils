@@ -1,6 +1,6 @@
 {
 	"name": "@rsc-utils/discord-utils",
-	"version": "0.2.9",
+	"version": "0.3.0",
 	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
 	"type": "module",
@@ -11,13 +11,13 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^29.5.14",
-		"@types/node": "^22.15.17",
+		"@types/node": "^24.6.1",
 		"jest": "^29.7.0",
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.9.7",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.9",
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#0.11.0",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#0.4.0",
 		"discord.js": "^14.21.0",
 		"emoji-regex-xs": "^1.0.0",
 		"regex": "^6.0.1"

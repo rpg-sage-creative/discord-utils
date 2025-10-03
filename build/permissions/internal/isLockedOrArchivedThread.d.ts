@@ -1,2 +1,2 @@
-import type { AnyThreadChannel, Channel } from "discord.js";
-export declare function isLockedOrArchivedThread(channel: Channel): channel is AnyThreadChannel;
+import type { SupportedChannel, SupportedThreadChannel } from "../../types/typeGuards/isSupported.js";
+export declare function isLockedOrArchivedThread(channel: SupportedChannel): channel is SupportedThreadChannel;

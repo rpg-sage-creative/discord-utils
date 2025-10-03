@@ -65,7 +65,7 @@ function embedsToContent(embeds?: Optional<MsgEmbed[]>): string | undefined {
 function contentToEmbeds(content?: Optional<string>, colorResolvable?: ColorResolvable): EmbedBuilder[] | undefined {
 	const trimmedContent = content?.trim();
 	if (trimmedContent?.length) {
-		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
+		const chunks = chunk(trimmedContent, { maxChunkLength:DiscordMaxValues.embed.descriptionLength });
 		if (chunks.length) {
 			const color = colorResolvable ? resolveColor(colorResolvable) : undefined;
 			return chunks.map(description => new EmbedBuilder({ color, description }));
@@ -101,7 +101,7 @@ function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, 
 	const hasEmbeds = !!embeds?.length;
 
 	// get content embeds
-	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]).color as ColorResolvable : undefined;
+	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]!).color as ColorResolvable : undefined;
 	const contentEmbeds = contentToEmbeds(content, embedColor ?? color);
 	const hasContentEmbeds = !!contentEmbeds?.length;
 
@@ -162,7 +162,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	const payloads: T[] = [];
 
 	// chunk content into valid lengths
-	const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
+	const contentChunks = chunk(contentToChunk?.trim() ?? "", { maxChunkLength:DiscordMaxValues.message.contentLength });
 
 	// create a payload for each chunk
 	contentChunks.forEach(contentChunk => {
@@ -213,13 +213,13 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 		}
 
 		// only include attachments in the first payload
-		// payloads[0].attachments = attachments;
+		// payloads[0]!.attachments = attachments;
 
 		// only include components in the first payload
-		payloads[0].components = components;
+		payloads[0]!.components = components;
 
 		// only include files in the first payload
-		payloads[0].files = files;
+		payloads[0]!.files = files;
 	}
 
 	return payloads;

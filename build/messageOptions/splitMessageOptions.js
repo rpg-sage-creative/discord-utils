@@ -34,7 +34,7 @@ function embedsToContent(embeds) {
 function contentToEmbeds(content, colorResolvable) {
     const trimmedContent = content?.trim();
     if (trimmedContent?.length) {
-        const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
+        const chunks = chunk(trimmedContent, { maxChunkLength: DiscordMaxValues.embed.descriptionLength });
         if (chunks.length) {
             const color = colorResolvable ? resolveColor(colorResolvable) : undefined;
             return chunks.map(description => new EmbedBuilder({ color, description }));
@@ -101,7 +101,7 @@ export function splitMessageOptions(msgOptions, splitOptions) {
         contentToChunk = `${replyingTo}\n\n${contentToChunk}`;
     }
     const payloads = [];
-    const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
+    const contentChunks = chunk(contentToChunk?.trim() ?? "", { maxChunkLength: DiscordMaxValues.message.contentLength });
     contentChunks.forEach(contentChunk => {
         payloads.push({
             content: contentChunk,

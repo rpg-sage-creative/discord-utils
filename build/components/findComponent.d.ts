@@ -1,4 +1,8 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { Message, MessageActionRowComponent } from "discord.js";
-import type { SPartialMessage } from "../types/types.js";
-export declare function findComponent<T extends MessageActionRowComponent>(message: Optional<Message | SPartialMessage>, customId: string): T | undefined;
+import type { ActionRowComponent, ComponentInContainer, TopLevelComponent } from "discord.js";
+type Component = ActionRowComponent | ComponentInContainer | TopLevelComponent;
+type Owner = {
+    components: Component[];
+};
+export declare function findComponent<T extends ActionRowComponent>(owner: Optional<Owner>, customId: string): T | undefined;
+export {};

@@ -12,7 +12,7 @@ beforeAll(async () => {
 	captureProcessExit(() => client?.destroy());
 	await new Promise((resolve, reject) => {
 		client = new Client({ intents:global.intents });
-		client.once("ready", async () => resolve(client));
+		client.once("clientReady", async () => resolve(client));
 		client.login(global.token).catch(reject);
 	});
 	discordCache = await DiscordCache.from(client, global.ids.GUILD_ID);
@@ -64,7 +64,7 @@ describe("humanReadable", () => {
 
 		test(`toHumanReadable(role)`, async () => {
 			const role = await discordCache.fetchGuildRole(ROLE_ID);
-			expect(toHumanReadable(role)).toBe("RPG Sage (Dev)#​Developer");
+			expect(toHumanReadable(role)).toBe("RPG Sage (Dev)@​Developer");
 		});
 
 		test(`toHumanReadable(webhook)`, async () => {

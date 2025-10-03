@@ -3,6 +3,7 @@ import { toGuildMemberName } from "./toGuildMemberName.js";
 import { toGuildName } from "./toGuildName.js";
 import { toUserName } from "./toUserName.js";
 import { toWebhookName } from "./toWebhookName.js";
+import { toRoleName } from "./toRoleName.js";
 export function toHumanReadable(target) {
     if (target) {
         if ("token" in target) {
@@ -24,6 +25,9 @@ export function toHumanReadable(target) {
         }
         if ("discoverySplash" in target) {
             return toGuildName(target);
+        }
+        if ("mentionable" in target) {
+            return toRoleName(target);
         }
         return toChannelName(target);
     }

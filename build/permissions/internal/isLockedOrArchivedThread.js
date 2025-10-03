@@ -1,6 +1,5 @@
-import { isThreadChannel } from "../../types/typeGuards/isThreadChannel.js";
 export function isLockedOrArchivedThread(channel) {
-    if (isThreadChannel(channel)) {
+    if (channel.isThread()) {
         if (channel.locked) {
             return true;
         }
