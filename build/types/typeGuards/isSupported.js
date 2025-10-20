@@ -19,6 +19,7 @@ export function isSupportedChannel(channel) {
     switch (channel.type) {
         case 0: return !channel.parent || isSupportedParentChannel(channel.parent);
         case 1: return true;
+        case 2: return !channel.parent || isSupportedParentChannel(channel.parent);
         case 11: return isSupportedParentChannel(channel.parent);
         case 12: return isSupportedParentChannel(channel.parent);
         case 15: return !channel.parent || isSupportedParentChannel(channel.parent);
