@@ -1,10 +1,11 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { AutocompleteInteraction, ButtonInteraction, CategoryChannel, Channel, ChannelSelectMenuInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Interaction, MentionableSelectMenuInteraction, Message, MessageContextMenuCommandInteraction, ModalSubmitInteraction, PartialUser, PrimaryEntryPointCommandInteraction, PrivateThreadChannel, PublicThreadChannel, RoleSelectMenuInteraction, StringSelectMenuInteraction, TextChannel, User, UserContextMenuCommandInteraction, UserSelectMenuInteraction } from "discord.js";
+import type { AutocompleteInteraction, ButtonInteraction, CategoryChannel, Channel, ChannelSelectMenuInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Interaction, MentionableSelectMenuInteraction, Message, MessageContextMenuCommandInteraction, ModalSubmitInteraction, PartialUser, PrimaryEntryPointCommandInteraction, PrivateThreadChannel, PublicThreadChannel, RoleSelectMenuInteraction, StringSelectMenuInteraction, TextChannel, User, UserContextMenuCommandInteraction, UserSelectMenuInteraction, VoiceChannel } from "discord.js";
 
 export type SupportedCategoryChannel = CategoryChannel & { id:Snowflake; };
 export type SupportedDMChannel = DMChannel & { id:Snowflake; };
 export type SupportedForumChannel = ForumChannel & { id:Snowflake; parent:CategoryChannel | null; };
 export type SupportedTextChannel = TextChannel & { id:Snowflake; parent:CategoryChannel | null; };
+export type SupportedVoiceChannel = VoiceChannel & { id:Snowflake; parent:CategoryChannel | null; };
 export type SupportedPrivateThreadChannel = PrivateThreadChannel & { id:Snowflake; parent: SupportedForumChannel | SupportedTextChannel | null; };
 export type SupportedPublicThreadChannel<Forum extends boolean = boolean> = PublicThreadChannel<Forum> & { id:Snowflake; parent: SupportedForumChannel | SupportedTextChannel; type:ChannelType.PublicThread; };
 
@@ -27,12 +28,13 @@ export function isSupportedParentChannel(channel: Optional<Channel | User | Part
 }
 
 /** All Text Channels Sage can be active in. */
-export type SupportedChannel = SupportedDMChannel | SupportedForumChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
+export type SupportedChannel = SupportedDMChannel | SupportedForumChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel | SupportedVoiceChannel;
 export function isSupportedChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedChannel {
 	if (!channel || !("type" in channel)) return false;
 	switch(channel.type) {
 		case 0: return !channel.parent || isSupportedParentChannel(channel.parent);  // ChannelType.GuildText
 		case 1: return true;                                                         // ChannelType.DM
+		case 2: return !channel.parent || isSupportedParentChannel(channel.parent);  // ChannelType.GuildVoice
 		case 11: return isSupportedParentChannel(channel.parent);                    // ChannelType.PublicThread
 		case 12: return isSupportedParentChannel(channel.parent);                    // ChannelType.PrivateThread
 		case 15: return !channel.parent || isSupportedParentChannel(channel.parent); // ChannelType.GuildForum
@@ -47,7 +49,7 @@ export function isSupportedChannelOrParent(channel: Optional<Channel | User | Pa
 }
 
 /** NonThread Channels Sage can be active in. */
-export type SupportedNonThreadChannel = SupportedDMChannel | SupportedForumChannel | SupportedTextChannel;
+export type SupportedNonThreadChannel = SupportedDMChannel | SupportedForumChannel | SupportedTextChannel | SupportedVoiceChannel;
 export function isSupportedNonThreadChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedNonThreadChannel {
 	return isSupportedChannel(channel) && !channel.isThread();
 }
@@ -59,25 +61,25 @@ export function isSupportedThreadChannel(channel: Optional<Channel | User | Part
 }
 
 /** Channels with Messages (.messages) Sage can be active in. */
-export type SupportedMessagesChannel = SupportedDMChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
+export type SupportedMessagesChannel = SupportedDMChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel | SupportedVoiceChannel;
 export function isSupportedMessagesChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedMessagesChannel {
 	return isSupportedChannel(channel) && "messages" in channel;
 }
 
 /** Game (non DM) Channels Sage can be active in. */
-export type SupportedGameChannel = SupportedForumChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
+export type SupportedGameChannel = SupportedForumChannel | SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel | SupportedVoiceChannel;
 export function isSupportedGameChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedGameChannel {
 	return isSupportedChannel(channel) && !channel.isDMBased();
 }
 
 /** Game (non DM) Channels with Messages (.messages) Sage can be active in. */
-export type SupportedGameMessagesChannel = SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel;
+export type SupportedGameMessagesChannel = SupportedPrivateThreadChannel | SupportedPublicThreadChannel | SupportedTextChannel | SupportedVoiceChannel;
 export function isSupportedGameMessagesChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedGameMessagesChannel {
 	return isSupportedChannel(channel) && !channel.isDMBased() && "messages" in channel;
 }
 
 /** Channels with Webhooks (.fetchWebhooks) Sage can be active in. */
-export type SupportedWebhookChannel = SupportedForumChannel | SupportedTextChannel;
+export type SupportedWebhookChannel = SupportedForumChannel | SupportedTextChannel | SupportedVoiceChannel;
 export function isSupportedWebhookChannel(channel: Optional<Channel | User | PartialUser>): channel is SupportedWebhookChannel {
 	return isSupportedChannel(channel) && "fetchWebhooks" in channel;
 }
