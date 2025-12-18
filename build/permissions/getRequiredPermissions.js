@@ -3,6 +3,7 @@ const SageFlagMap = {
     "Administrator": [],
     "AttachFiles": ["RunGame", "GameMaster", "Player"],
     "BanMembers": [],
+    "BypassSlowmode": [],
     "ChangeNickname": [],
     "Connect": [],
     "CreateEvents": [],
