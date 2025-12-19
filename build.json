@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/discord-utils",
-"version":"0.4.3",
+"version":"0.4.4",
 "branch":"main",
-"commit":"5dcc042a9fb1021ccf0bee8eec321e15098c984f",
-"commitSubject":"update utils and scripts",
-"commitTs":1766186123000,
-"commitDate":"2025-12-19-1515",
-"buildTs":1766186180000,
-"buildDate":"2025-12-19-1516",
+"commit":"15f0dd1b242d25ff2145744a37b3a726f17b7eba",
+"commitSubject":"update dependencies",
+"commitTs":1766187857000,
+"commitDate":"2025-12-19-1544",
+"buildTs":1766187877000,
+"buildDate":"2025-12-19-1544",
 "author":"Randal"
 }
