@@ -16,8 +16,8 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.1",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.2",
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#submodule",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#submodule",
 		"discord.js": "^14.21.0",
 		"emoji-regex-xs": "^1.0.0",
 		"regex": "^6.0.1"
