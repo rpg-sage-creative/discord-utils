@@ -1,9 +1,7 @@
 import { getEmojiRegex } from "../emoji/getEmojiRegex.js";
 import { tokenize } from "@rsc-utils/core-utils";
-let roleRegex;
-function getRoleRegex() { return roleRegex ??= /<@&\d{16,}>/; }
-let userRegex;
-function getUserRegex() { return userRegex ??= /<@\d{16,}>/; }
+const RoleRegExp = /<@&\d{16,}>/;
+const UserRegExp = /<@\d{16,}>/;
 function scrubBlankTokens(tokens) {
     const output = tokens.slice();
     let leftIndex = -1;
@@ -24,6 +22,7 @@ function scrubBlankTokens(tokens) {
     }
     return output;
 }
+const EscapedRegExp = /`[^`]+`/gu;
 export function correctEscapedMentions(value, options) {
     if (!options.emoji && !options.roles && !options.users)
         return value;
@@ -34,13 +33,13 @@ export function correctEscapedMentions(value, options) {
             if (options.emoji)
                 parsers.emoji = getEmojiRegex();
             if (options.roles)
-                parsers.role = getRoleRegex();
+                parsers.role = RoleRegExp;
             if (options.users)
-                parsers.user = getUserRegex();
+                parsers.user = UserRegExp;
         }
         return parsers;
     };
-    return value.replace(/`[^`]+`/gu, escapedValue => {
+    return value.replace(EscapedRegExp, escapedValue => {
         const tokens = tokenize(escapedValue.slice(1, -1), getParsers());
         let output = [];
         let isMention = false;
