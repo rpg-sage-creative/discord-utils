@@ -19,11 +19,11 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.2",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.3",
-		"discord.js": "^14.21.0",
-		"emoji-regex-xs": "^1.0.0",
-		"regex": "^6.0.1"
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.3",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.4",
+		"discord.js": "^14.25.1",
+		"emoji-regex-xs": "^2.0.1",
+		"regex": "^6.1.0"
 	},
 	"jest": {
 		"setupFiles": [
