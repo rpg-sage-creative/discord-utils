@@ -1,18 +1,17 @@
-import { isWrapped, wrap } from "@rsc-utils/core-utils";
-import { getUrlRegex } from "@rsc-utils/io-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { getUrlRegex, type WRAPPED_URL, type URL } from "@rsc-utils/io-utils";
 
 /**
  * Wraps the given content in <> if it is a url.
- * If the all flag is true, then all urls in the content will be wrapped.
  */
-export function wrapUrl(content: string, all?: boolean): string {
-	// do a regex replace all
-	if (all) {
-		const regex = getUrlRegex({ gFlag:"g", wrapChars:"<>", wrapOptional:true });
-		return content.replace(regex, url => isWrapped(url, "<>") ? url : wrap(url, "<>"));
-	}
-
+export function wrapUrl(url: URL): WRAPPED_URL;
+export function wrapUrl(url: OrNull<URL>): OrNull<WRAPPED_URL>
+export function wrapUrl(url: OrUndefined<URL>): OrUndefined<WRAPPED_URL>;
+export function wrapUrl(url: Optional<URL>): Optional<WRAPPED_URL>;
+export function wrapUrl(url: Optional<string>): Optional<string> {
+	if (!url) return url;
 	// wrap an unwrapped anchored url
 	const regex = getUrlRegex({ anchored:true });
-	return regex.test(content) ? wrap(content, "<>") : content;
+	const wrapped = regex.test(url) ? `<${url}>` : url;
+	return wrapped as WRAPPED_URL;
 }

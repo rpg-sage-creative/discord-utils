@@ -2,5 +2,7 @@ export * from "./toChannelUrl.js";
 export * from "./toInviteUrl.js";
 export * from "./toMessageUrl.js";
 export * from "./toUserUrl.js";
+export * from "./unwrapUrl.js";
 export * from "./urlOrUndefined.js";
 export * from "./wrapUrl.js";
+export * from "./wrapUrls.js";

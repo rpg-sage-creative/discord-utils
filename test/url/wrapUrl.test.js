@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-utils/core-utils";
 import { wrapUrl } from "../../build/index.js";
 
 describe("url", () => {
@@ -7,21 +7,19 @@ describe("url", () => {
 		const unwrappedUrl = "https://google.com";
 		const wrappedUrl = "<https://google.com>";
 		const nonUrl = "hello there";
-		const multipleUrlsBefore = [nonUrl, wrappedUrl, nonUrl, unwrappedUrl, nonUrl, unwrappedUrl].join(" ");
-		const multipleUrlsAfter = [nonUrl, wrappedUrl, nonUrl, wrappedUrl, nonUrl, wrappedUrl].join(" ");
 
 		const tests = [
-			{ input:unwrappedUrl, all:undefined, expected:wrappedUrl },
-			{ input:unwrappedUrl+" ", all:undefined, expected:unwrappedUrl+" " },
-			{ input:unwrappedUrl+" ", all:true, expected:wrappedUrl+" " },
-			{ input:unwrappedUrl, all:true, expected:wrappedUrl },
-			{ input:wrappedUrl, all:undefined, expected:wrappedUrl },
-			{ input:nonUrl, all:undefined, expected:nonUrl },
-			{ input:multipleUrlsBefore, all:true, expected:multipleUrlsAfter },
+			{ input:unwrappedUrl, expected:wrappedUrl },
+			{ input:unwrappedUrl+" ", expected:unwrappedUrl+" " },
+			{ input:wrappedUrl, expected:wrappedUrl },
+			{ input:wrappedUrl+" ", expected:wrappedUrl+" " },
+			{ input:nonUrl, expected:nonUrl },
+			{ input:null, expected:null },
+			{ input:undefined, expected:undefined },
 		];
-		tests.forEach(({ input, all, expected }) => {
-			test(`wrapUrl(${toLiteral(input)}, ${toLiteral(all)}) === ${toLiteral(expected)}`, () => {
-				expect(wrapUrl(input, all)).toBe(expected);
+		tests.forEach(({ input, expected }) => {
+			test(tagLiterals`wrapUrl(${input}) === ${expected}`, () => {
+				expect(wrapUrl(input)).toBe(expected);
 			});
 		});
 

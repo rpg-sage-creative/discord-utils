@@ -1,5 +1,9 @@
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { type WRAPPED_URL, type URL } from "@rsc-utils/io-utils";
 /**
  * Wraps the given content in <> if it is a url.
- * If the all flag is true, then all urls in the content will be wrapped.
  */
-export declare function wrapUrl(content: string, all?: boolean): string;
+export declare function wrapUrl(url: URL): WRAPPED_URL;
+export declare function wrapUrl(url: OrNull<URL>): OrNull<WRAPPED_URL>;
+export declare function wrapUrl(url: OrUndefined<URL>): OrUndefined<WRAPPED_URL>;
+export declare function wrapUrl(url: Optional<URL>): Optional<WRAPPED_URL>;
