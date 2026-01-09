@@ -15,7 +15,7 @@ describe("url", () => {
 		];
 		tests.forEach(({ input, expected }) => {
 			test(tagLiterals`unwrapUrl(${input}) === ${expected}`, () => {
-				expect(unwrapUrl(input, all)).toBe(expected);
+				expect(unwrapUrl(input)).toBe(expected);
 			});
 		});
 
