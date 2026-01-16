@@ -25,8 +25,8 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.0.1",
-		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.0.2",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.0.8",
+		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.0.4",
 		"discord.js": "^14.25.1",
 		"emoji-regex-xs": "^2.0.1",
 		"regex": "^6.1.0"
