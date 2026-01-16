@@ -29,6 +29,7 @@ function createInvalidTestRegex({ anchored, name, variants }) {
     }
     return new RegExp(source, "i");
 }
+const invalidNamesRegExps = invalidNames.map(createInvalidTestRegex);
 export function isInvalidWebhookUsername(name) {
     if (!name) {
         return true;
@@ -37,10 +38,9 @@ export function isInvalidWebhookUsername(name) {
     if (name.length < minLength || name.length > maxLength) {
         return true;
     }
-    for (const invalidName of invalidNames) {
-        const regex = createInvalidTestRegex(invalidName);
-        if (regex.test(name)) {
-            return invalidName.name;
+    for (let i = 0; i < invalidNames.length; i++) {
+        if (invalidNamesRegExps[i].test(name)) {
+            return invalidNames[i].name;
         }
     }
     return false;
@@ -53,6 +53,7 @@ export function addInvalidWebhookUsername(username = "UNDEFINED USERNAME", inval
     if (!found) {
         const invalidUsername = { name: invalidName, anchored };
         invalidNames.push(invalidUsername);
+        invalidNamesRegExps.push(createInvalidTestRegex(invalidUsername));
         return { old, new: invalidUsername };
     }
     if (found.anchored && !anchored) {

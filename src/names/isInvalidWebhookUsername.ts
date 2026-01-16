@@ -66,6 +66,8 @@ function createInvalidTestRegex({ anchored, name, variants }: InvalidUsername): 
 	return new RegExp(source, "i");
 }
 
+const invalidNamesRegExps = invalidNames.map(createInvalidTestRegex);
+
 /**
  * If the name isn't defined or has an invalid length, true is returned.
  * If a banned name is found, the "root" value (not the specific variant) is returned.
@@ -81,10 +83,9 @@ export function isInvalidWebhookUsername(name: Optional<string>): string | boole
 		return true;
 	}
 
-	for (const invalidName of invalidNames) {
-		const regex = createInvalidTestRegex(invalidName);
-		if (regex.test(name)) {
-			return invalidName.name;
+	for (let i = 0; i < invalidNames.length; i++) {
+		if (invalidNamesRegExps[i]!.test(name)) {
+			return invalidNames[i]!.name;
 		}
 	}
 
@@ -102,6 +103,7 @@ export function addInvalidWebhookUsername(username = "UNDEFINED USERNAME", inval
 	if (!found) {
 		const invalidUsername = { name:invalidName, anchored };
 		invalidNames.push(invalidUsername);
+		invalidNamesRegExps.push(createInvalidTestRegex(invalidUsername));
 		return { old, new:invalidUsername };
 	}
 
