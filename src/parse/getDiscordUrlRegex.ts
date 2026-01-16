@@ -1,4 +1,5 @@
 import { getOrCreateRegex, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions } from "@rsc-utils/core-utils";
+import { regex } from "regex";
 
 // dm message
 // https://discord.com/channels/@me/654449179493400649/1199781308537262212
@@ -22,19 +23,115 @@ type Options = RegExpFlagOptions & RegExpAnchorOptions & RegExpCaptureOptions & 
 	type: UrlType;
 };
 
+const ChannelUrlRegExp = regex`
+	# base
+	https://discord\.com/channels/
+
+	# guildId
+	( @me | \g<snowflake> )
+
+	/
+
+	# channelId
+	\g<snowflake>
+
+	# not followed by a messageId
+	(?! [\/\d] )
+
+
+	(?(DEFINE)
+		(?<snowflake> \d{16,} )
+	)
+`;
+
+const ChannelUrlCaptureRegExp = regex`
+	# base
+	https://discord\.com/channels/
+
+	# guildId
+	(?<guildId> @me | \g<snowflake> )
+
+	/
+
+	# channelId
+	(?<channelId> \g<snowflake> )
+
+	# not followed by a messageId
+	(?! [\/\d] )
+
+
+	(?(DEFINE)
+		(?<snowflake> \d{16,} )
+	)
+`;
+
+const MessageUrlRegExp = regex`
+	# base
+	https://discord\.com/channels/
+
+	# guildId
+	( @me | \g<snowflake> )
+
+	/
+
+	# channelId
+	\g<snowflake>
+
+	/
+
+	# messageId
+	\g<snowflake>
+
+
+	(?(DEFINE)
+		(?<snowflake> \d{16,} )
+	)
+`;
+
+const MessageUrlCaptureRegExp = regex`
+	# base
+	https://discord\.com/channels/
+
+	# guildId
+	(?<guildId> @me | \g<snowflake> )
+
+	/
+
+	# channelId
+	(?<channelId> \g<snowflake> )
+
+	/
+
+	# messageId
+	(?<messageId> \g<snowflake> )
+
+
+	(?(DEFINE)
+		(?<snowflake> \d{16,} )
+	)
+`;
+
+type FlagsGI = `${"g"|""}${"i"|""}`;
+
+function flagRegex(regexp: RegExp, flags: FlagsGI): RegExp {
+	let newFlags = regexp.flags;
+	flags.split("").forEach(flag => newFlags = newFlags.replace(flag, "") + flag);
+	return new RegExp(regexp, newFlags);
+}
+
 function createDiscordUrlRegex(options?: Options): RegExp {
 	const { capture, gFlag = "", iFlag = "", type = "message" } = options ?? {};
-	const flags = `${gFlag}${iFlag}`;
+	const flags: FlagsGI = `${gFlag}${iFlag}`;
 
 	switch(type) {
 		case "channel":
 			return capture
-				? new RegExp(`https://discord\\.com/channels/(?<guildId>@me|\\d{16,})/(?<channelId>\\d{16,})(?![/\\d])`, flags)
-				: new RegExp(`https://discord\\.com/channels/(?:@me|\\d{16,})/\\d{16,}(?![/\\d])`, flags);
+				? flagRegex(ChannelUrlCaptureRegExp, flags)
+				: flagRegex(ChannelUrlRegExp, flags);
 		case "message":
 			return capture
-				? new RegExp(`https://discord\\.com/channels/(?<guildId>@me|\\d{16,})/(?<channelId>\\d{16,})/(?<messageId>\\d{16,})`, flags)
-				: new RegExp(`https://discord\\.com/channels/(?:@me|\\d{16,})/\\d{16,}/\\d{16,}`, flags);
+				? flagRegex(MessageUrlCaptureRegExp, flags)
+				: flagRegex(MessageUrlRegExp, flags);
 	}
 }
 
