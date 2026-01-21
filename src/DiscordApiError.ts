@@ -1,15 +1,18 @@
-import { error, formatArg, warn } from "@rsc-utils/core-utils";
+import { error, formatArg, warn, type TypedRegExp } from "@rsc-utils/core-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
 
 type ErrorCode = 10003 | 10004 | 10007 | 10008 | 10011 | 10013 | 10014 | 10015 | 10062 | 50001 | 50035;
 
+const DiscordAPIErrorRegExp = /DiscordAPIError(\[\d+\])?/;
+const InvalidUsernameRegExp = /Username cannot contain "(?<name>[^"]+)"/ as TypedRegExp<{ name?:string; }>;
+
 export function isDiscordApiError(reason: unknown): reason is TDiscordApiError;
-export function isDiscordApiError<T extends ErrorCode>(reason: unknown, codes: T): reason is (TDiscordApiError & { code:T });
+export function isDiscordApiError<T extends ErrorCode>(reason: unknown, codes: T): reason is (TDiscordApiError & { code:T; });
 export function isDiscordApiError<T extends ErrorCode>(reason: unknown, ...codes: T[]): reason is TDiscordApiError;
 export function isDiscordApiError(reason: any, ...codes: number[]): reason is TDiscordApiError {
-	if (/DiscordAPIError(\[\d+\])?/.test(String(reason?.name))) {
+	if (DiscordAPIErrorRegExp.test(String(reason?.name))) {
 		if (codes.some(code => reason.code === code)) return true;
 		return isErrorCode(reason?.code) || isWarnCode(reason?.code);
 	}
@@ -47,7 +50,7 @@ export class DiscordApiError {
 	public get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
 
 	public get isUsername() { return this.asString.includes("username[USERNAME_INVALID_CONTAINS]"); }
-	public getInvalidUsername() { return /Username cannot contain "(?<name>[^"]+)"/.exec(this.asString)?.groups?.name; }
+	public getInvalidUsername() { return InvalidUsernameRegExp.exec(this.asString)?.groups?.name; }
 
 	public get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
 
