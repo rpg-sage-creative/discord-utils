@@ -8,6 +8,7 @@ type ErrorCode = 10003 | 10004 | 10007 | 10008 | 10011 | 10013 | 10014 | 10015 |
 const DiscordAPIErrorRegExp = /DiscordAPIError(\[\d+\])?/;
 const InvalidUsernameRegExp = /Username cannot contain "(?<name>[^"]+)"/ as TypedRegExp<{ name?:string; }>;
 
+/** Tests the given object to see if it is a valid DiscordApiError object. */
 export function isDiscordApiError(reason: unknown): reason is TDiscordApiError;
 export function isDiscordApiError<T extends ErrorCode>(reason: unknown, codes: T): reason is (TDiscordApiError & { code:T; });
 export function isDiscordApiError<T extends ErrorCode>(reason: unknown, ...codes: T[]): reason is TDiscordApiError;
@@ -19,12 +20,14 @@ export function isDiscordApiError(reason: any, ...codes: number[]): reason is TD
 	return false;
 }
 
+/** Error codes that should log as an error. */
 function isErrorCode(code?: string | number): boolean {
 	return code === 50001 // "Missing Access"
 		|| code === 50035 // "Invalid Form Body"
 		;
 }
 
+/** Error codes that should log as a warning. */
 function isWarnCode(code?: string | number): boolean {
 	return code === 10003 // "Unknown Channel"
 		|| code === 10004 // "Unknown Guild"
@@ -56,10 +59,12 @@ export class DiscordApiError {
 
 	/** Tries to process various DiscordApiErrors and returns true if logged in some way. */
 	public process(): boolean {
+
 		if (this.isUsername) {
 			error({ invalidUsername:this.getInvalidUsername() });
 			return true;
 		}
+
 		if (isErrorCode(this.error.code)) {
 			if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
 				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
@@ -68,26 +73,32 @@ export class DiscordApiError {
 			}
 			return true;
 		}
+
 		if (this.isFetchWebhooks && this.isMissingPermissions) {
 			warn(`DiscordAPIError[${this.error.code}]: Missing Permissions (TextChannel.fetchWebhooks)`);
 			return true;
 		}
+
 		if (isWarnCode(this.error.code)) {
 			warn(`[${this.error.code}]${this.error.message}: ${this.error.url}`);
 			return true;
 		}
+
 		return false;
 	}
 
+	/** Creates a DiscordApiError object if valid. */
 	public static from(reason: unknown): DiscordApiError | undefined {
 		return isDiscordApiError(reason) ? new DiscordApiError(reason) : undefined;
 	}
 
+	/** Processes DiscordApiError errors but ignores other objects. */
 	public static process(err: unknown): undefined {
 		DiscordApiError.from(err)?.process();
 		return undefined;
 	}
 
+	/** Creates a catcher that ignores the given codes but processes other DiscordApiError objects. */
 	public static ignore<T extends ErrorCode>(...codes: T[]): (reason: unknown) => undefined {
 		return (reason: unknown) => {
 			if (!isDiscordApiError(reason, ...codes)) {
