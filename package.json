@@ -18,15 +18,15 @@
 		"create-test-todos": "bash ./node_modules/@rsc-utils/dev-scripts/sh/create-test-js.sh"
 	},
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.1.0",
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.2.0",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^24.10.4",
 		"jest": "^30.2.0",
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.0.8",
-		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.0.4",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.2.0",
+		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.1.0",
 		"discord.js": "^14.25.1",
 		"emoji-regex-xs": "^2.0.1",
 		"regex": "^6.1.0"
