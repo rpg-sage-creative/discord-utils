@@ -61,7 +61,7 @@ export declare class DiscordCache {
     static from(guildResolvable: ClientGuildResolvable): DiscordCache;
     static from(client: Client, guildIdResolvable: GuildIdResolvable): Promise<DiscordCache>;
     private static SAGE_ID;
-    static getSageId(): `${number}`;
+    static getSageId(): `${bigint}`;
     static setSageId(id: Snowflake): void;
 }
 export {};
