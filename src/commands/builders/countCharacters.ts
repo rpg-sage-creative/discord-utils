@@ -12,6 +12,7 @@ function doCount(cmd: SlashCommand): number {
 	return count;
 }
 
+/** @deprecated */
 export async function countCharacters(commandPathValidator: CommandPathValidator): Promise<number> {
 	let count = 0;
 
