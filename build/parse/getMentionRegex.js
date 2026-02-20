@@ -1,23 +1,21 @@
-import { getOrCreateRegex } from "@rsc-utils/core-utils";
-function createMentionRegex(options) {
-    const { capture, gFlag = "", iFlag = "", type = "user" } = options ?? {};
-    const flags = `${gFlag}${iFlag}`;
-    let prefix = "";
-    switch (type) {
-        case "channel":
-            prefix = "#";
-            break;
-        case "role":
-            prefix = "@&";
-            break;
-        case "user":
-            prefix = "@\\!?";
-            break;
+import { globalizeRegex } from "@rsc-utils/core-utils";
+const ChannelMentionRegExp = (/<#(?<channelId>\d{16,})>/);
+const ChannelMentionRegExpG = globalizeRegex(ChannelMentionRegExp);
+const RoleMentionRegExp = (/<@&(?<roleId>\d{16,})>/);
+const RoleMentionRegExpG = globalizeRegex(RoleMentionRegExp);
+const UserMentionRegExp = (/<@\!?(?<userId>\d{16,})>/);
+const UserMentionRegExpG = globalizeRegex(UserMentionRegExp);
+export function getMentionRegex(type, global) {
+    if (global) {
+        if (type === "channel")
+            return ChannelMentionRegExpG;
+        if (type === "role")
+            return RoleMentionRegExpG;
+        return UserMentionRegExpG;
     }
-    return capture
-        ? new RegExp(`<${prefix}(?<${type}Id>\\d{16,})>`, flags)
-        : new RegExp(`<${prefix}\\d{16,}>`, flags);
-}
-export function getMentionRegex(options) {
-    return getOrCreateRegex(createMentionRegex, options);
+    if (type === "channel")
+        return ChannelMentionRegExp;
+    if (type === "role")
+        return RoleMentionRegExp;
+    return UserMentionRegExp;
 }

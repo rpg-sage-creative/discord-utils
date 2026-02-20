@@ -19,8 +19,7 @@ export function parseId(value: Optional<string>, type: IdType): Snowflake | unde
 		const groupKey = getGroupKey(type);
 
 		if (type !== "message") {
-			const mentionRegex = getMentionRegex({ anchored:true, capture:type, type });
-			const mentionMatch = mentionRegex.exec(value);
+			const mentionMatch = getMentionRegex(type).exec(value);
 			if (mentionMatch?.groups?.[groupKey]) {
 				return mentionMatch.groups[groupKey] as Snowflake; //NOSONAR
 			}

@@ -1,39 +1,23 @@
-import { getOrCreateRegex, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions } from "@rsc-utils/core-utils";
+import { globalizeRegex, type Snowflake, type TypedRegExp } from "@rsc-utils/core-utils";
 
 type MentionType = "channel" | "role" | "user";
 
-type Options = RegExpFlagOptions & RegExpCaptureOptions & RegExpAnchorOptions & {
-	type: MentionType;
-};
+const ChannelMentionRegExp = (/<#(?<channelId>\d{16,})>/) as TypedRegExp<{ channelId:Snowflake; }>;
+const ChannelMentionRegExpG = globalizeRegex(ChannelMentionRegExp);
 
-/**
- * @internal
- * Returns a regex that will match the given type of mention, including named capture groups based on type: channelId, roleId, userId.
- * RegExp Reminder: globalFlag ("g") only matches multiples at top level when you use "".match(); .exec() returns next match
- * Default options: { globalFlag:false, anchored:false }
- */
-function createMentionRegex(options?: Options): RegExp {
-	const { capture, gFlag = "", iFlag = "", type = "user" } = options ?? {};
-	const flags = `${gFlag}${iFlag}`;
+const RoleMentionRegExp = (/<@&(?<roleId>\d{16,})>/) as TypedRegExp<{ roleId:Snowflake; }>;
+const RoleMentionRegExpG = globalizeRegex(RoleMentionRegExp);
 
-	let prefix = "";
-	switch(type) {
-		case "channel":
-			prefix = "#";
-			break;
-		case "role":
-			prefix = "@&";
-			break;
-		case "user":
-			prefix = "@\\!?";
-			break;
+const UserMentionRegExp = (/<@\!?(?<userId>\d{16,})>/) as TypedRegExp<{ userId:Snowflake; }>;
+const UserMentionRegExpG = globalizeRegex(UserMentionRegExp);
+
+export function getMentionRegex(type: MentionType, global?: boolean): RegExp {
+	if (global) {
+		if (type === "channel") return ChannelMentionRegExpG;
+		if (type === "role") return RoleMentionRegExpG;
+		return UserMentionRegExpG;
 	}
-
-	return capture
-		? new RegExp(`<${prefix}(?<${type}Id>\\d{16,})>`, flags)
-		: new RegExp(`<${prefix}\\d{16,}>`, flags);
-}
-
-export function getMentionRegex(options?: Options): RegExp {
-	return getOrCreateRegex(createMentionRegex, options);
+	if (type === "channel") return ChannelMentionRegExp;
+	if (type === "role") return RoleMentionRegExp;
+	return UserMentionRegExp;
 }

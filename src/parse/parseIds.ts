@@ -49,10 +49,10 @@ type PossibleSnowflake = Snowflake | string | undefined;
 /** Parses the content for mentions of the given IdType and returns the id/snowflakes. */
 function getContentMentionIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
 	if (isMentionIdType(type) && content) {
-		const globalRegex = getMentionRegex({ gFlag:"g", type });
-		const mentions = content.match(globalRegex) ?? []; // NOSONAR
-		if (mentions.length) {
-			const regex = getMentionRegex({ type });
+		const globalRegex = getMentionRegex(type, true);
+		const mentions = content.match(globalRegex);
+		if (mentions?.length) {
+			const regex = getMentionRegex(type);
 			return mentions.map(mention => regex.exec(mention)?.groups?.[getGroupKey(type)]);
 		}
 	}
@@ -89,6 +89,8 @@ function uniqueNonNilSnowflakeFilter(value: PossibleSnowflake, index: number, ar
 	return isNonNilSnowflake(value) && array.indexOf(value) === index;
 }
 
+const RawSnowflakeRegExpG = /\b\d{16,}\b/g;
+
 /** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
 export function parseIds(messageOrContent: MessageOrPartial | string, type: IdType, includeRaw?: boolean): Snowflake[] {
 	const isString = typeof(messageOrContent) === "string";
@@ -97,6 +99,6 @@ export function parseIds(messageOrContent: MessageOrPartial | string, type: IdTy
 	const contentMentionIds = getContentMentionIds(type, content);
 	const contentUrlIds = getContentUrlIds(type, content);
 	const mentionIds = message ? getMessageMentionIds(type, message) : [];
-	const rawIds = includeRaw ? (content ?? "").match(/\d{16,}/g) ?? [] : [];
+	const rawIds = includeRaw ? content?.match(RawSnowflakeRegExpG) ?? [] : [];
 	return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
 }
