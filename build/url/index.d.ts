@@ -1,3 +1,6 @@
+export * from "./isDiscordAttachmentCdnUrl.js";
+export * from "./refreshDiscordAttachmentUrl.js";
+export * from "./simplifyDiscordAttachmentUrl.js";
 export * from "./toChannelUrl.js";
 export * from "./toInviteUrl.js";
 export * from "./toMessageUrl.js";
