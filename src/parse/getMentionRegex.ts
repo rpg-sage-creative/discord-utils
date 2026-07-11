@@ -11,6 +11,7 @@ const RoleMentionRegExpG = globalizeRegex(RoleMentionRegExp);
 const UserMentionRegExp = (/<@\!?(?<userId>\d{16,})>/) as TypedRegExp<{ userId:Snowflake; }>;
 const UserMentionRegExpG = globalizeRegex(UserMentionRegExp);
 
+/** Returns a TypedRegExp with one of the following capture groups: channelId, roleId, or userId */
 export function getMentionRegex(type: MentionType, global?: boolean): RegExp {
 	if (global) {
 		if (type === "channel") return ChannelMentionRegExpG;
