@@ -135,6 +135,7 @@ function createDiscordUrlRegex(options?: Options): RegExp {
 	}
 }
 
+/** @deprecated @todo rewrite this to not use getOrCreateRegex (see other regex using globalizeRegex) */
 export function getDiscordUrlRegex(options?: Options): RegExp {
 	return getOrCreateRegex(createDiscordUrlRegex, options);
 }
