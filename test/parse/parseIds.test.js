@@ -45,5 +45,11 @@ describe("parse", () => {
 			results.every(id => expect(channelIds.includes(id) || roleIds.includes(id) || userIds.includes(id) || rawSnowflakes.includes(id)).toBe(true));
 		});
 
+		test(`real example`, () => {
+			const content = `!pc auto on https://discord.com/channels/963531189254238278/978785150357864538`;
+			const results = parseIds(content, "channel");
+			expect(results.length).toBe(1);
+			expect(results).toContain("978785150357864538");
+		});
 	});
 });

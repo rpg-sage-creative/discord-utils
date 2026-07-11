@@ -74,10 +74,12 @@ function getMessageMentionIds(type: IdType, message: MessageOrPartial): Possible
 /** Parses the content for urls of the given IdType and returns the ids/snowflakes. */
 function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
 	if (isUrlIdType(type) && content) {
+		// use global regex to get an array of urls
 		const globalRegex = getDiscordUrlRegex({ gFlag:"g", type });
 		const urls = content.match(globalRegex) ?? []; // NOSONAR
 		if (urls.length) {
-			const regex = getDiscordUrlRegex({ type });
+			// use capture regex to parse each individual url
+			const regex = getDiscordUrlRegex({ capture:type, type });
 			return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
 		}
 	}

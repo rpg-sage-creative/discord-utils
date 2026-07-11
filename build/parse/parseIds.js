@@ -45,7 +45,7 @@ function getContentUrlIds(type, content) {
         const globalRegex = getDiscordUrlRegex({ gFlag: "g", type });
         const urls = content.match(globalRegex) ?? [];
         if (urls.length) {
-            const regex = getDiscordUrlRegex({ type });
+            const regex = getDiscordUrlRegex({ capture: type, type });
             return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
         }
     }
