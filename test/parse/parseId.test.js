@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-utils/core-utils";
 import { parseId } from "../../build/index.js";
 
 describe("parse", () => {
@@ -39,10 +39,16 @@ describe("parse", () => {
 			{ input:messageUrl, type:"message", expected:"1192628934014140476" },
 		];
 		tests.forEach(({ input, type, expected }) => {
-			test(`parseId(${toLiteral(input)}, ${toLiteral(type)}) === ${toLiteral(expected)}`, () => {
+			test(tagLiterals`parseId(${input}, $(type}) === ${expected}`, () => {
 				expected
 				? expect(parseId(input, type)).toBe(expected)
 				: expect(parseId(input, type)).toBeUndefined();
+			});
+			const spacedInput = ` ${input} `;
+			test(tagLiterals`parseId(${spacedInput}, ${type}) === ${expected}`, () => {
+				expected
+				? expect(parseId(spacedInput, type)).toBe(expected)
+				: expect(parseId(spacedInput, type)).toBeUndefined();
 			});
 		});
 
