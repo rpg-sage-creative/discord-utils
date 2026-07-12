@@ -43,10 +43,11 @@ function getMessageMentionIds(type, message) {
 function getContentUrlIds(type, content) {
     if (isUrlIdType(type) && content) {
         const globalRegex = getDiscordUrlRegex({ gFlag: "g", type });
-        const urls = content.match(globalRegex) ?? [];
-        if (urls.length) {
+        const urls = content.match(globalRegex);
+        if (urls?.length) {
             const regex = getDiscordUrlRegex({ capture: type, type });
-            return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
+            const groupKey = getGroupKey(type);
+            return urls.map(url => regex.exec(url)?.groups?.[groupKey]);
         }
     }
     return [];
@@ -63,5 +64,5 @@ export function parseIds(messageOrContent, type, includeRaw) {
     const contentUrlIds = getContentUrlIds(type, content);
     const mentionIds = message ? getMessageMentionIds(type, message) : [];
     const rawIds = includeRaw ? content?.match(RawSnowflakeRegExpG) ?? [] : [];
-    return [...contentMentionIds, ...contentUrlIds, ...mentionIds, ...rawIds].filter(uniqueNonNilSnowflakeFilter);
+    return contentMentionIds.concat(contentUrlIds, mentionIds, rawIds).filter(uniqueNonNilSnowflakeFilter);
 }
