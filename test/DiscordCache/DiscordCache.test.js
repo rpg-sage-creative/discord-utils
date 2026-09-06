@@ -1,6 +1,7 @@
 import { captureProcessExit, toLiteral } from "@rsc-utils/core-utils";
 import { Client } from "discord.js";
 import { DiscordCache, toChannelUrl, toHumanReadable, toMessageUrl, toUserUrl } from "../../build/index.js";
+import { inject } from "vitest";
 
 /** @type {Client} */
 let client;
@@ -8,21 +9,27 @@ let client;
 /** @type {DiscordCache} */
 let discordCache;
 
+const injected = {
+	ids: inject("ids"),
+	intents: inject("intents"),
+	token: inject("token"),
+};
+
 beforeAll(async () => {
 	captureProcessExit(() => client?.destroy());
 	await new Promise((resolve, reject) => {
-		client = new Client({ intents:global.intents });
+		client = new Client({ intents:injected.intents });
 		client.once("clientReady", async () => resolve(client));
-		client.login(global.token).catch(reject);
+		client.login(injected.token).catch(reject);
 	});
-	discordCache = await DiscordCache.from(client, global.ids.GUILD_ID);
+	discordCache = await DiscordCache.from(client, injected.ids.GUILD_ID);
 });
 
 afterAll(async () => client?.destroy());
 
 describe("DiscordCache", () => {
 
-	const { SAGE_ID, GUILD_ID } = global.ids;
+	const { SAGE_ID, GUILD_ID } = injected.ids;
 
 	test(`setSageId(${toLiteral(SAGE_ID)})`, () => {
 		DiscordCache.setSageId(SAGE_ID);
@@ -40,7 +47,7 @@ describe("DiscordCache", () => {
 describe("humanReadable", () => {
 	describe("toHumanReadable", () => {
 
-		const { CHANNEL_ID, GUILD_ID, ROLE_ID, SUPER_USER_ID, WEBHOOK_ID } = global.ids;
+		const { CHANNEL_ID, GUILD_ID, ROLE_ID, SUPER_USER_ID, WEBHOOK_ID } = injected.ids;
 
 		test(`toHumanReadable(channel)`, async () => {
 			const channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
@@ -80,7 +87,7 @@ describe("url", () => {
 
 	describe(`toChannelUrl`, () => {
 
-		const { GUILD_ID, CHANNEL_ID, MESSAGE_ID } = global.ids;
+		const { GUILD_ID, CHANNEL_ID, MESSAGE_ID } = injected.ids;
 
 		const CHANNEL_LINK = `https://discord.com/channels/${GUILD_ID}/${CHANNEL_ID}`;
 
@@ -114,7 +121,7 @@ describe("url", () => {
 
 	describe(`toMessageUrl`, () => {
 
-		const { GUILD_ID, CHANNEL_ID, MESSAGE_ID } = global.ids;
+		const { GUILD_ID, CHANNEL_ID, MESSAGE_ID } = injected.ids;
 
 		const MESSAGE_LINK = `https://discord.com/channels/${GUILD_ID}/${CHANNEL_ID}/${MESSAGE_ID}`;
 
@@ -143,7 +150,7 @@ describe("url", () => {
 
 	describe(`toUserUrl`, () => {
 
-		const { SUPER_USER_ID } = global.ids;
+		const { SUPER_USER_ID } = injected.ids;
 
 		const SUPER_USER_LINK = `https://discordapp.com/users/${SUPER_USER_ID}`;
 
