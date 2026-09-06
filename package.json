@@ -27,11 +27,6 @@
 		"emoji-regex-xs": "^2.0.1",
 		"regex": "^6.1.0"
 	},
-	"vitest": {
-		"setupFiles": [
-			"<rootDir>/test/jest-global.mjs"
-		]
-	},
 	"scripts": {
 		"scrub": "pnpm run '/^scrub::.*/'",
 		"scrub::node_modules": "rm -rf node_modules",
