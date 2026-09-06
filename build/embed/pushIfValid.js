@@ -1,6 +1,10 @@
 import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 import { getEmbedLength } from "./getEmbedLength.js";
 import { getTotalEmbedLength } from "./getTotalEmbedLength.js";
+/**
+ * Pushes an embed to an array only if the resulting array is within allowed embed length limits.
+ * @returns number of items pushed
+ */
 export function pushIfValid(array, ...embeds) {
     let pushed = 0;
     for (const embed of embeds) {

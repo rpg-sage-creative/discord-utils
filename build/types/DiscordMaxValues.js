@@ -1,14 +1,21 @@
 export const DiscordMaxValues = {
+    /** slash commands, message commands, user commands */
     command: {
+        /** required */
         nameLength: 32,
+        /** required for CHAT_INPUT; empty string ("") for USER and MESSAGE */
         descriptionLength: 100,
         option: {
             count: 25,
+            /** required */
             nameLength: 32,
+            /** required */
             descriptionLength: 100,
             choice: {
                 count: 25,
+                /** required */
                 nameLength: 100,
+                /** required */
                 valueLength: 100,
             },
         },
@@ -17,6 +24,7 @@ export const DiscordMaxValues = {
         messageCount: 5,
         userCount: 5,
     },
+    /** message components */
     component: {
         button: {
             idLength: 100,
@@ -34,6 +42,7 @@ export const DiscordMaxValues = {
             placeholderLength: 150,
         },
     },
+    /** modal popups */
     modal: {
         field: {
             count: 5,
@@ -43,6 +52,7 @@ export const DiscordMaxValues = {
             valueLength: 4000,
         },
     },
+    /** message embeds */
     embed: {
         titleLength: 256,
         descriptionLength: 4096,
@@ -55,16 +65,21 @@ export const DiscordMaxValues = {
         authorNameLength: 256,
         totalLength: 6000,
     },
+    /** message */
     message: {
         contentLength: 2000,
         embedCount: 10,
+        // fileCount: 10,
+        // reactionCount: 20,
     },
+    /** user */
     user: {
         username: {
             minLength: 1,
             maxLength: 32,
         }
     },
+    /** webhook */
     webhook: {
         username: {
             minLength: 1,
@@ -72,3 +87,10 @@ export const DiscordMaxValues = {
         }
     },
 };
+// files
+// limited by size limit based on tier, not count
+// channel
+// tag limit of 20
+// name length of 100
+// topic 1024 (4096 forum)
+// maxed pin messages 50

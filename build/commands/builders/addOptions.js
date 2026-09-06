@@ -1,12 +1,13 @@
 import { setMinMaxValues } from "./setMinMaxValues.js";
 import { setNameAndRequired } from "./setNameAndRequired.js";
 import { toChoice } from "./toChoice.js";
+/** shortcut for setting options all things that allow options */
 export function addOptions(builder, options) {
     options?.forEach(option => {
         const addHandler = (opt) => {
             setNameAndRequired(opt, option);
             if ("setMinValue" in opt)
-                setMinMaxValues(opt, option);
+                setMinMaxValues(opt, option); //NOSONAR
             if ("addChoices" in opt) {
                 option.choices?.forEach(choice => {
                     opt.addChoices(toChoice(choice));

@@ -33,8 +33,8 @@ export declare function addInvalidWebhookUsername(username: string | undefined, 
     new: InvalidUsername;
     found?: undefined;
 } | {
-    found: InvalidUsername;
     old?: undefined;
     new?: undefined;
+    found: InvalidUsername;
 };
 export {};

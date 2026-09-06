@@ -47,6 +47,7 @@ const SageFlagMap: Record<PermFlagBitsKeys, PermReasonKeys[]> = {
 	"SendPolls": ["RunGame"],
 	"SendTTSMessages": [],
 	"SendVoiceMessages": [],
+	"SetVoiceChannelStatus": [],
 	"Speak": [],
 	"Stream": [],
 	"UseApplicationCommands": [],

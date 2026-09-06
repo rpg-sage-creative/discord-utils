@@ -1,4 +1,5 @@
 import { resolveEmbed } from "./resolveEmbed.js";
+/** Counts the fields in the given EmbedResolvable, returning 0 if one wasn't given. */
 export function getEmbedFieldCount(resolvable) {
     if (resolvable) {
         const embed = resolveEmbed(resolvable);

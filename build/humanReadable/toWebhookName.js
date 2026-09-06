@@ -1,4 +1,5 @@
 import { toUserName } from "./toUserName.js";
+/** Returns the webhook name as a readable value or "$UnknownWebhook" */
 export function toWebhookName(webhook) {
     if (webhook) {
         if (webhook.sourceGuild) {

@@ -4,6 +4,11 @@ export async function refreshDiscordAttachmentUrl(url) {
     if (!url)
         return url;
     const postData = { attachment_urls: [url] };
+    // const opts = {
+    // 	headers: {
+    // 		"Authorization": "DISCORD_TOKEN",
+    // 	}
+    // }
     let error;
     const response = await getJson(POST_URL, postData).catch(err => { error = err; });
     if (!response)

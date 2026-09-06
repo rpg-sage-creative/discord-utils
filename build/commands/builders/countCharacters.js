@@ -7,6 +7,7 @@ function doCount(cmd) {
     cmd.options?.forEach(option => count += doCount(option));
     return count;
 }
+/** @deprecated */
 export async function countCharacters(commandPathValidator) {
     let count = 0;
     const commands = await registerCommands(commandPathValidator);

@@ -7,9 +7,9 @@ export function isSupportedParentChannel(channel) {
     if (!channel || !("type" in channel))
         return false;
     switch (channel.type) {
-        case 0: return !channel.parent || isSupportedParentChannel(channel.parent);
-        case 4: return true;
-        case 15: return !channel.parent || isSupportedParentChannel(channel.parent);
+        case 0: return !channel.parent || isSupportedParentChannel(channel.parent); // ChannelType.GuildText
+        case 4: return true; // ChannelType.GuildCategory
+        case 15: return !channel.parent || isSupportedParentChannel(channel.parent); // ChannelType.GuildForum
         default: return false;
     }
 }
@@ -17,12 +17,12 @@ export function isSupportedChannel(channel) {
     if (!channel || !("type" in channel))
         return false;
     switch (channel.type) {
-        case 0: return !channel.parent || isSupportedParentChannel(channel.parent);
-        case 1: return true;
-        case 2: return !channel.parent || isSupportedParentChannel(channel.parent);
-        case 11: return isSupportedParentChannel(channel.parent);
-        case 12: return isSupportedParentChannel(channel.parent);
-        case 15: return !channel.parent || isSupportedParentChannel(channel.parent);
+        case 0: return !channel.parent || isSupportedParentChannel(channel.parent); // ChannelType.GuildText
+        case 1: return true; // ChannelType.DM
+        case 2: return !channel.parent || isSupportedParentChannel(channel.parent); // ChannelType.GuildVoice
+        case 11: return isSupportedParentChannel(channel.parent); // ChannelType.PublicThread
+        case 12: return isSupportedParentChannel(channel.parent); // ChannelType.PrivateThread
+        case 15: return !channel.parent || isSupportedParentChannel(channel.parent); // ChannelType.GuildForum
         default: return false;
     }
 }
@@ -57,12 +57,16 @@ export function isSupportedTarget(target) {
 export function isSupportedInteraction(interaction) {
     if (!interaction)
         return false;
+    // all need a valid channel
     if (interaction.channel && !isSupportedChannel(interaction.channel))
         return false;
+    // message context needs targetMessage to have a valid channel
     if ("targetMessage" in interaction && !isSupportedChannel(interaction.targetMessage.channel))
         return false;
+    // select / button / modal need message to have a valid channel
     if ("message" in interaction && interaction.message && !isSupportedChannel(interaction.message.channel))
         return false;
+    // otherwise ...
     return true;
 }
 export function isSupportedRepliableInteraction(interaction) {

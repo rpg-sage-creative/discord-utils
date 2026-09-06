@@ -4,7 +4,9 @@ function parseString(url, type) {
     const regex = getDiscordUrlRegex({ anchored: true, capture: "discordUrl", type });
     const match = regex.exec(unwrap(url, "<>"));
     if (match?.groups) {
+        // cast to MessageReference to allow guildId to be undefined
         let { guildId, channelId, messageId } = match.groups;
+        // update guildId as needed
         if (guildId === "@me") {
             guildId = undefined;
         }

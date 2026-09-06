@@ -7,6 +7,8 @@ function buildOne(raw) {
     const which = getCodeName();
     raw.name = which.includes("stable") ? `sage-${raw.name}` : `sage-${which}-${raw.name}`;
     const cmd = setName(new SlashCommandBuilder(), raw);
+    // setDefaultMemberPermissions() will let me restrict commands to folks with specific discord perms
+    // setContexts() will let me turn off game/channel commands in DMs
     raw.children?.forEach(child => {
         if (child.children?.length) {
             cmd.addSubcommandGroup(grp => addSubcommands(setName(grp, child), child.children));

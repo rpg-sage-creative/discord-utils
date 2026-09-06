@@ -1,6 +1,7 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { toGuildName } from "../toGuildName.js";
 import { toUserName } from "../toUserName.js";
+/** @internal */
 export function channelToName(channel) {
     if (channel) {
         if (channel.isDMBased()) {

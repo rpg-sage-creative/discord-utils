@@ -2,12 +2,19 @@ import { PermissionFlagsBits, PermissionsBitField } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
 import { isSupportedWebhookChannel } from "../types/typeGuards/isSupported.js";
 class Permissions {
+    /** the perms checked */
     checked;
+    /** is the member in the members list (has joined a thread) */
     isInChannel;
+    /** is the channel actually a thread */
     isThread;
+    /** the perms not found */
     missing;
+    /** the underlying permissions data */
     perms;
+    /** the perms found */
     present;
+    /** the webhook channel (parent of a thread) */
     webhookChannel;
     constructor({ checked, isInChannel, isThread, missing, perms, present, webhookChannel } = {}) {
         this.checked = checked ?? [];
@@ -18,6 +25,7 @@ class Permissions {
         this.present = present ?? [];
         this.webhookChannel = webhookChannel ?? undefined;
     }
+    /** Tests to see if the requested permission is present */
     can(key) {
         if (key === "SendTo") {
             return this.isThread ? this.can("SendMessagesInThreads") : this.can("SendMessages");
@@ -30,9 +38,11 @@ class Permissions {
 }
 export function getPermsFor(channel, memberOrRole, ...checked) {
     const memberOrRoleId = resolveSnowflake(memberOrRole);
+    // return false if member or channel are not valid
     if (!memberOrRoleId || !channel || channel.isDMBased()) {
         return new Permissions();
     }
+    // check for thread and ensure we have the correct channel for perms checking
     const isThread = channel.isThread();
     const channelWithPerms = isThread ? channel.parent : channel;
     if (!channelWithPerms || channelWithPerms.isDMBased()) {

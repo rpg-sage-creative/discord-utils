@@ -7,23 +7,23 @@ export function toInviteUrl(guild) {
     try {
         const bestInvite = guild.invites.cache.find(invite => {
             if (!invite.channel?.isTextBased())
-                return false;
+                return false; //NOSONAR
             if (invite.guildScheduledEvent)
-                return false;
+                return false; //NOSONAR
             if (invite.maxAge)
-                return false;
+                return false; //NOSONAR
             if (invite.maxUses)
-                return false;
+                return false; //NOSONAR
             if (invite.stageInstance)
-                return false;
+                return false; //NOSONAR
             if (invite.targetApplication)
-                return false;
+                return false; //NOSONAR
             if (invite.targetUser)
-                return false;
+                return false; //NOSONAR
             if (invite.targetType)
-                return false;
+                return false; //NOSONAR
             if (invite.temporary)
-                return false;
+                return false; //NOSONAR
             return true;
         });
         return bestInvite?.url ?? undefined;

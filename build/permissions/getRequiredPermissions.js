@@ -7,18 +7,18 @@ const SageFlagMap = {
     "ChangeNickname": [],
     "Connect": [],
     "CreateEvents": [],
-    "CreateGuildExpressions": [],
-    "CreateInstantInvite": [],
-    "CreatePrivateThreads": ["RunGame"],
-    "CreatePublicThreads": ["RunGame"],
+    "CreateGuildExpressions": [], /** @todo manage server emoji? */
+    "CreateInstantInvite": [], /** @todo for future game postings? */
+    "CreatePrivateThreads": ["RunGame"], /** @todo to send secret messages vs ephemeral or dm? */
+    "CreatePublicThreads": ["RunGame"], /** @todo for future npc shop keep? */
     "DeafenMembers": [],
     "EmbedLinks": ["RunGame"],
     "KickMembers": [],
     "ManageChannels": ["ManageChannels"],
-    "ManageEmojisAndStickers": [],
+    "ManageEmojisAndStickers": [], // deprecated -> ManageGuildExpressions
     "ManageEvents": [],
     "ManageGuild": [],
-    "ManageGuildExpressions": [],
+    "ManageGuildExpressions": [], /** @todo manage server emoji? */
     "ManageMessages": ["RunGame"],
     "ManageNicknames": [],
     "ManageRoles": ["ManageRoles"],
@@ -37,15 +37,16 @@ const SageFlagMap = {
     "SendPolls": ["RunGame"],
     "SendTTSMessages": [],
     "SendVoiceMessages": [],
+    "SetVoiceChannelStatus": [],
     "Speak": [],
     "Stream": [],
     "UseApplicationCommands": [],
     "UseEmbeddedActivities": [],
     "UseExternalApps": [],
     "UseExternalEmojis": ["RunGame"],
-    "UseExternalSounds": [],
+    "UseExternalSounds": [], /** @todo for the FUTURE! */
     "UseExternalStickers": [],
-    "UseSoundboard": [],
+    "UseSoundboard": [], /** @todo for the FUTURE (related to UseExternalSounds)! */
     "UseVAD": [],
     "ViewAuditLog": [],
     "ViewChannel": ["ManageChannels", "RunGame", "GameMaster", "Player"],
@@ -57,6 +58,7 @@ const ManageRolesFlags = Object.keys(SageFlagMap).filter(key => SageFlagMap[key]
 const RunGameFlags = Object.keys(SageFlagMap).filter(key => SageFlagMap[key].includes("RunGame"));
 const GameMasterFlags = Object.keys(SageFlagMap).filter(key => SageFlagMap[key].includes("GameMaster"));
 const PlayerFlags = Object.keys(SageFlagMap).filter(key => SageFlagMap[key].includes("Player"));
+/** Gets the set of permissions required for a given reason. */
 export function getRequiredPermissions(reason) {
     switch (reason) {
         case "GameMaster": return GameMasterFlags;

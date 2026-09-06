@@ -15,14 +15,14 @@ export function parseId(value, type) {
         if (type !== "message") {
             const mentionMatch = getMentionRegex(type).exec(value);
             if (mentionMatch?.groups?.[groupKey]) {
-                return mentionMatch.groups[groupKey];
+                return mentionMatch.groups[groupKey]; //NOSONAR
             }
         }
         if (type !== "role" && type !== "user") {
             const urlRegex = getDiscordUrlRegex({ capture: type, type });
             const urlMatch = urlRegex.exec(value);
             if (urlMatch?.groups?.[groupKey]) {
-                return urlMatch.groups[groupKey];
+                return urlMatch.groups[groupKey]; //NOSONAR
             }
         }
     }

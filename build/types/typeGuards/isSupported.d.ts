@@ -65,9 +65,9 @@ export type MightHaveChannel = {
     channel: SupportedMessagesChannel | null;
 };
 export type MightHaveMessage = {
-    message: Message & {
+    message: (Message & {
         channel: SupportedMessagesChannel | null;
-    } | null;
+    }) | null;
 };
 export type HasMessage = {
     message: Message & {

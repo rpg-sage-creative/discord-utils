@@ -9,6 +9,7 @@ export function toChannelUrl(ref) {
         if (!ref.isDMBased()) {
             return createUrl(ref.guildId, ref.id);
         }
+        /** @todo do we need to test and handle isDMBased(ref) ? */
         return createUrl(undefined, ref.id);
     }
     return undefined;

@@ -5,6 +5,7 @@ const RoleMentionRegExp = (/<@&(?<roleId>\d{16,})>/);
 const RoleMentionRegExpG = globalizeRegex(RoleMentionRegExp);
 const UserMentionRegExp = (/<@\!?(?<userId>\d{16,})>/);
 const UserMentionRegExpG = globalizeRegex(UserMentionRegExp);
+/** Returns a TypedRegExp with one of the following capture groups: channelId, roleId, or userId */
 export function getMentionRegex(type, global) {
     if (global) {
         if (type === "channel")

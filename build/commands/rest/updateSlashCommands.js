@@ -19,6 +19,8 @@ export async function updateSlashCommands({ appId, appToken, codeName, commandPa
         info(`Successfully reloaded application (/) commands for: ${codeName}.`);
     }
     catch (ex) {
+        // console.info(Object.keys(error as any)); // [ 'rawError', 'code', 'status', 'method', 'url', 'requestBody' ]
+        // console.error(`${error.code} (${error.rawError}): ${error.status}`); // undefined (undefined): undefined
         error(ex);
     }
 }

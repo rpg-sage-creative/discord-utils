@@ -1,3 +1,4 @@
+/** Makes sure no matter how i give/set the choice it converts to what the API needs. */
 export function toChoice(choice) {
     if (Array.isArray(choice)) {
         return { name: choice[0], value: choice[1] };

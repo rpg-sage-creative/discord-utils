@@ -5,6 +5,7 @@ import { isMessage } from "./types/typeGuards/isMessage.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 export class DiscordKey {
+    //#region ChannelReference/MessageReference
     get guildId() {
         return this.hasServer ? this.server : undefined;
     }
@@ -17,11 +18,15 @@ export class DiscordKey {
     get type() {
         return 0;
     }
+    //#endregion
+    //#region MessageReferenceAdjacent
     get userId() {
         return this.isDm ? this.channel : undefined;
     }
+    //#endregion
     server;
     channel;
+    /** @deprecated */
     thread;
     message;
     isDm;
@@ -31,9 +36,12 @@ export class DiscordKey {
     shortKey;
     hasServer;
     hasChannel;
+    /** @deprecated */
     hasThread;
     hasMessage;
-    constructor(server, channel, thread, message) {
+    constructor(server, channel, 
+    /** @deprecated */
+    thread, message) {
         this.server = resolveSnowflake(server, true);
         this.channel = resolveSnowflake(channel, true);
         this.thread = resolveSnowflake(thread, true);
@@ -56,15 +64,18 @@ export class DiscordKey {
             this.shortKey = DiscordKey.createKey(this.server, this.channel);
         }
     }
+    /** @deprecated Returns the thread if it has one. Returns the channel otherwise. */
     get threadOrChannel() {
         return this.hasThread ? this.thread : this.channel;
     }
+    /** @deprecated */
     get channelAndThread() {
         return {
             channel: this.hasChannel ? this.channel : undefined,
             thread: this.hasThread ? this.thread : undefined
         };
     }
+    /** @deprecated */
     get user() {
         return this.isDm ? this.channel : undefined;
     }

@@ -1,12 +1,15 @@
 import { isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
 import { getMentionRegex } from "./getMentionRegex.js";
+/** Validate MentionIdType */
 function isMentionIdType(type) {
     return ["channel", "role", "user"].includes(type);
 }
+/** Validate UrlIdType */
 function isUrlIdType(type) {
     return ["channel", "message"].includes(type);
 }
+/** Get GroupKey for the IdType */
 function getGroupKey(type) {
     switch (type) {
         case "channel": return "channelId";
@@ -15,6 +18,7 @@ function getGroupKey(type) {
         case "user": return "userId";
     }
 }
+/** Get the proper Collection key for the MentionIdType */
 function getMentionKey(type) {
     switch (type) {
         case "channel": return "channels";
@@ -22,6 +26,7 @@ function getMentionKey(type) {
         case "user": return "users";
     }
 }
+/** Parses the content for mentions of the given IdType and returns the id/snowflakes. */
 function getContentMentionIds(type, content) {
     if (isMentionIdType(type) && content) {
         const globalRegex = getMentionRegex(type, true);
@@ -33,6 +38,7 @@ function getContentMentionIds(type, content) {
     }
     return [];
 }
+/** Gets the ids from the Collection for the given IdType. */
 function getMessageMentionIds(type, message) {
     if (isMentionIdType(type)) {
         const collection = message.mentions[getMentionKey(type)];
@@ -40,11 +46,14 @@ function getMessageMentionIds(type, message) {
     }
     return [];
 }
+/** Parses the content for urls of the given IdType and returns the ids/snowflakes. */
 function getContentUrlIds(type, content) {
     if (isUrlIdType(type) && content) {
+        // use global regex to get an array of urls
         const globalRegex = getDiscordUrlRegex({ gFlag: "g", type });
         const urls = content.match(globalRegex);
         if (urls?.length) {
+            // use capture regex to parse each individual url
             const regex = getDiscordUrlRegex({ capture: type, type });
             const groupKey = getGroupKey(type);
             return urls.map(url => regex.exec(url)?.groups?.[groupKey]);
@@ -52,10 +61,12 @@ function getContentUrlIds(type, content) {
     }
     return [];
 }
+/** A filter that only returns unique nonNil snowflakes. */
 function uniqueNonNilSnowflakeFilter(value, index, array) {
     return isNonNilSnowflake(value) && array.indexOf(value) === index;
 }
 const RawSnowflakeRegExpG = /\b\d{16,}\b/g;
+/** Returns all unique nonNil Snowflakes of the given IdType from the given Message. */
 export function parseIds(messageOrContent, type, includeRaw) {
     const isString = typeof (messageOrContent) === "string";
     const content = isString ? messageOrContent : messageOrContent.content;

@@ -1,4 +1,5 @@
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+/** Replaces @here and @everyone using ZERO_WIDTH_SPACE so that reposts don't ping channels/servers. */
 export function safeMentions(content) {
     return content
         ? content.replace(/@(here|everyone)/gi, (_, tag) => `@${ZERO_WIDTH_SPACE}${tag}`)

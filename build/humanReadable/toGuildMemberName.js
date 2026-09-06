@@ -1,5 +1,6 @@
 import { addZeroWidthSpaces } from "./addZeroWidthSpaces.js";
 import { toUserName } from "./toUserName.js";
+/** Returns the guild member as a readable mention or "@UnknownGuildMember" */
 export function toGuildMemberName(member) {
     if (member) {
         if (member.nickname) {

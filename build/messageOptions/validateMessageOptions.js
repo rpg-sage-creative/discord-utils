@@ -1,6 +1,7 @@
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { validateEmbedLengths } from "../embed/validateEmbedLengths.js";
 import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
+/** Returns true if all lengths of the given options are under the allowed values for a single messge post. */
 export function validateMessageOptions(options) {
     const contentLength = options.content?.length ?? 0;
     if (contentLength > DiscordMaxValues.message.contentLength) {

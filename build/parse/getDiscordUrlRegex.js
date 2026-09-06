@@ -103,6 +103,7 @@ function createDiscordUrlRegex(options) {
                 : flagRegex(MessageUrlRegExp, flags);
     }
 }
+/** @deprecated @todo rewrite this to not use getOrCreateRegex (see other regex using globalizeRegex) */
 export function getDiscordUrlRegex(options) {
     return getOrCreateRegex(createDiscordUrlRegex, options);
 }
