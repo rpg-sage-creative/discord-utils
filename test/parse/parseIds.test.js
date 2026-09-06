@@ -41,8 +41,22 @@ describe("parse", () => {
 
 		test(`parseIds(content, "user", true)`, () => {
 			const results = parseIds(content, "user", true);
-			expect(results.length).toBe(channelIds.length + roleIds.length + userIds.length + rawSnowflakes.length);
-			results.every(id => expect(channelIds.includes(id) || roleIds.includes(id) || userIds.includes(id) || rawSnowflakes.includes(id)).toBe(true));
+			expect(results.length).toBe(
+				channelIds.length
+				+ roleIds.length
+				+ userIds.length
+				+ rawSnowflakes.length
+			);
+			results.every(id => {
+				const regex = new RegExp(`\\b${id}\\b`);
+				const tester = s => regex.test(s);
+				expect(
+					channelIds.some(tester)
+					|| roleIds.some(tester)
+					|| userIds.some(tester)
+					|| rawSnowflakes.some(tester)
+				).toBe(true)
+			});
 		});
 
 		test(`real example`, () => {
