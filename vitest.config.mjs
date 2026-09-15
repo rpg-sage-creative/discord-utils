@@ -5,7 +5,7 @@ import { resolve, join } from "node:path";
 
 // allows the tests to load data file when in mono repo
 function resolvePath(relPath) {
-	if (resolve(".").includes("/rpg-sage")) {
+	if (resolve(".").endsWith("/rpg-sage")) {
 		return resolve(join("packages/@rsc-utils/discord-utils", relPath));
 	}
 	return resolve(relPath);
