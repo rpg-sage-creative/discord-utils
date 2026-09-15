@@ -1,16 +1,24 @@
 import { IntentsBitField } from "discord.js";
 import { readFileSync } from "fs";
 import { defineConfig } from "vitest/config";
+import { resolve, join } from "node:path";
 
+// allows the tests to load data file when in mono repo
+function resolvePath(relPath) {
+	if (resolve(".").includes("/rpg-sage")) {
+		return resolve(join("packages/@rsc-utils/discord-utils", relPath));
+	}
+	return resolve(relPath);
+}
 
 export default defineConfig({
   test: {
 	provide: {
 		// token for Sage to connect to Discord
-		token: readFileSync("./config/token.txt").toString("utf-8"),
+		token: readFileSync(resolvePath("./config/token.txt")).toString("utf-8"),
 
 		// snowflakes for things we use to test DiscordCache
-		ids: JSON.parse(readFileSync("./config/ids.json").toString("utf-8")),
+		ids: JSON.parse(readFileSync(resolvePath("./config/ids.json")).toString("utf-8")),
 
 		// the intents flags for connecting to Discord
 		intents: [
